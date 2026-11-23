@@ -33,8 +33,8 @@ Proyecto final de Programación Avanzada.
 
 ## Sistema visual
 
-Crema y azul noche como base, un acento iris (`#6D5EF0`) y colores pastel que identifican el tipo de servicio: celeste para corte y peinado, rosa para color, menta para uñas. Títulos en Fraunces y texto en DM Sans.
+Estilo clásico de panel administrativo: menú azul marino (`#031641`), contenido gris claro, tarjetas blancas y un único azul de acción (`#0033DD`, el del logo). Verde y rojo se usan solo para estados. Los servicios se distinguen por texto, no por color. Tipografía sans (Inter) en toda la interfaz; el logo es lo único con serif.
 
 ![Sistema visual de Citara](assets/sistema-visual.png)
 
-> En los PDF los títulos pueden verse con una tipografía de reemplazo; el diseño final usa Fraunces y DM Sans.
+> En los PDF los títulos pueden verse con una tipografía de reemplazo; el diseño final usa Inter.
