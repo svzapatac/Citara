@@ -75,7 +75,7 @@ flowchart LR
 |---|---|---|---|
 | Agenda · Día | Ve los turnos de cada empleado, abre el detalle y marca los servicios realizados. | cita_servicio, empleado, cliente, factura | cita_servicio (estado) |
 | Agenda · Semana | Vista semanal de la agenda por empleado. | cita_servicio, empleado | — |
-| Nueva cita | Registra una reserva que llegó por chat; valida traslapes. | cliente, servicio, empleado_servicio, turno_empleado, cita_servicio | cita, cita_servicio, factura |
+| Nueva cita | Registra una reserva que llegó por chat, con uno o varios servicios de cualquier área; valida traslapes. | cliente, servicio, empleado_servicio, turno_empleado, cita_servicio | cita, cita_servicio, factura |
 | Clientes | Lista y ficha del cliente con su historial. | cliente, cita, factura | cliente |
 
 ## Equipo, documentos y servicios

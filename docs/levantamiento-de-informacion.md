@@ -1,4 +1,4 @@
-# Levantamiento de información — Gestión de peluquerías y salones de uñas
+# Levantamiento de información — Gestión de peluquerías, salones de uñas y barberías
 
 12 de noviembre de 2026
 
