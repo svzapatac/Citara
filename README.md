@@ -2,18 +2,18 @@
   <img src="assets/citara-logo.png" alt="Citara" width="420">
 </p>
 
-**Citara** es una plataforma SaaS para peluquerías y salones de uñas. Centraliza las reservas y conecta la agenda de cada trabajador con los servicios realizados, la factura, las comisiones, el inventario y los reportes, para que el dueño delegue la operación diaria y consulte resultados por trabajador y sede.
+**Citara** es una plataforma SaaS para peluquerías, salones de uñas y barberías. Centraliza las reservas y conecta la agenda de cada trabajador con los servicios realizados, la factura, las comisiones, el inventario y los reportes, para que el dueño delegue la operación diaria y consulte resultados por trabajador y sede.
 
 Proyecto final de Programación Avanzada.
 
 ## Qué incluye el sistema
 
-- **Reservas** del cliente por enlace público, con catálogo reducido: uñas (tradicional, acrílicas, semipermanentes) y cabello (corte, color, peinado).
-- **Duraciones fijas** (uñas 45 min, cabello 30 min) y un **bot de asesoría por chat** para los casos que necesitan más tiempo.
-- **Agenda de empleados** que se actualiza con cada cambio y se muestra en un **televisor del salón** (turno actual, siguiente y tiempo restante).
+- **Reservas** del cliente por enlace público, para cualquier cliente y con varios servicios por cita. Catálogo reducido: cabello (corte, color, peinado), uñas (tradicional, acrílicas, semipermanentes), barbería (barba) y cejas.
+- **Duraciones fijas** (uñas 45 min, cabello y barba 30 min, cejas 15 min) y un **bot de asesoría por chat** para los casos que necesitan más tiempo.
+- **Agenda de empleados** que se actualiza con cada cambio y se muestra en un **televisor del salón** (turno actual, tiempo restante y turnos del día), con varios turnos por día por empleado.
 - **Factura** única por cita, con **historial de facturas** (sin integración con proveedor electrónico).
-- **Comisiones y pagos** diarios, semanales, quincenales o mensuales.
-- **Inventario** de uso interno y de venta, con alerta de existencias bajas.
+- **Comisiones y pagos** diarios, semanales, quincenales o mensuales, con descuento mensual por productos y ganancia por ventas del empleado.
+- **Inventario** de venta, uso interno y dotación por área, con stock en bodega y en manos de cada empleado, y alerta de existencias bajas.
 - **Finanzas** con ingresos por servicios y por productos, gastos, y ganancia bruta y neta.
 - **Roles:** cliente, empleado, administrador y dueño.
 
@@ -27,8 +27,8 @@ Proyecto final de Programación Avanzada.
 | [`docs/flujos-de-usuario.md`](docs/flujos-de-usuario.md) | Flujos de usuario corregidos de cliente, empleado, administrador y dueño (diagramas). |
 | [`docs/flujo-por-panel.md`](docs/flujo-por-panel.md) | Flujo por panel: qué hace el usuario en cada pantalla y qué tablas lee y escribe. |
 | [`docs/modelo-de-datos.md`](docs/modelo-de-datos.md) | Borrador del modelo de datos (diagrama entidad-relación) y reglas que debe garantizar. |
-| [`design/Citara_Computador.pdf`](design/Citara_Computador.pdf) | Maquetación para computador: 25 pantallas (administración, dueño, televisor). |
-| [`design/Citara_Celular.pdf`](design/Citara_Celular.pdf) | Maquetación para celular: 8 pantallas (app del cliente y del empleado). |
+| [`design/Citara_Computador.pdf`](design/Citara_Computador.pdf) | Maquetación para computador: 26 pantallas (administración, dueño, televisor). |
+| [`design/Citara_Celular.pdf`](design/Citara_Celular.pdf) | Maquetación para celular: 9 pantallas (app del cliente y del empleado). |
 | [`assets/`](assets) | Logo de Citara e imagen del sistema visual. |
 
 ## Sistema visual

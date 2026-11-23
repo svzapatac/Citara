@@ -10,15 +10,19 @@ Este documento reúne lo levantado en cuatro entrevistas con dueños de salones,
 
 ## Decisiones del equipo (23 de noviembre)
 
-Estas cinco decisiones ajustan el alcance del enunciado y prevalecen sobre las secciones siguientes cuando haya diferencia.
+Estas decisiones ajustan el alcance del enunciado y prevalecen sobre las secciones siguientes cuando haya diferencia.
 
 1. **Los empleados no tienen tiempo.** No pueden revisar el celular durante la jornada: el sistema les pide lo mínimo y les muestra la información sin que la busquen.
-2. **Catálogo reducido.** Solo se ofrecen uñas (tradicional, acrílicas, semipermanentes) y cabello (corte, color, peinado).
-3. **Duraciones fijas, con excepciones por chat.** Las uñas siempre duran 45 minutos y el cabello 30. Los casos que necesitan más tiempo tienen dos caminos, ambos con un bot en formato chat:
+2. **Catálogo reducido y para cualquier cliente.** El sistema no es solo para mujeres: sirve para peluquerías, salones de uñas y barberías, y cualquier persona puede pedir cualquier servicio. Se ofrecen cuatro áreas: cabello (corte, color, peinado), uñas (tradicional, acrílicas, semipermanentes), barbería (barba) y cejas.
+3. **Duraciones fijas, con excepciones por chat.** Las uñas siempre duran 45 minutos, el cabello y la barba 30 y las cejas 15. Un corte y una barba se piden en una sola cita, con dos líneas en la factura. Los casos que necesitan más tiempo tienen dos caminos, ambos con un bot en formato chat:
    - Asesoría antes de reservar: el cliente dice que necesita asesoría y el bot le indica cuánto puede tardar el servicio y quién está disponible. Ejemplo: una decoloración toma unas 5 horas y están disponibles Patty y Sofía.
    - Diseño de uñas más complicado de lo esperado (por ejemplo, se partió una uña acrílica): el bot le pide al cliente que escriba su caso, como en un chat.
 4. **Factura electrónica solo como historial.** No se integra con ningún proveedor; el sistema guarda y muestra el historial de facturas para no complicar el alcance.
-5. **Agenda en un televisor.** La agenda de los empleados se actualiza con cada cambio y se muestra en un televisor del salón: en qué turno va cada empleado, cuál es el siguiente y cuánto se demorará en el turno actual.
+5. **Agenda en un televisor.** La agenda de los empleados se actualiza con cada cambio y se muestra en un televisor del salón: en qué turno va cada empleado, cuánto falta para terminar el actual y la lista de turnos del día.
+6. **Varios turnos por día.** Cada empleado puede tener más de un turno el mismo día (por ejemplo mañana y tarde). Los turnos de una misma persona no se pueden cruzar y las citas solo se reservan dentro de un turno.
+7. **Productos para vender.** El gerente entrega productos a los empleados para que los vendan. Se los deja a precio de empleado; el empleado los vende al precio público y se queda con la diferencia como ingreso extra. Cada mes el negocio descuenta del pago los productos a precio de empleado. Lo que no se vende se devuelve y no se descuenta. Si el empleado compra un producto para sí mismo es de **uso personal**: se descuenta igual, sin ganancia.
+8. **Dotación por área.** El negocio entrega a cada empleado un kit básico según su área, no producto por producto: tijeras, secador y plancha en cabello; esmaltes y brochas en uñas; tijeras y máquina en barbería; cera y pinzas en cejas. La dotación no se cobra y se devuelve al retirarse la persona; si se pierde o daña, el administrador decide si se descuenta.
+9. **Documentos sin vencimiento.** El sistema no marca documentos como vencidos: los guarda y ofrece una opción para ver todos rápidamente.
 
 **Por definir a partir de estas decisiones**
 
@@ -26,6 +30,7 @@ Estas cinco decisiones ajustan el alcance del enunciado y prevalecen sobre las s
 - Quién confirma el tiempo cuando el cliente escribe un caso de uñas. Supuesto: el bot propone un tiempo y el administrador lo confirma antes de reservar.
 - En qué canal vive el bot: el enlace público de reserva, WhatsApp o ambos.
 - Cuántos televisores hay. Supuesto: uno por sede.
+- Las cuatro reglas de productos de la decisión 7 y 8 (ver preguntas abiertas).
 
 ## Hallazgos de las entrevistas
 
@@ -33,7 +38,7 @@ La prioridad de los dueños es automatizar la agenda: las solicitudes llegan por
 
 - Los dueños perciben estabilidad económica y quieren dedicar su tiempo a investigar y desarrollar oportunidades, no a coordinar el día a día.
 - Los empleados tienen poco tiempo para revisar el celular y suelen salir al terminar sus turnos, porque su pago está ligado a los servicios atendidos.
-- Un modelo descrito: el gerente entrega productos o herramientas y su costo se descuenta del pago final. Para el proyecto se registra la entrega y, cuando corresponda, el cobro se muestra como un concepto separado.
+- Un modelo descrito: el gerente entrega productos o herramientas y su costo se descuenta del pago final. Para el proyecto se registra la entrega y el cobro se muestra como un concepto separado. Se aclaró en clase que los productos son para vender y las herramientas son dotación (decisiones 7 y 8).
 - Quieren documentos digitales disponibles cuando se los soliciten y métricas claras por trabajador y por sede.
 - Los negocios ya usan facturación electrónica. Decisión del equipo: el sistema solo guarda y muestra el historial de facturas, sin integrarse con el proveedor.
 - El rango de inversión mencionado fue de $1 a $3 millones COP. Falta confirmar si es implementación, presupuesto anual u otra modalidad.
@@ -49,7 +54,7 @@ El enunciado exige ocho módulos; estas son las reglas que el sistema debe cumpl
 | Agenda de empleados | Asignar turnos según horario y servicios habilitados. El administrador consulta turnos por fecha; el empleado consulta sus turnos programados y realizados. |
 | Factura | Una sola factura por cita, con cada servicio, su valor y el empleado que lo prestó. |
 | Comisiones y pagos | Calcular el pago con los servicios realizados y el porcentaje de comisión. Pagos diarios, semanales, quincenales o mensuales, según elija el empleado. Mostrar detalle y total individual. |
-| Inventario | Separar productos de uso interno y de venta. En cada entrega interna registrar empleado, fecha y cantidad. Listar los productos de venta con menos de cinco unidades. |
+| Inventario | Separar productos de uso interno y de venta. En cada entrega interna registrar empleado, fecha y cantidad. Listar los productos de venta con menos de cinco unidades. El equipo agrega un tercer tipo, la dotación por área, y las existencias en manos de cada empleado. |
 | Finanzas | Mostrar por separado ingresos por servicios e ingresos por venta de productos. Registrar gastos (arriendo, servicios) y calcular ganancias brutas y netas. |
 | Roles | Cliente, empleado, administrador y dueño. El dueño hace todo lo del administrador y además consulta ganancias totales y costo de pagos. |
 
@@ -83,16 +88,16 @@ La hipótesis comercial es que el dueño dedicará menos tiempo a coordinar cita
 
 ## Caso para la demostración
 
-Una clienta reserva en una sola cita un corte con Laura y un manicure con Camila, y el sistema deja una factura con dos líneas.
+Un cliente reserva en una sola cita un corte con Laura y un manicure con Camila, y el sistema deja una factura con dos líneas.
 
 1. Reserva **corte a las 10:00 con Laura** y **manicure a las 10:30 con Camila**.
-2. El sistema valida la duración (30 minutos el corte, 45 el manicure) y la disponibilidad de cada servicio y actualiza ambas agendas.
+2. El sistema valida la duración (30 minutos el corte, 45 el manicure; el enunciado usa 10:45 para el manicure, aquí 10:30 porque el corte dura 30) y la disponibilidad de cada servicio y actualiza ambas agendas.
 3. Genera **una factura con dos líneas**, cada una con su valor y su empleada.
 4. Al marcar cada servicio como realizado, alimenta la comisión de quien lo atendió y el reporte de la sede.
 
 ## Supuestos y preguntas abiertas
 
-Nueve puntos siguen sin confirmar; los cuatro primeros cambian el modelo de datos y conviene cerrarlos antes de programar.
+Doce puntos siguen sin confirmar; los cuatro primeros y los de productos cambian el modelo de datos y conviene cerrarlos antes de programar.
 
 | Pregunta | Se confirma con | Supuesto de trabajo |
 |---|---|---|
@@ -100,11 +105,38 @@ Nueve puntos siguen sin confirmar; los cuatro primeros cambian el modelo de dato
 | ¿Cómo se definen ganancia bruta y neta? | Profesor | Bruta = ingresos − comisiones; neta = bruta − gastos. |
 | ¿Se espera multi-negocio real o basta una sede en la entrega académica? | Profesor | Modelo con negocio y sede desde el inicio; se usa una sede en la entrega. |
 | ¿Hay stack obligatorio, fecha de entrega y tamaño del equipo? | Profesor y equipo | Sin definir; se recomienda PostgreSQL por la validación de traslapes. |
-| ¿Qué documentos pide en la práctica la Secretaría de Salud y si vencen? | Salones | Cada documento con fecha de vencimiento opcional. |
-| ¿El descuento por productos o herramientas se cobra siempre o solo a veces? | Salones | Se registra la entrega y el cobro es un concepto separado cuando corresponde. |
+| ¿Qué documentos pide en la práctica la Secretaría de Salud? | Salones | Lista configurable. Los documentos no vencen en el sistema: solo se guardan y se pueden ver todos juntos con una opción rápida. |
+| ¿Qué se descuenta: todo lo entregado o solo lo vendido? | Salones y profesor | Se descuenta lo vendido y lo de uso personal; lo devuelto no. |
+| ¿Quién cobra el producto al cliente: el empleado o la caja? | Salones | El empleado cobra el precio público y se queda con la diferencia. |
+| ¿El precio de empleado es fijo por producto y el descuento es mensual para todos, aunque el empleado cobre semanal? | Salones | Precio fijo por producto; el descuento se aplica al cierre del mes. |
+| ¿Se cobra la dotación que se pierde o se daña? | Salones | La decide el administrador caso por caso, como concepto aparte. |
 | ¿La comisión es un porcentaje único por empleado o varía por servicio? | Salones | Porcentaje por empleado, con opción de ajustarlo por servicio. |
 | ¿Cuánto dura cada servicio y un empleado puede atender dos clientes a la vez? | Salones | Un cliente a la vez por empleado; duración configurable por servicio. |
 | El rango de $1 a $3 millones COP, ¿es implementación, presupuesto anual u otra modalidad? | Salones | Por validar; el piloto no depende de este dato. |
+
+## Cruce con el enunciado
+
+Revisión de cada exigencia del enunciado contra lo que cubren la maqueta, los flujos y el modelo de datos.
+
+| Exigencia del enunciado | Cómo se cubre | Dónde |
+|---|---|---|
+| Empleados: datos, retiro, documentos de la Secretaría de Salud, historial | Registro, expediente digital con «Ver todos», retiro que conserva el historial | Equipo, Registrar empleado, Expediente |
+| Clientes y reservas por servicio, duración, horario y disponibilidad; elegir profesional o ver quién está libre | Reserva del cliente y nueva cita del administrador con cuatro áreas y varios servicios por cita | Reservar, Nueva cita |
+| Agenda: turnos según horario y servicios habilitados; el administrador consulta por fecha; el empleado ve programados y realizados | Turnos múltiples por día, agenda por día y semana, «Mi agenda de hoy», televisor | Turnos, Agenda, Empleado · Hoy, Televisor |
+| Una sola factura por cita, con servicios, valor y empleado | `factura.cita_id` único; una línea por servicio | Factura · Detalle |
+| Comisiones y pagos diarios, semanales, quincenales o mensuales; detalle y total individual | Liquidación por modalidad; detalle con comisión y descuentos | Comisiones y pagos, Pago · Detalle, Mis pagos |
+| Inventario: uso interno y venta separados; entrega con empleado, fecha y cantidad; venta con menos de cinco unidades | Tres tipos (venta, dotación, uso interno); alerta con menos de cinco en bodega | Inventario, Registrar entrega, Dotación por área |
+| Finanzas: ingresos por servicios y por productos por separado; gastos; ganancia bruta y neta | Cadena de ingresos, comisiones, gastos y ganancias | Finanzas |
+| Roles: cliente, empleado, administrador y dueño | Matriz de permisos | Usuarios y permisos |
+| Entrevistas: el gerente entrega productos y su costo se descuenta; el cobro aparece como concepto separado | Modelo de productos para vender, uso personal y dotación; descuentos como líneas separadas | Registrar entrega, Pago · Detalle, Mis productos |
+| Caso de demostración: corte con Laura y manicure con Camila, una factura con dos líneas | Se mantiene; la hora del manicure es 10:30 porque el corte dura 30 min | Nueva cita, Factura · Detalle |
+
+**Diferencias con el enunciado que conviene avisar a la profesora**
+
+- El enunciado habla de peluquerías y salones de uñas; el equipo amplió el catálogo a barbería y cejas y a cualquier tipo de cliente.
+- El inventario del enunciado tiene dos tipos; aquí se agrega la dotación por área y el stock por empleado.
+- El enunciado pide verificar documentos; aquí no se manejan vencimientos.
+- La factura es solo historial, sin integración con el proveedor electrónico.
 
 ## Alcance, orden de trabajo y viabilidad
 
@@ -137,7 +169,7 @@ Ya hay una maqueta de pantallas y un tablero de flujos para que los desarrollado
 
 | Material | Qué contiene |
 |---|---|
-| [Maqueta de pantallas](https://claude.ai/artifact/QzeV7U7JaXWVw1mFZJbEBJ) | Reserva del cliente con catálogo reducido, chat de asesoría, historial de facturas, agenda del administrador, televisor del salón, comisiones y pagos, inventario y finanzas del dueño. Los datos son de ejemplo. |
+| [Maqueta de pantallas](https://claude.ai/artifact/QzeV7U7JaXWVw1mFZJbEBJ) | 35 pantallas: 26 para computador y 9 para celular. Reserva con catálogo de cuatro áreas, chat de asesoría, historial de facturas, agenda con barbería, turnos múltiples por día, televisor, comisiones y pagos con descuentos por productos, inventario con dotación por área y venta de productos, pantalla «Mis productos» del empleado y finanzas del dueño. Los datos son de ejemplo. |
 | [Diagramas de flujo por módulo y por rol](https://claude.ai/artifact/XUxKQyBm7kqEZBJDoKWP1S) | Ocho flujos (empleados, reservas, agenda, factura, comisiones, inventario, finanzas y roles) y cuatro flujos de usuario que muestran, junto a cada rol, lo que vive el cliente. |
 
 Las pantallas también están en PDF en la carpeta [`design/`](../design).

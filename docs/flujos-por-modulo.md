@@ -1,6 +1,6 @@
 # Diagramas de flujo por módulo
 
-Los ocho módulos del enunciado, tomados del tablero «Diagramas de flujo por módulo» y **corregidos con las decisiones del equipo del 23 de noviembre**: catálogo reducido (uñas y cabello), duraciones fijas con asesoría por chat, agenda del empleado en el televisor, factura solo como historial y empleados sin tiempo para revisar el celular.
+Los ocho módulos del enunciado, tomados del tablero «Diagramas de flujo por módulo» y **corregidos con las decisiones del equipo del 23 de noviembre**: catálogo para cualquier cliente (cabello, uñas, barbería y cejas), duraciones fijas con asesoría por chat, varios turnos por día, agenda del empleado en el televisor, productos entregados por el gerente con descuento mensual, dotación por área, factura solo como historial y empleados sin tiempo para revisar el celular.
 
 Colores: azul = paso, amarillo = decisión, verde = resultado, naranja = excepción. Los cambios respecto al tablero original están marcados con ✱.
 
@@ -14,14 +14,16 @@ flowchart LR
     B --> C{¿Documentos verificados?}
     C -- Sí --> D[Habilitar servicios y horario]
     C -- No --> E[Pendiente: no recibe turnos]
-    D --> F[Activo en la agenda]
+    D --> D2[✱ Entregar la dotación de su área<br/>kit básico, sin cobro]
+    D2 --> F[Activo en la agenda]
     F --> G[Retirar del equipo]
-    G --> H[Se conserva historial de servicios y pagos]
+    G --> G2[✱ Devuelve la dotación]
+    G2 --> H[Se conserva historial de servicios y pagos]
     classDef paso fill:#dbeafe,stroke:#3b82f6
     classDef dec fill:#fef9c3,stroke:#ca8a04
     classDef ok fill:#dcfce7,stroke:#16a34a
     classDef exc fill:#ffedd5,stroke:#ea580c
-    class A,B,D,G paso
+    class A,B,D,D2,G,G2 paso
     class C dec
     class F,H ok
     class E exc
@@ -29,11 +31,11 @@ flowchart LR
 
 ## 2. Clientes y reservas
 
-✱ Se agrega la asesoría por chat para los servicios que necesitan más tiempo que el fijo (uñas 45 min, cabello 30 min).
+✱ Se agrega la asesoría por chat para los servicios que necesitan más tiempo que el fijo. ✱ El catálogo es para cualquier cliente: cabello (corte, color, peinado: 30 min), uñas (tradicional, acrílicas, semipermanentes: 45 min), barbería (barba: 30 min) y cejas (15 min). Varios servicios se piden en una sola cita, por ejemplo corte y barba, y quedan como dos líneas de una factura.
 
 ```mermaid
 flowchart LR
-    A[Cliente abre el enlace público de reserva] --> B[Elegir servicio<br/>uñas 45 min · cabello 30 min]
+    A[Cliente abre el enlace público de reserva] --> B[✱ Elegir uno o varios servicios<br/>cabello 30 · uñas 45 · barba 30 · cejas 15 min]
     A2[Administrador registra una solicitud de chat] --> B
     B --> Q{✱ ¿Necesita más tiempo<br/>del habitual?}
     Q -- Sí --> AS[✱ Asesoría por chat<br/>el bot indica duración y quién está disponible]
@@ -61,8 +63,8 @@ flowchart LR
 
 ```mermaid
 flowchart LR
-    A[Administrador define turnos y horario] --> B[Asignar servicios habilitados]
-    B --> C[✱ Televisor del salón:<br/>turno actual, siguiente y tiempo restante]
+    A[✱ Administrador define uno o varios turnos por día<br/>ej. mañana y tarde] --> B[Asignar servicios habilitados]
+    B --> C[✱ Televisor del salón: turno actual,<br/>tiempo restante y los turnos del día]
     C --> D[Atiende el servicio]
     D --> E[Marca el servicio como realizado]
     E --> F[Detalle de la cita y factura actualizados]
@@ -103,45 +105,56 @@ flowchart LR
 
 ## 5. Comisiones y pagos
 
+✱ Cada mes se descuentan los productos que el gerente entregó al empleado para vender, a precio de empleado, y las compras de uso personal. Lo vendido a clientes le deja al empleado una ganancia: cobra el precio público y el negocio le descuenta el precio de empleado.
+
 ```mermaid
 flowchart LR
     A[Empleado elige: diario, semanal,<br/>quincenal o mensual] --> B[Reunir servicios realizados del período]
     B --> C[Aplicar el porcentaje de comisión]
-    C --> D{¿Hay entregas con cobro?}
-    D -- Sí --> E[Restar el descuento como concepto aparte]
-    E --> F[Detalle y total a pagar por empleado]
+    C --> D{✱ ¿Cierra el mes<br/>o hay descuentos?}
+    D -- Sí --> E[✱ Restar como conceptos aparte:<br/>productos vendidos a precio de empleado<br/>y compras de uso personal]
+    E --> E2[✱ Mostrar la ganancia por ventas<br/>precio público − precio de empleado]
+    E2 --> F[Detalle y total a pagar por empleado]
     D -- No --> G[Sin descuentos]
     G --> F
     classDef paso fill:#dbeafe,stroke:#3b82f6
     classDef dec fill:#fef9c3,stroke:#ca8a04
     classDef ok fill:#dcfce7,stroke:#16a34a
-    class A,B,C,E,G paso
+    class A,B,C,E,E2,G paso
     class D dec
     class F ok
 ```
 
 ## 6. Inventario
 
+✱ Tres tipos de producto: **venta**, **dotación por área** (herramientas del kit de cada área) y **uso interno** (insumos). Existencias en bodega y en manos de cada empleado.
+
 ```mermaid
 flowchart LR
-    A[Registrar producto] --> B{¿Venta o uso interno?}
-    B -- Venta --> C[Registrar la venta<br/>ingreso aparte]
-    C --> D[Descontar existencias]
-    D --> E[Revisar existencias del producto]
-    E --> F{¿Quedan menos de 5?}
-    F -- Sí --> G[Alerta de stock bajo<br/>en la lista de venta]
-    B -- Interno --> H[Entrega interna:<br/>empleado, fecha y cantidad]
-    H --> I{¿Se cobra al empleado?}
-    I -- Sí --> J[Descuento en el pago,<br/>como concepto aparte]
-    I -- No --> K[Solo queda registrada la entrega]
+    A[Registrar producto] --> B{✱ ¿Venta, dotación o uso interno?}
+    B -- Venta --> C[✱ Entrega al empleado<br/>cantidad, fecha y precio de empleado]
+    C --> D[✱ Existencias: sale de bodega<br/>y pasa a manos del empleado]
+    D --> E{¿El empleado lo vende?}
+    E -- A un cliente --> F[✱ Registra la venta:<br/>ingreso por productos y ganancia del empleado]
+    E -- Para sí mismo --> G[✱ Uso personal:<br/>se descuenta, sin ganancia]
+    E -- No lo vende --> H[✱ Lo devuelve a bodega<br/>y no se descuenta]
+    F --> I[Descuento en el pago mensual<br/>como concepto aparte]
+    G --> I
+    D --> J{¿En bodega quedan menos de 5?}
+    J -- Sí --> K[Alerta de stock bajo<br/>en la lista de venta]
+    B -- Dotación --> L[✱ Kit según el área del empleado<br/>tijeras, secador, esmaltes, máquina…]
+    L --> M[Entrega registrada: empleado, fecha y cantidad<br/>sin cobro]
+    M --> N{¿Se pierde o daña?}
+    N -- Sí --> O[✱ El administrador decide si se descuenta<br/>como concepto aparte]
+    B -- Uso interno --> P[Entrega: empleado, fecha y cantidad]
     classDef paso fill:#dbeafe,stroke:#3b82f6
     classDef dec fill:#fef9c3,stroke:#ca8a04
     classDef ok fill:#dcfce7,stroke:#16a34a
     classDef exc fill:#ffedd5,stroke:#ea580c
-    class A,C,D,E,H,J paso
-    class B,F,I dec
-    class K ok
-    class G exc
+    class A,C,D,F,G,H,L,M,P paso
+    class B,E,J,N dec
+    class I ok
+    class K,O exc
 ```
 
 ## 7. Finanzas
