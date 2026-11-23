@@ -23,6 +23,7 @@ Proyecto final de Programación Avanzada.
 |---|---|
 | [`docs/enunciado-profesora.md`](docs/enunciado-profesora.md) | Enunciado de la profesora: módulos exigidos, hallazgos de las entrevistas y referencias. |
 | [`docs/levantamiento-de-informacion.md`](docs/levantamiento-de-informacion.md) | Levantamiento de información, decisiones del equipo (23 de noviembre), roles, supuestos y alcance. |
+| [`docs/flujos-por-modulo.md`](docs/flujos-por-modulo.md) | Diagramas de flujo de los ocho módulos del enunciado, corregidos con las decisiones del 23 de noviembre. |
 | [`docs/flujos-de-usuario.md`](docs/flujos-de-usuario.md) | Flujos de usuario corregidos de cliente, empleado, administrador y dueño (diagramas). |
 | [`docs/flujo-por-panel.md`](docs/flujo-por-panel.md) | Flujo por panel: qué hace el usuario en cada pantalla y qué tablas lee y escribe. |
 | [`docs/modelo-de-datos.md`](docs/modelo-de-datos.md) | Borrador del modelo de datos (diagrama entidad-relación) y reglas que debe garantizar. |
