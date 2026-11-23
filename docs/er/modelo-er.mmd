@@ -1,0 +1,188 @@
+erDiagram
+    NEGOCIO ||--o{ SEDE : tiene
+    NEGOCIO ||--o{ USUARIO : agrupa
+    NEGOCIO ||--o{ SERVICIO : ofrece
+    NEGOCIO ||--o{ DOCUMENTO_NEGOCIO : presenta
+    SEDE ||--o{ SEDE_HORARIO : abre
+    SEDE ||--o| TELEVISOR : muestra
+    SEDE ||--o{ EMPLEADO : emplea
+    SEDE ||--o{ CITA : recibe
+    SEDE ||--o{ PRODUCTO : guarda
+    SEDE ||--o{ GASTO : paga
+    USUARIO ||--o| EMPLEADO : es
+    USUARIO ||--o| CLIENTE : es
+    EMPLEADO ||--o{ EMPLEADO_DOCUMENTO : presenta
+    DOCUMENTO_REQUERIDO ||--o{ EMPLEADO_DOCUMENTO : define
+    NEGOCIO ||--o{ AREA : define
+    AREA ||--o{ SERVICIO : agrupa
+    AREA ||--o{ AREA_DOTACION : kit
+    PRODUCTO ||--o{ AREA_DOTACION : forma
+    EMPLEADO ||--o{ EMPLEADO_AREA : pertenece
+    AREA ||--o{ EMPLEADO_AREA : incluye
+    EMPLEADO ||--o{ EMPLEADO_SERVICIO : habilitado
+    SERVICIO ||--o{ EMPLEADO_SERVICIO : habilita
+    EMPLEADO ||--o{ TURNO_EMPLEADO : trabaja
+    EMPLEADO ||--|| COMISION_CONFIG : cobra
+    CLIENTE ||--o{ CITA : reserva
+    CITA ||--|{ CITA_SERVICIO : incluye
+    SERVICIO ||--o{ CITA_SERVICIO : es
+    EMPLEADO ||--o{ CITA_SERVICIO : presta
+    CITA ||--|| FACTURA : genera
+    SERVICIO ||--o{ ASESORIA_REGLA : tiene
+    CLIENTE ||--o{ ASESORIA_CHAT : abre
+    ASESORIA_CHAT ||--o{ ASESORIA_MENSAJE : contiene
+    EMPLEADO ||--o{ LIQUIDACION : recibe
+    LIQUIDACION ||--|{ LIQUIDACION_DETALLE : detalla
+    CITA_SERVICIO ||--o| LIQUIDACION_DETALLE : origina
+    PRODUCTO ||--o{ ENTREGA_INTERNA : sale
+    EMPLEADO ||--o{ ENTREGA_INTERNA : recibe
+    ENTREGA_INTERNA ||--o| LIQUIDACION_DETALLE : descuenta
+    PRODUCTO ||--o{ VENTA_PRODUCTO : vende
+    EMPLEADO ||--o{ VENTA_PRODUCTO : registra
+    ENTREGA_INTERNA ||--o{ VENTA_PRODUCTO : origina
+    VENTA_PRODUCTO ||--o| LIQUIDACION_DETALLE : descuenta
+
+    NEGOCIO { int id PK
+        string nombre
+        string nit }
+    SEDE { int id PK
+        int negocio_id FK
+        string nombre
+        string direccion }
+    DOCUMENTO_NEGOCIO { int id PK
+        int negocio_id FK
+        string nombre
+        string archivo
+        date subido_en }
+    SEDE_HORARIO { int id PK
+        int sede_id FK
+        int dia_semana
+        time apertura
+        time cierre }
+    TELEVISOR { int id PK
+        int sede_id FK
+        string codigo }
+    USUARIO { int id PK
+        int negocio_id FK
+        string correo
+        string clave_hash
+        string rol "cliente, empleado, administrador, dueno" }
+    CLIENTE { int id PK
+        int usuario_id FK
+        string nombres
+        string celular }
+    EMPLEADO { int id PK
+        int usuario_id FK
+        int sede_id FK
+        string nombres
+        string documento
+        boolean activo }
+    DOCUMENTO_REQUERIDO { int id PK
+        string nombre
+        boolean obligatorio }
+    EMPLEADO_DOCUMENTO { int id PK
+        int empleado_id FK
+        int documento_requerido_id FK
+        string archivo
+        date subido_en
+        string estado "pendiente, verificado" }
+    AREA { int id PK
+        int negocio_id FK
+        string nombre "cabello, unas, barberia, cejas" }
+    EMPLEADO_AREA { int empleado_id PK
+        int area_id PK }
+    AREA_DOTACION { int id PK
+        int area_id FK
+        int producto_id FK
+        int cantidad "piezas del kit del area" }
+    SERVICIO { int id PK
+        int negocio_id FK
+        int area_id FK
+        string nombre "corte, color, peinado, tradicional, acrilicas, semipermanentes, barba, cejas"
+        int duracion_min "30 cabello y barba, 45 unas, 15 cejas"
+        decimal precio }
+    EMPLEADO_SERVICIO { int empleado_id PK
+        int servicio_id PK }
+    TURNO_EMPLEADO { int id PK
+        int empleado_id FK
+        int dia_semana
+        time inicio
+        time fin "varios turnos por dia, sin cruzarse" }
+    COMISION_CONFIG { int empleado_id PK
+        decimal porcentaje
+        string periodicidad "diario, semanal, quincenal, mensual" }
+    CITA { int id PK
+        int sede_id FK
+        int cliente_id FK
+        date fecha
+        string origen "enlace, whatsapp, administrador"
+        string estado }
+    CITA_SERVICIO { int id PK
+        int cita_id FK
+        int servicio_id FK
+        int empleado_id FK
+        datetime inicio
+        datetime fin
+        decimal valor
+        string estado "programado, en curso, realizado, cancelado" }
+    FACTURA { int id PK
+        int cita_id FK
+        int numero
+        decimal total
+        datetime emitida_en }
+    ASESORIA_REGLA { int id PK
+        int servicio_id FK
+        string motivo "ej. decoloracion"
+        int duracion_min "ej. 300" }
+    ASESORIA_CHAT { int id PK
+        int cliente_id FK
+        string tipo "tiempo o caso de unas"
+        int duracion_propuesta_min
+        string estado "abierto, confirmado por administrador" }
+    ASESORIA_MENSAJE { int id PK
+        int chat_id FK
+        string autor "bot o cliente"
+        string texto }
+    LIQUIDACION { int id PK
+        int empleado_id FK
+        date desde
+        date hasta
+        decimal total
+        string estado "pendiente, pagado" }
+    LIQUIDACION_DETALLE { int id PK
+        int liquidacion_id FK
+        string tipo "comision, descuento_venta, descuento_personal, descuento_dotacion"
+        int cita_servicio_id FK
+        int venta_producto_id FK
+        int entrega_interna_id FK
+        decimal valor }
+    PRODUCTO { int id PK
+        int sede_id FK
+        string nombre
+        string tipo "venta, dotacion, uso_interno"
+        int existencias_bodega
+        decimal precio_publico "solo venta"
+        decimal precio_empleado "solo venta" }
+    ENTREGA_INTERNA { int id PK
+        int producto_id FK
+        int empleado_id FK
+        date fecha
+        int cantidad
+        string tipo "dotacion, venta, uso_interno"
+        decimal precio_unitario "precio de empleado si es venta"
+        int devueltas }
+    VENTA_PRODUCTO { int id PK
+        int producto_id FK
+        int empleado_id FK
+        int entrega_interna_id FK
+        int cliente_id FK
+        date fecha
+        int cantidad
+        string destino "cliente, uso_personal, mostrador"
+        decimal precio_cobrado
+        decimal precio_empleado }
+    GASTO { int id PK
+        int sede_id FK
+        string concepto "arriendo, servicios, otros"
+        decimal valor
+        date fecha }
