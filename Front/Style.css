@@ -1,0 +1,56 @@
+:root {
+  /* Colores */
+  --c-marino:   #031641;  /* menú */
+  --c-medio:    #2E3F6B;
+  --c-accion:   #0033DD;  /* único azul de acción */
+  --c-suave:    #E8EEFC;  /* selección */
+  --c-fondo:    #F0F2F5;
+  --c-tarjeta:  #FFFFFF;
+  --c-linea:    #DCE0E6;
+  --c-texto2:   #5B6676;
+
+  /* Solo para estados */
+  --c-ok:       #1E7A46;  --c-ok-bg:  #E1F3E8;
+  --c-error:    #B42318;  --c-error-bg: #FBE4E2;
+
+  /* Medidas del PDF */
+  --radio: 8px;
+  --alto-control: 44px;
+
+  /* Conecta Bootstrap con la paleta */
+  --bs-primary: var(--c-accion);
+  --bs-primary-rgb: 0, 51, 221;
+  --bs-body-bg: var(--c-fondo);
+  --bs-body-color: var(--c-marino);
+  --bs-border-color: var(--c-linea);
+  --bs-border-radius: var(--radio);
+  --bs-font-sans-serif: 'Inter', system-ui, sans-serif;
+}
+
+body { font-family: var(--bs-font-sans-serif); background: var(--c-fondo); color: var(--c-marino); }
+h1, h2, h3, .cifra { font-weight: 700; }
+.texto-secundario { color: var(--c-texto2); }
+
+/* Tarjetas: borde fino, radio 8 */
+.card { background: var(--c-tarjeta); border: 1px solid var(--c-linea); border-radius: var(--radio); }
+
+/* Botones y campos: mínimo 44px */
+.btn, .form-control, .form-select { min-height: var(--alto-control); border-radius: var(--radio); font-weight: 600; }
+.form-control, .form-select { font-weight: 400; border-color: #C5CBD6; }
+
+.btn-citara   { background: var(--c-accion); color: #fff; border: 1px solid var(--c-accion); }
+.btn-citara:hover { background: #002BC0; color: #fff; }
+.btn-secundario { background: #fff; color: var(--c-accion); border: 1px solid var(--c-accion); }
+.btn-oscuro   { background: var(--c-marino); color: #fff; border: 1px solid var(--c-marino); }
+
+/* Etiquetas de estado (verde y rojo solo aquí) */
+.estado { display: inline-block; padding: 2px 10px; border-radius: 6px; font-size: .8rem; font-weight: 600; }
+.estado-confirmada { background: var(--c-ok-bg);    color: var(--c-ok); }
+.estado-en-curso   { background: var(--c-suave);    color: var(--c-accion); }
+.estado-pendiente  { background: var(--c-error-bg); color: var(--c-error); }
+.estado-verificar  { background: var(--c-linea);    color: var(--c-texto2); }
+
+/* Círculos con iniciales (en vez de fotos) */
+.avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--c-linea);
+          display: inline-flex; align-items: center; justify-content: center;
+          font-weight: 700; font-size: .75rem; color: var(--c-medio); }
