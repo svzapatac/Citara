@@ -291,3 +291,32 @@ hr { border-color: var(--c-linea); opacity: 1; }
 .turno { display: inline-block; background: var(--c-suave); border-left: 4px solid var(--c-accion);
          border-radius: 6px; padding: .3rem .7rem; font-weight: 600; font-size: .95rem; }
 .libre { color: var(--c-texto2); opacity: .8; }
+
+/*Servicios y facturas*/
+.avatar-40 { width: 40px; height: 40px; font-size: .75rem; }
+
+/* Interruptor (form-switch de Bootstrap): fondo marino y círculo azul */
+.form-switch .form-check-input { width: 3.2rem; height: 1.8rem; }
+.form-switch .form-check-input:checked {
+  background-color: var(--c-marino); border-color: var(--c-marino);
+  --bs-form-switch-bg: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='%230033DD'/%3e%3c/svg%3e");
+}
+
+/* Caja informativa (azul suave con borde azul) */
+.caja-info { background: var(--c-suave); border: 1px solid var(--c-accion); border-radius: 8px; padding: 1.1rem 1.4rem; }
+
+/* Factura */
+.factura-num { font-size: 3rem; font-weight: 700; letter-spacing: -.03em; line-height: 1; }
+.divisor-punteado-abajo { border-bottom: 1px dashed #C5CBD6; }
+.punto { display: inline-block; width: 12px; height: 12px; border-radius: 50%;
+         background: var(--c-accion); margin-right: .8rem; }
+.total-barra { background: var(--c-marino); color: #fff; border-radius: 10px; padding: 1.2rem 1.6rem;
+               display: flex; justify-content: space-between; align-items: center; }
+.total-barra .etiqueta { color: #C9D2E6; font-size: .85rem; }
+.total-barra strong { font-size: 2.4rem; font-weight: 700; letter-spacing: -.02em; }
+
+/* "Imprimir o guardar PDF": solo sale la factura */
+@media print {
+  .menu-lateral, .barra-movil, .offcanvas, .no-imprimir { display: none !important; }
+  body { background: #fff; }
+}
