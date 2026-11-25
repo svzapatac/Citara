@@ -222,3 +222,24 @@ hr { border-color: var(--c-linea); opacity: 1; }
                   border-radius: 8px; padding: .6rem .9rem; margin-bottom: .6rem; }
 .linea-servicio small { color: var(--c-texto2); }
 .etiqueta { font-size: .72rem; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--c-texto2); }
+/* Agenda · semana  */
+.agenda-semana { --hora: 68px; --cols: 6; }
+.agenda-semana .agenda-ancho { min-width: 760px; }
+.agenda-semana .agenda-cab { padding-bottom: .6rem; }
+.agenda-semana .cita { padding: .2rem .45rem; font-size: .78rem; }
+
+.agenda-dia { text-align: center; padding: .35rem 0; border-radius: 10px; margin: 0 4px; line-height: 1.1; }
+.agenda-dia small { display: block; font-size: .72rem; font-weight: 600; letter-spacing: .04em; color: var(--c-texto2); }
+.agenda-dia strong { font-size: 1.35rem; }
+.agenda-dia.hoy { background: var(--c-accion); }
+.agenda-dia.hoy small, .agenda-dia.hoy strong { color: var(--c-marino); }
+
+/* Nueva cita */
+.input-group-text { border-color: #C5CBD6; background: #fff; color: var(--c-texto2); }
+
+.card.resumen { background: var(--c-marino); border-color: var(--c-marino); color: #fff; padding: 1.5rem; }
+.resumen .etiqueta { color: #AEBBD6; }
+.resumen-fecha { font-size: 1.8rem; font-weight: 700; letter-spacing: -.02em; }
+.resumen-linea { background: rgba(255,255,255,.08); border-radius: 8px; padding: .7rem .9rem; margin-bottom: .6rem; }
+.resumen-linea small { color: #C9D2E6; }
+.resumen-total { font-size: 2.2rem; font-weight: 700; }
