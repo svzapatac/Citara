@@ -182,7 +182,7 @@ hr { border-color: var(--c-linea); opacity: 1; }
 .agenda { --hora: 120px; }
 .agenda-scroll { overflow-x: auto; }
 .agenda-ancho { min-width: 640px; padding: 1rem 1rem 1rem .5rem; }
-.agenda-cab, .agenda-cuerpo { display: grid; grid-template-columns: 56px repeat(4, minmax(0, 1fr)); }
+.agenda-cab, .agenda-cuerpo { display: grid; grid-template-columns: 56px repeat(var(--cols, 4), minmax(0, 1fr)); }
 .agenda-cab { padding-bottom: .9rem; }
 .agenda-emp { display: flex; align-items: center; gap: .6rem; padding: 0 .5rem; }
 .agenda-emp strong { display: block; line-height: 1.1; }
