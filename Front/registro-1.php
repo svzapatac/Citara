@@ -31,16 +31,16 @@
       <h1 class="mb-2">Crea tu cuenta de dueño</h1>
       <p class="text-secondary mb-4">Con esta cuenta administras tu negocio, tus sedes y tu equipo.</p>
 
-      <form action="registro-2.html">
+      <form action="registro-2.php">
         <div class="card p-4">
           <div class="row g-3">
             <div class="col-md-6">
               <label class="form-label" for="nombres">Nombres</label>
-              <input id="nombres" class="form-control" value="Isabel" required>
+              <input id="nombres" class="form-control" placeholder="Isabel" required>
             </div>
             <div class="col-md-6">
               <label class="form-label" for="apellidos">Apellidos</label>
-              <input id="apellidos" class="form-control" value="Rojas" required>
+              <input id="apellidos" class="form-control" placeholder="Rojas Gomez" required>
 
             </div>
 
@@ -54,25 +54,25 @@
             </div>
             <div class="col-md-8">
               <label class="form-label" for="numdoc">Número de documento</label>
-              <input id="numdoc" class="form-control" inputmode="numeric" value="1.020.345.678" required>
+              <input id="numdoc" class="form-control" inputmode="numeric" placeholder="1020345678" required>
             </div>
 
             <div class="col-md-6">
               <label class="form-label" for="celular">Celular</label>
-              <input id="celular" type="tel" class="form-control" value="300 123 4567" required>
+              <input id="celular" type="tel" class="form-control" placeholder="3001234567" required>
             </div>
             <div class="col-md-6">
               <label class="form-label" for="correo">Correo</label>
-              <input id="correo" type="email" class="form-control" value="isabel@correo.com" required>
+              <input id="correo" type="email" class="form-control" placeholder="isabelrg@correo.com" required>
             </div>
 
             <div class="col-md-6">
               <label class="form-label" for="clave">Contraseña</label>
-              <input id="clave" type="password" class="form-control" value="Clave12345" required>
+              <input id="clave" type="password" class="form-control" placeholder="Clave12345" required>
             </div>
             <div class="col-md-6">
               <label class="form-label" for="clave2">Confirmar contraseña</label>
-              <input id="clave2" type="password" class="form-control" value="Clave12345" required>
+              <input id="clave2" type="password" class="form-control" placeholder="Clave12345" required>
             </div>
 
             <div class="col-12">

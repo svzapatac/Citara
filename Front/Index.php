@@ -33,9 +33,9 @@
       <img src="../assets/citara-logo.png" alt="Citara" height="40" class="d-lg-none mb-4">
 
       <h1 class="mb-2">Inicia sesión</h1>
-      <p class="text-secondary mb-4">Clientes, empleados, administradores y dueños entran aquí. Cada quien ve solo lo que le corresponde.</p>
+      <p class="text-secondary mb-4">Empleados, administradores y dueños entran aquí. Cada quien ve solo lo que le corresponde.</p>
 
-      <form action="agenda.html">
+      <form action="agenda.php">
         <label for="correo" class="form-label">Correo</label>
         <input type="email" id="correo" class="form-control mb-3" placeholder="nombre@correo.com" required>
 
@@ -54,11 +54,11 @@
       </form>
 
       <hr class="my-4">
-
+<!-- 
       <a href="#" class="btn btn-outline-primary w-100 d-flex justify-content-between align-items-center mb-2">
         Soy cliente: reservar sin cuenta <i class="bi bi-arrow-right"></i>
-      </a>
-      <a href="registro-1.html" class="btn btn-secondary w-100 d-flex justify-content-between align-items-center">
+      </a> -->
+      <a href="registro-1.php" class="btn btn-secondary w-100 d-flex justify-content-between align-items-center">
         Soy dueño: registrar mi negocio <i class="bi bi-arrow-right"></i>
       </a>
 

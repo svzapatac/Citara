@@ -69,8 +69,8 @@
 
           <div class="nota-suave mb-3"><strong>Ganancia por ventas:</strong> cobró $114.000 a los clientes y descuenta $90.000, así que se queda con $24.000. La compra de uso personal no deja ganancia.</div>
 
-          <a href="comisiones.html" class="btn btn-primary w-100 mb-2"><i class="bi bi-check-lg me-2"></i>Marcar como pagado</a>
-          <a href="comisiones.html" class="btn btn-secondary w-100">Volver</a>
+          <a href="comisiones.php" class="btn btn-primary w-100 mb-2"><i class="bi bi-check-lg me-2"></i>Marcar como pagado</a>
+          <a href="comisiones.php" class="btn btn-secondary w-100">Volver</a>
         </div>
       </div>
 

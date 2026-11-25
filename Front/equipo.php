@@ -29,8 +29,8 @@
           <button type="button" class="btn btn-segmento active">Activos</button>
           <button type="button" class="btn btn-segmento">Retirados</button>
         </div>
-        <a href="turnos.html" class="btn btn-outline-primary"><i class="bi bi-calendar-week me-2"></i>Turnos y horarios</a>
-        <a href="registrar-empleado.html" class="btn btn-primary"><i class="bi bi-plus-lg me-2"></i>Registrar empleado</a>
+        <a href="turnos.php" class="btn btn-outline-primary"><i class="bi bi-calendar-week me-2"></i>Turnos y horarios</a>
+        <a href="registrar-empleado.php" class="btn btn-primary"><i class="bi bi-plus-lg me-2"></i>Registrar empleado</a>
       </div>
     </div>
 
@@ -52,7 +52,7 @@
               <td>Semanal · 40%</td>
               <td><span class="badge bg-success-subtle text-success-emphasis">Completos</span></td>
               <td><span class="badge bg-success-subtle text-success-emphasis">Kit completo</span></td>
-              <td><a href="expediente.html" class="enlace-fuerte">Expediente</a></td>
+              <td><a href="expediente.php" class="enlace-fuerte">Expediente</a></td>
             </tr>
             <tr>
               <td><div class="d-flex align-items-center gap-3"><span class="avatar avatar-44 rounded-circle d-inline-flex align-items-center justify-content-center">CR</span><span class="nombre-fila">Camila Ruiz</span></div></td>
@@ -61,7 +61,7 @@
               <td>Quincenal · 45%</td>
               <td><span class="badge bg-secondary-subtle text-secondary-emphasis">1 por verificar</span></td>
               <td><span class="badge bg-success-subtle text-success-emphasis">Kit completo</span></td>
-              <td><a href="expediente.html" class="enlace-fuerte">Expediente</a></td>
+              <td><a href="expediente.php" class="enlace-fuerte">Expediente</a></td>
             </tr>
             <tr>
               <td><div class="d-flex align-items-center gap-3"><span class="avatar avatar-44 rounded-circle d-inline-flex align-items-center justify-content-center">PM</span><span class="nombre-fila">Patty Mora</span></div></td>
@@ -70,7 +70,7 @@
               <td>Mensual · 35%</td>
               <td><span class="badge bg-success-subtle text-success-emphasis">Completos</span></td>
               <td><span class="badge bg-success-subtle text-success-emphasis">Kit completo</span></td>
-              <td><a href="expediente.html" class="enlace-fuerte">Expediente</a></td>
+              <td><a href="expediente.php" class="enlace-fuerte">Expediente</a></td>
             </tr>
             <tr>
               <td><div class="d-flex align-items-center gap-3"><span class="avatar avatar-44 avatar-azul rounded-circle d-inline-flex align-items-center justify-content-center">SD</span><span class="nombre-fila">Sofía Díaz</span></div></td>
@@ -79,7 +79,7 @@
               <td>Mensual · 35%</td>
               <td><span class="badge bg-danger-subtle text-danger-emphasis">Falta 1</span></td>
               <td><span class="badge bg-secondary-subtle text-secondary-emphasis">Falta 1 pieza</span></td>
-              <td><a href="expediente.html" class="enlace-fuerte">Expediente</a></td>
+              <td><a href="expediente.php" class="enlace-fuerte">Expediente</a></td>
             </tr>
             <tr>
               <td><div class="d-flex align-items-center gap-3"><span class="avatar avatar-44 rounded-circle d-inline-flex align-items-center justify-content-center">AP</span><span class="nombre-fila">Andrés Pardo</span></div></td>
@@ -88,7 +88,7 @@
               <td>Quincenal · 40%</td>
               <td><span class="badge bg-success-subtle text-success-emphasis">Completos</span></td>
               <td><span class="badge bg-success-subtle text-success-emphasis">Kit completo</span></td>
-              <td><a href="expediente.html" class="enlace-fuerte">Expediente</a></td>
+              <td><a href="expediente.php" class="enlace-fuerte">Expediente</a></td>
             </tr>
           </tbody>
         </table>

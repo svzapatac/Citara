@@ -84,7 +84,7 @@
 
         <div class="card p-4">
           <button type="button" class="btn btn-outline-primary w-100 mb-2" onclick="window.print()"><i class="bi bi-file-earmark-text me-2"></i>Imprimir o guardar PDF</button>
-          <a href="facturas.html" class="btn btn-secondary w-100">Volver al historial</a>
+          <a href="facturas.php" class="btn btn-secondary w-100">Volver al historial</a>
         </div>
       </div>
 

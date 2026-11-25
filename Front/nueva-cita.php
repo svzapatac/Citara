@@ -20,7 +20,7 @@
     <h1 class="mb-2">Nueva cita</h1>
     <p class="text-secondary mb-4">Registra aquí las solicitudes que llegan por WhatsApp, Facebook u otros canales. El sistema valida duración y disponibilidad de cada servicio.</p>
 
-    <form action="agenda.html">
+    <form action="agenda.php">
       <div class="row g-3">
 
         <!-- Formulario -->
@@ -32,7 +32,7 @@
                 <label class="form-label" for="cliente">Cliente</label>
                 <div class="input-group">
                   <span class="input-group-text"><i class="bi bi-search"></i></span>
-                  <input id="cliente" class="form-control" value="Ana Martínez · 300 765 4321">
+                  <input id="cliente" class="form-control" placeholder="Ana Martínez \ 102056171">
                 </div>
                 <div class="small text-secondary mt-1">¿Cliente nuevo? <a href="#" class="enlace-suave">Registrar cliente</a></div>
               </div>
@@ -136,7 +136,7 @@
                 <span class="resumen-total">$65.000</span>
               </div>
               <button type="submit" class="btn btn-primary w-100 mb-2">Guardar cita</button>
-              <a href="agenda.html" class="btn btn-outline-light w-100">Cancelar</a>
+              <a href="agenda.php" class="btn btn-outline-light w-100">Cancelar</a>
             </div>
           </div>
         </div>

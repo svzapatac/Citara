@@ -21,7 +21,7 @@
     <h1 class="mb-1">Registrar entrega</h1>
     <p class="text-secondary mb-3">Registra quién recibió el producto, cuándo y cuántas unidades.</p>
 
-    <form action="inventario.html">
+    <form action="inventario.php">
       <div class="row g-3">
 
         <div class="col-12 col-xl-7">
@@ -62,7 +62,7 @@
             </div>
 
             <div class="d-flex justify-content-end gap-2 mt-3">
-              <a href="inventario.html" class="btn btn-secondary px-4">Cancelar</a>
+              <a href="inventario.php" class="btn btn-secondary px-4">Cancelar</a>
               <button type="submit" class="btn btn-primary px-4">Guardar entrega</button>
             </div>
           </div>

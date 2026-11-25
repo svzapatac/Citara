@@ -33,10 +33,10 @@
           <option>Semana 30 nov al 5 dic</option>
         </select>
         <div class="btn-group segmento" role="group" aria-label="Vista">
-          <a href="agenda.html" class="btn btn-segmento">Día</a>
-          <a href="agenda-semana.html" class="btn btn-segmento active" aria-current="page">Semana</a>
+          <a href="agenda.php" class="btn btn-segmento">Día</a>
+          <a href="agenda-semana.php" class="btn btn-segmento active" aria-current="page">Semana</a>
         </div>
-        <a href="nueva-cita.html" class="btn btn-primary"><i class="bi bi-plus-lg me-1"></i> Nueva cita</a>
+        <a href="nueva-cita.php" class="btn btn-primary"><i class="bi bi-plus-lg me-1"></i> Nueva cita</a>
       </div>
     </div>
 
