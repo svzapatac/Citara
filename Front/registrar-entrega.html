@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registrar entrega · Citara</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="Style.css" rel="stylesheet">
+</head>
+<body>
+
+<div class="d-flex flex-column flex-lg-row">
+
+  <!-- Menú lateral (lo construye menu.js) -->
+  <div id="menu-lateral" class="menu-envoltura" data-activo="inventario" data-rol="administrador"></div>
+
+  <main class="contenido p-3 p-lg-4">
+
+    <h1 class="mb-1">Registrar entrega</h1>
+    <p class="text-secondary mb-3">Registra quién recibió el producto, cuándo y cuántas unidades.</p>
+
+    <form action="inventario.html">
+      <div class="row g-3">
+
+        <div class="col-12 col-xl-7">
+          <div class="card p-4">
+
+            <div class="btn-group segmento mb-3 align-self-start" role="group" aria-label="Tipo de entrega">
+              <input type="radio" class="btn-check" name="tipo" id="t1"><label class="btn btn-segmento" for="t1">Dotación del área</label>
+              <input type="radio" class="btn-check" name="tipo" id="t2" checked><label class="btn btn-segmento" for="t2">Productos para vender</label>
+              <input type="radio" class="btn-check" name="tipo" id="t3"><label class="btn btn-segmento" for="t3">Uso interno</label>
+            </div>
+
+            <div class="row g-3">
+              <div class="col-md-8"><label class="form-label" for="producto">Producto</label>
+                <select id="producto" class="form-select">
+                  <option selected>Shampoo hidratante</option><option>Acondicionador</option><option>Esmalte en gel</option>
+                  <option>Aceite capilar</option><option>Mascarilla capilar</option><option>Aceite para barba</option>
+                </select></div>
+              <div class="col-md-4"><label class="form-label" for="cantidad">Cantidad</label>
+                <input id="cantidad" class="form-control" inputmode="numeric" value="4"></div>
+
+              <div class="col-md-6"><label class="form-label" for="entregado">Entregado a</label>
+                <select id="entregado" class="form-select">
+                  <option selected>Laura Gómez</option><option>Camila Ruiz</option><option>Patty Mora</option><option>Sofía Díaz</option><option>Andrés Pardo</option>
+                </select></div>
+              <div class="col-md-6"><label class="form-label" for="fecha">Fecha</label>
+                <input id="fecha" class="form-control" value="19/11/2026" placeholder="dd/mm/aaaa"></div>
+
+              <div class="col-md-4"><label class="form-label" for="publico">Precio público</label>
+                <input id="publico" class="form-control" value="$38.000"></div>
+              <div class="col-md-4"><label class="form-label" for="empleado">Precio de empleado</label>
+                <input id="empleado" class="form-control" value="$30.000"></div>
+              <div class="col-md-4"><label class="form-label" for="ganancia">Ganancia por unidad</label>
+                <input id="ganancia" class="form-control" value="$8.000" readonly></div>
+
+              <div class="col-12">
+                <div class="nota-gris">El valor a precio de empleado se descuenta en el pago mensual. Lo que el empleado no venda lo devuelve y no se descuenta. Si lo compra para sí mismo queda como <strong>uso personal</strong>: se descuenta, sin ganancia.</div>
+              </div>
+            </div>
+
+            <div class="d-flex justify-content-end gap-2 mt-3">
+              <a href="inventario.html" class="btn btn-secondary px-4">Cancelar</a>
+              <button type="submit" class="btn btn-primary px-4">Guardar entrega</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 col-xl-5">
+          <div class="card p-4">
+            <p class="etiqueta mb-2">Cuentas de esta entrega</p>
+            <div class="dato-fila"><span>Cobra a los clientes (4 × $38.000)</span><strong>$152.000</strong></div>
+            <div class="dato-fila"><span>Se descuenta de su pago (4 × $30.000)</span><strong>−$120.000</strong></div>
+            <hr class="my-2">
+            <div class="dato-fila"><strong>Ganancia de Laura si vende las 4</strong><span class="cifra-media">$32.000</span></div>
+
+            <p class="etiqueta mt-4 mb-2">Existencias</p>
+            <div class="dato-fila"><span>Bodega</span><strong>7 → 3</strong></div>
+            <div class="dato-fila"><span>En manos de Laura</span><strong>0 → 4</strong></div>
+          </div>
+        </div>
+
+      </div>
+    </form>
+
+  </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="menu.js"></script>
+</body>
+</html>

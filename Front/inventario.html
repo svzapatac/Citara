@@ -1,0 +1,133 @@
+!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inventario · Citara</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="Style.css" rel="stylesheet">
+</head>
+<body>
+
+<div class="d-flex flex-column flex-lg-row">
+
+  <!-- Menú lateral (lo construye menu.js) -->
+  <div id="menu-lateral" class="menu-envoltura" data-activo="inventario" data-rol="administrador"></div>
+
+  <main class="contenido p-3 p-lg-4">
+
+    <!-- Encabezado -->
+    <div class="d-flex flex-wrap align-items-start justify-content-between gap-3 mb-3">
+      <div>
+        <h1 class="mb-1">Inventario</h1>
+        <p class="text-secondary mb-0">Productos de venta, dotación por área y uso interno, por separado.</p>
+      </div>
+      <div class="d-flex flex-wrap gap-2">
+        <a href="registrar-entrega.html" class="btn btn-outline-primary">Registrar entrega</a>
+        <a href="#" class="btn btn-primary"><i class="bi bi-plus-lg me-2"></i>Nuevo producto</a>
+      </div>
+    </div>
+
+    <!-- Alerta de existencias -->
+    <div class="caja-info d-flex align-items-center gap-3 mb-3">
+      <i class="bi bi-bell fs-4"></i>
+      <div class="lh-sm">
+        <div class="alerta-titulo">3 productos de venta con menos de 5 unidades en bodega</div>
+        <span>Shampoo hidratante · Esmalte en gel · Mascarilla capilar</span>
+      </div>
+    </div>
+
+    <div class="row g-3 mb-3">
+
+      <div class="col-12 col-xl-7">
+        <div class="card p-3 p-md-4 h-100">
+          <h2 class="card-titulo mb-2">Productos de venta</h2>
+          <div class="table-responsive">
+            <table class="table tabla-citara">
+              <thead>
+                <tr><th>Producto</th><th class="text-end">Bodega</th><th class="text-end">En empleados</th><th class="text-end">Público</th><th class="text-end">Empleado</th></tr>
+              </thead>
+              <tbody>
+                <tr class="table-active">
+                  <td>Shampoo hidratante</td><td class="text-end"><strong>3</strong> <span class="badge bg-danger-subtle text-danger-emphasis ms-1">Bajo</span></td><td class="text-end">4</td>
+                  <td class="text-end">$38.000</td><td class="text-end">$30.000</td>
+                </tr>
+                <tr>
+                  <td>Acondicionador</td><td class="text-end">12</td><td class="text-end">2</td>
+                  <td class="text-end">$36.000</td><td class="text-end">$28.000</td>
+                </tr>
+                <tr class="table-active">
+                  <td>Esmalte en gel</td><td class="text-end"><strong>4</strong> <span class="badge bg-danger-subtle text-danger-emphasis ms-1">Bajo</span></td><td class="text-end">3</td>
+                  <td class="text-end">$18.000</td><td class="text-end">$13.000</td>
+                </tr>
+                <tr>
+                  <td>Aceite capilar</td><td class="text-end">8</td><td class="text-end">1</td>
+                  <td class="text-end">$42.000</td><td class="text-end">$33.000</td>
+                </tr>
+                <tr class="table-active">
+                  <td>Mascarilla capilar</td><td class="text-end"><strong>2</strong> <span class="badge bg-danger-subtle text-danger-emphasis ms-1">Bajo</span></td><td class="text-end">2</td>
+                  <td class="text-end">$45.000</td><td class="text-end">$35.000</td>
+                </tr>
+                <tr>
+                  <td>Aceite para barba</td><td class="text-end">9</td><td class="text-end">2</td>
+                  <td class="text-end">$32.000</td><td class="text-end">$24.000</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="text-secondary small mb-0 mt-2">El gerente entrega estos productos a los empleados a precio de empleado; ellos los venden al precio público.</p>
+        </div>
+      </div>
+
+      <div class="col-12 col-xl-5">
+        <div class="card p-3 p-md-4">
+          <div class="d-flex align-items-center justify-content-between mb-2">
+            <h2 class="card-titulo mb-0">Dotación por área</h2>
+            <a href="dotacion.html" class="enlace-fuerte">Ver kits</a>
+          </div>
+          <div class="table-responsive">
+            <table class="table tabla-citara">
+              <thead>
+                <tr><th>Área</th><th>Kit básico</th><th class="text-end">Personas</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Cabello</td><td>Tijeras, secador, plancha, peinillas</td><td class="text-end">3</td></tr>
+                <tr><td>Uñas</td><td>Esmaltes, brochas, limas, lámpara UV</td><td class="text-end">1</td></tr>
+                <tr><td>Barbería</td><td>Tijeras, máquina, navajas, capa</td><td class="text-end">1</td></tr>
+                <tr><td>Cejas</td><td>Cera, pinzas, hilo</td><td class="text-end">2</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Entregas recientes -->
+    <div class="card p-3 p-md-4">
+      <h2 class="card-titulo mb-2">Entregas recientes</h2>
+      <div class="table-responsive">
+        <table class="table tabla-citara">
+          <thead>
+            <tr><th>Fecha</th><th>Empleado</th><th>Producto</th><th class="text-end">Cant.</th><th>Tipo</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>19 nov</td><td>Laura</td><td>Shampoo hidratante</td><td class="text-end">4</td><td><span class="badge bg-primary-subtle text-primary-emphasis">Para vender</span></td></tr>
+            <tr><td>12 nov</td><td>Camila</td><td>Esmalte en gel</td><td class="text-end">3</td><td><span class="badge bg-primary-subtle text-primary-emphasis">Para vender</span></td></tr>
+            <tr><td>10 nov</td><td>Patty</td><td>Tinte</td><td class="text-end">2</td><td><span class="badge bg-secondary-subtle text-secondary-emphasis">Uso interno</span></td></tr>
+            <tr><td>9 nov</td><td>Andrés</td><td>Máquina de corte</td><td class="text-end">1</td><td><span class="badge bg-secondary-subtle text-secondary-emphasis">Dotación</span></td></tr>
+            <tr><td>5 nov</td><td>Sofía</td><td>Plancha</td><td class="text-end">1</td><td><span class="badge bg-secondary-subtle text-secondary-emphasis">Dotación</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="menu.js"></script>
+</body>
+</html>
