@@ -243,3 +243,51 @@ hr { border-color: var(--c-linea); opacity: 1; }
 .resumen-linea { background: rgba(255,255,255,.08); border-radius: 8px; padding: .7rem .9rem; margin-bottom: .6rem; }
 .resumen-linea small { color: #C9D2E6; }
 .resumen-total { font-size: 2.2rem; font-weight: 700; }
+
+/* Tablas (clientes, equipo, turnos)*/
+.tabla-citara { --bs-table-bg: transparent; --bs-table-border-color: var(--c-linea);
+                --bs-table-active-bg: #EEF2FD; --bs-table-hover-bg: #F4F7FE; margin-bottom: 0; }
+.tabla-citara thead th { font-size: .9rem; font-weight: 600; color: var(--c-marino);
+                         border-bottom: 2px solid var(--c-linea); white-space: nowrap; }
+.tabla-citara > :not(caption) > * > * { padding: .9rem .75rem; }
+.tabla-citara td { vertical-align: middle; }
+.tabla-citara tbody tr:last-child > * { border-bottom-width: 0; }
+.nombre-fila { font-weight: 700; }
+.enlace-fuerte { color: var(--c-medio); font-weight: 700; text-decoration: none; }
+.enlace-fuerte:hover { text-decoration: underline; }
+
+/* Avatares: tamaños y variante azul */
+.avatar-44 { width: 44px; height: 44px; font-size: .85rem; }
+.avatar-80 { width: 80px; height: 80px; font-size: 1.6rem; }
+.avatar-azul { background: #DDE6FB; color: var(--c-accion); }
+
+/* Textos y títulos de tarjeta */
+.buscador { width: 360px; max-width: 100%; }
+.ancho-texto { max-width: 560px; }
+.card-titulo { font-size: 1.7rem; font-weight: 700; letter-spacing: -.02em; margin-bottom: 1rem; }
+.nombre-grande { font-size: 2rem; font-weight: 700; letter-spacing: -.02em; line-height: 1.1; }
+.cifra-grande { font-size: 3.2rem; font-weight: 700; letter-spacing: -.03em; line-height: 1; }
+
+/* Filas de datos y de dotación */
+.dato-fila { display: flex; justify-content: space-between; align-items: baseline; padding: .18rem 0; }
+.dato-fila strong { font-weight: 700; }
+.dotacion-fila { display: flex; align-items: center; gap: .8rem; padding: .3rem 0; }
+.dotacion-fila .cant { margin-left: auto; font-weight: 700; }
+
+/* Caja con borde punteado (persona retirada) */
+.caja-punteada { border: 1px dashed #C5CBD6; border-radius: 8px; padding: 1rem 1.25rem; }
+
+/* Botón blanco con borde azul y texto oscuro ("Retirar del equipo") */
+.btn-borde { --bs-btn-color: var(--c-marino); --bs-btn-bg: #fff; --bs-btn-border-color: var(--c-accion);
+             --bs-btn-hover-color: var(--c-marino); --bs-btn-hover-bg: var(--c-suave); --bs-btn-hover-border-color: var(--c-accion);
+             --bs-btn-active-color: var(--c-marino); --bs-btn-active-bg: var(--c-suave); --bs-btn-active-border-color: var(--c-accion); }
+
+/* Barra de avance */
+.progress { --bs-progress-height: .8rem; --bs-progress-bg: var(--c-linea);
+            --bs-progress-bar-bg: var(--c-accion); --bs-progress-border-radius: 999px; }
+
+/* Turnos */
+.tabla-turnos { min-width: 820px; }
+.turno { display: inline-block; background: var(--c-suave); border-left: 4px solid var(--c-accion);
+         border-radius: 6px; padding: .3rem .7rem; font-weight: 600; font-size: .95rem; }
+.libre { color: var(--c-texto2); opacity: .8; }
