@@ -131,3 +131,94 @@ hr { border-color: var(--c-linea); opacity: 1; }
 .servicio .nombre { font-weight: 700; flex: 1; }
 .servicio .duracion { color: var(--c-texto2); }
 .servicio .form-control { width: 130px; text-align: right; font-weight: 700; }
+
+/* Panel: menú lateral */
+.menu-envoltura { flex: none; }
+.contenido { flex: 1; min-width: 0; }
+
+.menu-lateral { width: 240px; background: var(--c-marino); padding: 1rem;
+                position: sticky; top: 0; height: 100vh; overflow-y: auto; }
+
+/* Menú: nav-pills de Bootstrap con la paleta de Citara */
+.nav-citara {
+  --bs-nav-link-color: #E3E8F4;
+  --bs-nav-link-hover-color: #fff;
+  --bs-nav-link-padding-y: .7rem;
+  --bs-nav-link-padding-x: .9rem;
+  --bs-nav-link-font-size: 1rem;
+  --bs-nav-link-font-weight: 500;
+  --bs-nav-pills-border-radius: 10px;
+  --bs-nav-pills-link-active-bg: var(--c-accion);
+  --bs-nav-pills-link-active-color: #fff;
+}
+.nav-citara .nav-link:hover { background: rgba(255,255,255,.08); }
+.nav-citara .nav-link.active { font-weight: 600; }
+.nav-citara .nav-link i { font-size: 1.1rem; }
+
+.usuario-caja { background: rgba(255,255,255,.07); border-radius: 12px; padding: .8rem; color: #fff; }
+.usuario-caja small { color: #AEBBD6; }
+.usuario-caja .avatar { background: var(--c-suave); color: var(--c-accion); flex: none; }
+
+.avatar { width: 36px; height: 36px; background: var(--c-linea); color: var(--c-medio);
+          font-weight: 700; font-size: .75rem; flex: none; }
+
+/* Celular */
+.barra-movil { background: var(--c-marino); }
+.offcanvas-citara { --bs-offcanvas-width: 280px; background: var(--c-marino); }
+
+/*  Agenda */
+/* Selector Día / Semana */
+.segmento { background: #fff; border: 1px solid var(--c-linea); border-radius: 10px; padding: 4px; }
+.btn-segmento { --bs-btn-color: var(--c-texto2); --bs-btn-border-color: transparent;
+                --bs-btn-hover-color: var(--c-marino); --bs-btn-hover-border-color: transparent;
+                --bs-btn-active-bg: var(--c-suave); --bs-btn-active-color: var(--c-marino);
+                --bs-btn-active-border-color: transparent; border-radius: 8px !important; }
+
+/* Leyenda */
+.leyenda-cita    { display: inline-block; width: 4px;  height: 14px; background: var(--c-accion); border-radius: 2px; vertical-align: middle; margin-right: .4rem; }
+.leyenda-bloqueo { display: inline-block; width: 14px; height: 14px; background: #E4E8F0; border-radius: 3px; vertical-align: middle; margin-right: .4rem; }
+
+/* Cuadrícula del día: 1 hora = --hora de alto */
+.agenda { --hora: 120px; }
+.agenda-scroll { overflow-x: auto; }
+.agenda-ancho { min-width: 640px; padding: 1rem 1rem 1rem .5rem; }
+.agenda-cab, .agenda-cuerpo { display: grid; grid-template-columns: 56px repeat(4, minmax(0, 1fr)); }
+.agenda-cab { padding-bottom: .9rem; }
+.agenda-emp { display: flex; align-items: center; gap: .6rem; padding: 0 .5rem; }
+.agenda-emp strong { display: block; line-height: 1.1; }
+.agenda-emp small { color: var(--c-texto2); font-size: .78rem; }
+
+.agenda-cuerpo { position: relative; }
+.agenda-horas { position: relative; }
+.agenda-horas span { position: absolute; right: .6rem; top: calc(var(--hora) * var(--n));
+                     transform: translateY(-50%); font-size: .8rem; font-weight: 600; color: var(--c-texto2); }
+
+.agenda-col { position: relative; height: calc(var(--hora) * 5);
+              border-left: 1px solid var(--c-linea); border-bottom: 1px solid var(--c-linea);
+              background-image: repeating-linear-gradient(to bottom, var(--c-linea) 0, var(--c-linea) 1px, transparent 1px, transparent var(--hora)); }
+
+/* Línea de la hora actual */
+.agenda-ahora { position: absolute; left: 0; right: 0; top: calc(var(--hora) * var(--ini));
+                border-top: 2px solid var(--c-accion); z-index: 3; pointer-events: none; }
+.agenda-ahora span { position: absolute; left: 4px; top: 0; transform: translateY(-50%);
+                     background: var(--c-accion); color: #fff; font-size: .75rem; font-weight: 700;
+                     padding: .15rem .5rem; border-radius: 999px; }
+
+/* Citas: --ini = horas desde las 9:00, --dur = duración en horas */
+.cita { position: absolute; left: 4px; right: 4px; z-index: 1;
+        top: calc(var(--hora) * var(--ini)); height: calc(var(--hora) * var(--dur) - 3px);
+        background: var(--c-suave); border-left: 4px solid var(--c-accion); border-radius: 8px;
+        padding: .35rem .55rem; overflow: hidden; line-height: 1.25; font-size: .85rem; }
+.cita strong { color: var(--c-marino); }
+.cita small  { color: var(--c-texto2); font-size: .78rem; }
+.cita.hecha { border-left-color: #8FA3E8; }
+.cita.hecha strong { color: var(--c-texto2); }
+.cita.corta { padding-top: .15rem; white-space: nowrap; text-overflow: ellipsis; }
+.cita-estado { position: absolute; top: .35rem; right: .5rem; font-size: .7rem; font-weight: 600; color: var(--c-accion); }
+
+/* Detalle de cita */
+.linea-servicio { display: flex; justify-content: space-between; align-items: center; gap: 1rem;
+                  background: var(--c-suave); border-left: 4px solid var(--c-accion);
+                  border-radius: 8px; padding: .6rem .9rem; margin-bottom: .6rem; }
+.linea-servicio small { color: var(--c-texto2); }
+.etiqueta { font-size: .72rem; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--c-texto2); }

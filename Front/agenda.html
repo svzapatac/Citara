@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agenda · Citara</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="Style.css" rel="stylesheet">
+</head>
+<body>
+
+<div class="d-flex flex-column flex-lg-row">
+
+  <!-- Menú lateral (lo construye menu.js) -->
+  <div id="menu-lateral" class="menu-envoltura" data-activo="agenda" data-rol="administrador"></div>
+
+  <main class="contenido p-3 p-lg-4">
+
+    <!-- Encabezado -->
+    <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-2">
+      <h1 class="mb-0">Agenda</h1>
+      <div class="d-flex flex-wrap align-items-center gap-2">
+        <select class="form-select w-auto fw-semibold" aria-label="Fecha">
+          <option selected>Lunes 23 de noviembre</option>
+          <option>Martes 24 de noviembre</option>
+          <option>Miércoles 25 de noviembre</option>
+          <option>Jueves 26 de noviembre</option>
+          <option>Viernes 27 de noviembre</option>
+          <option>Sábado 28 de noviembre</option>
+        </select>
+        <div class="btn-group segmento" role="group" aria-label="Vista">
+          <a href="agenda.html" class="btn btn-segmento active" aria-current="page">Día</a>
+          <a href="agenda-semana.html" class="btn btn-segmento">Semana</a>
+        </div>
+        <a href="nueva-cita.html" class="btn btn-primary"><i class="bi bi-plus-lg me-1"></i> Nueva cita</a>
+      </div>
+    </div>
+
+    <p class="small text-secondary mb-3">
+      <span class="leyenda-cita"></span>Cita
+      <span class="leyenda-bloqueo ms-3"></span>Bloqueo / descanso
+    </p>
+
+    <div class="row g-3">
+
+      <!-- Cuadrícula del día -->
+      <div class="col-12 col-xl-8">
+        <div class="card agenda">
+          <div class="agenda-scroll">
+            <div class="agenda-ancho">
+
+              <!-- Empleados -->
+              <div class="agenda-cab">
+                <div></div>
+                <div class="agenda-emp"><span class="avatar rounded-circle d-inline-flex align-items-center justify-content-center">LG</span><div><strong>Laura</strong><small>Corte · peinado</small></div></div>
+                <div class="agenda-emp"><span class="avatar rounded-circle d-inline-flex align-items-center justify-content-center">CR</span><div><strong>Camila</strong><small>Uñas</small></div></div>
+                <div class="agenda-emp"><span class="avatar rounded-circle d-inline-flex align-items-center justify-content-center">PM</span><div><strong>Patty</strong><small>Color</small></div></div>
+                <div class="agenda-emp"><span class="avatar rounded-circle d-inline-flex align-items-center justify-content-center">AP</span><div><strong>Andrés</strong><small>Barbería · cejas</small></div></div>
+              </div>
+
+              <div class="agenda-cuerpo">
+
+                <!-- Horas -->
+                <div class="agenda-horas">
+                  <span style="--n:0">9:00</span>
+                  <span style="--n:1">10:00</span>
+                  <span style="--n:2">11:00</span>
+                  <span style="--n:3">12:00</span>
+                  <span style="--n:4">13:00</span>
+                </div>
+
+                <!-- Laura -->
+                <div class="agenda-col">
+                  <div class="cita hecha" style="--ini:0; --dur:.5"><strong>09:00 Corte</strong><small class="d-block">Marta León</small></div>
+                  <div class="cita hecha" style="--ini:.5; --dur:.5"><strong>09:30 Peinado</strong><small class="d-block">Paula Castro</small></div>
+                  <div class="cita" style="--ini:1; --dur:.5"><strong>10:00 Corte</strong><span class="cita-estado">En curso</span><small class="d-block">Ana Martínez</small></div>
+                  <div class="cita" style="--ini:4; --dur:.5"><strong>13:00 Corte</strong><span class="badge bg-danger-subtle text-danger-emphasis cita-estado"><i class="bi bi-arrow-repeat"></i> de 12:30</span><small class="d-block">Marcela Ríos</small></div>
+                </div>
+
+                <!-- Camila -->
+                <div class="agenda-col">
+                  <div class="cita" style="--ini:1.5; --dur:.75"><strong>10:30 Uñas tradicional</strong><small class="d-block">Ana Martínez · 45 min</small></div>
+                  <div class="cita" style="--ini:3; --dur:.75"><strong>12:00 Semipermanentes</strong><small class="d-block">Daniela Ruiz · 45 min</small></div>
+                </div>
+
+                <!-- Patty -->
+                <div class="agenda-col">
+                  <div class="cita" style="--ini:0; --dur:5"><strong>09:00 Decoloración</strong><span class="cita-estado">En curso</span><small class="d-block">Lucía Ortiz · 5 h</small></div>
+                </div>
+
+                <!-- Andrés -->
+                <div class="agenda-col">
+                  <div class="cita hecha" style="--ini:0; --dur:.5"><strong>09:00 Corte</strong><small class="d-block">Julián Rey</small></div>
+                  <div class="cita hecha" style="--ini:.5; --dur:.5"><strong>09:30 Barba</strong><small class="d-block">Julián Rey</small></div>
+                  <div class="cita" style="--ini:1; --dur:.5"><strong>10:00 Corte</strong><span class="cita-estado">En curso</span><small class="d-block">Sebastián C.</small></div>
+                  <div class="cita" style="--ini:1.5; --dur:.5"><strong>10:30 Barba</strong><small class="d-block">Sebastián C.</small></div>
+                  <div class="cita corta" style="--ini:2; --dur:.25"><strong>11:00 Cejas</strong> <small>· Mateo D.</small></div>
+                  <div class="cita" style="--ini:3; --dur:.5"><strong>12:00 Corte</strong><small class="d-block">Felipe Mora</small></div>
+                </div>
+
+                <!-- Hora actual: 10:12 = 1,2 horas desde las 9:00 -->
+                <div class="agenda-ahora" style="--ini:1.2"><span>10:12</span></div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Detalle de cita -->
+      <div class="col-12 col-xl-4">
+        <div class="card p-3">
+          <h2 class="h3 mb-3">Detalle de cita</h2>
+
+          <div class="d-flex align-items-center gap-3 mb-3">
+            <span class="avatar rounded-circle d-inline-flex align-items-center justify-content-center" style="width:52px;height:52px;background:var(--c-suave);color:var(--c-medio);font-size:1rem">AM</span>
+            <div>
+              <strong class="fs-5 d-block lh-sm">Ana Martínez</strong>
+              <small class="text-secondary">300 765 4321 · WhatsApp</small>
+            </div>
+          </div>
+
+          <div class="linea-servicio">
+            <div><strong class="d-block">Corte</strong><small>Laura · 10:00 a 10:30</small></div>
+            <strong>$35.000</strong>
+          </div>
+          <div class="linea-servicio">
+            <div><strong class="d-block">Uñas tradicional</strong><small>Camila · 10:30 a 11:15</small></div>
+            <strong>$30.000</strong>
+          </div>
+
+          <div class="d-flex justify-content-between align-items-baseline my-3">
+            <span class="etiqueta">Total · Factura 0148</span>
+            <strong class="fs-3">$65.000</strong>
+          </div>
+
+          <div class="d-flex gap-2 mb-3">
+            <span class="badge bg-primary-subtle text-primary-emphasis">En curso</span>
+            <span class="badge bg-success-subtle text-success-emphasis">Sin traslapes</span>
+          </div>
+
+          <button type="button" class="btn btn-primary w-100 mb-2"><i class="bi bi-check-lg me-2"></i>Marcar servicios realizados</button>
+          <button type="button" class="btn btn-outline-primary w-100 mb-2">Reprogramar</button>
+          <a href="factura-0148.html" class="btn btn-secondary w-100">Ver factura</a>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="menu.js"></script>
+</body>
+</html>
