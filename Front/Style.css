@@ -361,3 +361,44 @@ hr { border-color: var(--c-linea); opacity: 1; }
   .kpi-fila { grid-template-columns: 1fr auto 1fr auto 1fr auto 1fr; }
   .kpi-op { display: flex; align-items: center; justify-content: center; }
 }
+/* ============ Reportes, usuarios, sedes y turnos de hoy ============ */
+.avatar-56 { width: 56px; height: 56px; font-size: 1rem; }
+
+/* Reportes */
+.cifra-stat { font-size: clamp(2rem, 2.6vw, 3rem); font-weight: 700; letter-spacing: -.03em; line-height: 1.05; }
+.fila-barra { display: grid; grid-template-columns: 4.5rem 1fr auto; gap: .9rem; align-items: center; padding: .35rem 0; }
+.progress.barra-gruesa { --bs-progress-height: 2.2rem; --bs-progress-border-radius: 8px; }
+
+/* Usuarios y permisos */
+.permiso-si { color: var(--c-ok); font-size: 1.25rem; }
+.permiso-no { color: #B9C0CC; }
+.permiso-nota { font-weight: 700; font-size: .85rem; color: var(--c-medio); }
+
+/* Sedes */
+.sede-titulo { font-size: 1.8rem; font-weight: 700; letter-spacing: -.02em; line-height: 1.1; }
+a.caja-punteada { text-decoration: none; }
+
+/* Turnos de hoy (pantalla oscura) */
+body.pantalla-oscura { background: var(--c-marino); color: #fff; min-height: 100vh; }
+.pantalla-oscura h1 { color: #fff; font-size: clamp(2.2rem, 4vw, 3.4rem); }
+.reloj { font-size: clamp(3.5rem, 8vw, 6.5rem); font-weight: 700; letter-spacing: -.03em; line-height: 1; color: #8FB0FF; }
+.reloj-fecha { color: #AEBBD6; font-size: .8rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; }
+
+.tarjeta-turno { background: #fff; color: var(--c-marino); border-radius: 12px; border-top: 5px solid var(--c-accion);
+                 padding: 1.4rem; height: 100%; }
+.tarjeta-turno.tarjeta-libre { border-top-color: #C5CBD6; }
+.tarjeta-turno .nombre { font-size: 2.2rem; font-weight: 700; letter-spacing: -.02em; line-height: 1; margin-bottom: .3rem; }
+.estado-turno { padding: .45rem .9rem; border-radius: 6px; font-weight: 700; font-size: .95rem;
+                background: var(--c-accion); color: #fff; white-space: nowrap; }
+.estado-turno.estado-libre { background: #E4E8F0; color: var(--c-texto2); }
+.ahora-titulo { font-size: 1.6rem; font-weight: 700; letter-spacing: -.02em; line-height: 1.15; }
+.cuenta { font-size: 2.6rem; font-weight: 700; color: var(--c-accion); letter-spacing: -.02em; line-height: 1; }
+
+.cola-turnos .linea { display: flex; align-items: center; gap: .9rem; padding: .45rem .7rem; border-radius: 8px; }
+.cola-turnos .hora { font-weight: 600; min-width: 3rem; }
+.cola-turnos .texto { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cola-turnos .pasada { color: #8791A3; }
+.cola-turnos .pasada strong { font-weight: 500; }
+.cola-turnos .actual { background: var(--c-marino); color: #fff; }
+.cola-turnos .etq-ahora { margin-left: auto; color: #8FB0FF; font-weight: 700; font-size: .78rem; letter-spacing: .04em; }
+.cola-turnos .marca-hecho { margin-left: auto; }
