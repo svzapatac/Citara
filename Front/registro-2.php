@@ -31,18 +31,18 @@
       <h1 class="mb-2">Cuéntanos de tu negocio</h1>
       <p class="text-secondary mb-4">Estos datos aparecen en tu enlace de reservas y en las facturas.</p>
 
-      <form action="registro-3.html">
+      <form action="registro-3.php">
         <div class="card p-4">
 
           <p class="etiqueta mb-3">Negocio</p>
           <div class="row g-3 mb-4">
             <div class="col-md-8">
               <label class="form-label" for="negocio">Nombre del negocio</label>
-              <input id="negocio" class="form-control" value="[Nombre del salón]" required>
+              <input id="negocio" class="form-control" placeholder="Nombre del salón" required>
             </div>
             <div class="col-md-4">
               <label class="form-label" for="nit">NIT</label>
-              <input id="nit" class="form-control" value="900.123.456-7">
+              <input id="nit" class="form-control" placeholder="900123456">
             </div>
             <div class="col-md-7">
               <label class="form-label" for="tipo">Tipo de negocio</label>
@@ -54,7 +54,7 @@
             </div>
             <div class="col-md-5">
               <label class="form-label" for="tel">Teléfono</label>
-              <input id="tel" type="tel" class="form-control" value="601 234 5678">
+              <input id="tel" type="tel" class="form-control" placeholder="6012345678">
             </div>
             <div class="col-12">
               <label class="form-label">Logo</label>
@@ -66,15 +66,15 @@
           <div class="row g-3">
             <div class="col-md-7">
               <label class="form-label" for="sede">Nombre de la sede</label>
-              <input id="sede" class="form-control" value="Sede principal" required>
+              <input id="sede" class="form-control" placeholder="Sede principal" required>
             </div>
             <div class="col-md-5">
               <label class="form-label" for="ciudad">Ciudad</label>
-              <input id="ciudad" class="form-control" value="Bogotá" required>
+              <input id="ciudad" class="form-control" placeholder="Bogotá" required>
             </div>
             <div class="col-12">
               <label class="form-label" for="dir">Dirección</label>
-              <input id="dir" class="form-control" value="Cra. 15 # 85-20" required>
+              <input id="dir" class="form-control" placeholder="Cra. 15 # 85-20" required>
             </div>
 
             <div class="col-12">
@@ -104,7 +104,7 @@
         </div>
 
         <div class="d-flex justify-content-end gap-2 mt-3">
-          <a href="registro-1.html" class="btn btn-secondary px-4">Atrás</a>
+          <a href="registro-1.php" class="btn btn-secondary px-4">Atrás</a>
           <button type="submit" class="btn btn-primary px-4">Continuar <i class="bi bi-arrow-right ms-1"></i></button>
         </div>
       </form>

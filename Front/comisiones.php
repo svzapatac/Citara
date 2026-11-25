@@ -57,7 +57,7 @@
               <td class="text-end">−$120.000</td>
               <td class="text-end"><strong>$168.000</strong></td>
               <td><span class="badge bg-danger-subtle text-danger-emphasis">Pendiente</span></td>
-              <td><a href="pago-laura.html" class="enlace-fuerte" aria-label="Ver pago de Laura"><i class="bi bi-arrow-right"></i></a></td>
+              <td><a href="pago.php" class="enlace-fuerte" aria-label="Ver pago de Laura"><i class="bi bi-arrow-right"></i></a></td>
             </tr>
             <tr>
               <td><div class="d-flex align-items-center gap-3"><span class="avatar avatar-44 rounded-circle d-inline-flex align-items-center justify-content-center">CR</span><span class="nombre-fila">Camila</span></div></td>
@@ -68,7 +68,7 @@
               <td class="text-end">$0</td>
               <td class="text-end"><strong>$54.000</strong></td>
               <td><span class="badge bg-success-subtle text-success-emphasis">Pagado</span></td>
-              <td><a href="pago-laura.html" class="enlace-fuerte" aria-label="Ver pago de Camila"><i class="bi bi-arrow-right"></i></a></td>
+              <td><a href="pago.php" class="enlace-fuerte" aria-label="Ver pago de Camila"><i class="bi bi-arrow-right"></i></a></td>
             </tr>
             <tr>
               <td><div class="d-flex align-items-center gap-3"><span class="avatar avatar-44 rounded-circle d-inline-flex align-items-center justify-content-center">PM</span><span class="nombre-fila">Patty</span></div></td>
@@ -79,7 +79,7 @@
               <td class="text-end">$0</td>
               <td class="text-end"><strong>$56.000</strong></td>
               <td><span class="badge bg-success-subtle text-success-emphasis">Pagado</span></td>
-              <td><a href="pago-laura.html" class="enlace-fuerte" aria-label="Ver pago de Patty"><i class="bi bi-arrow-right"></i></a></td>
+              <td><a href="pago.php" class="enlace-fuerte" aria-label="Ver pago de Patty"><i class="bi bi-arrow-right"></i></a></td>
             </tr>
           </tbody>
           <tfoot>

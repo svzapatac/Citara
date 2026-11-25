@@ -110,7 +110,7 @@
             <div class="dotacion-fila py-2"><input class="form-check-input" type="checkbox" checked aria-label="Uniforme"><span>Uniforme</span></div>
           <button type="button" class="btn btn-primary w-100 mt-3">Entregar piezas marcadas</button>
           <p class="text-secondary small mt-3">La dotación no se cobra. Si una pieza se pierde o se daña, el administrador decide si se descuenta del pago, como concepto aparte. Al retirar a la persona, la dotación se devuelve.</p>
-          <a href="inventario.html" class="btn btn-secondary w-100">Volver al inventario</a>
+          <a href="inventario.php" class="btn btn-secondary w-100">Volver al inventario</a>
         </div>
       </div>
 

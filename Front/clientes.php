@@ -120,7 +120,7 @@
           <div class="linea-servicio"><div><strong class="d-block">Semipermanentes</strong><small>2 nov · Camila</small></div><strong>$45.000</strong></div>
           <div class="linea-servicio"><div><strong class="d-block">Peinado</strong><small>18 oct · Laura</small></div><strong>$40.000</strong></div>
 
-          <a href="nueva-cita.html" class="btn btn-primary w-100 mt-2">Nueva cita para Ana</a>
+          <a href="nueva-cita.php" class="btn btn-primary w-100 mt-2">Nueva cita para Ana</a>
         </div>
       </div>
 

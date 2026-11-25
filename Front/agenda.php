@@ -31,10 +31,10 @@
           <option>Sábado 28 de noviembre</option>
         </select>
         <div class="btn-group segmento" role="group" aria-label="Vista">
-          <a href="agenda.html" class="btn btn-segmento active" aria-current="page">Día</a>
-          <a href="agenda-semana.html" class="btn btn-segmento">Semana</a>
+          <a href="agenda.php" class="btn btn-segmento active" aria-current="page">Día</a>
+          <a href="agenda-semana.php" class="btn btn-segmento">Semana</a>
         </div>
-        <a href="nueva-cita.html" class="btn btn-primary"><i class="bi bi-plus-lg me-1"></i> Nueva cita</a>
+        <a href="nueva-cita.php" class="btn btn-primary"><i class="bi bi-plus-lg me-1"></i> Nueva cita</a>
       </div>
     </div>
 
@@ -143,7 +143,7 @@
 
           <button type="button" class="btn btn-primary w-100 mb-2"><i class="bi bi-check-lg me-2"></i>Marcar servicios realizados</button>
           <button type="button" class="btn btn-outline-primary w-100 mb-2">Reprogramar</button>
-          <a href="factura-0148.html" class="btn btn-secondary w-100">Ver factura</a>
+          <a href="factura.php" class="btn btn-secondary w-100">Ver factura</a>
         </div>
       </div>
 

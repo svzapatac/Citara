@@ -80,7 +80,7 @@
               <td>Corte + Uñas tradicional</td>
               <td>Laura, Camila</td>
               <td class="text-end">$65.000</td>
-              <td><a href="factura-0148.html" class="enlace-fuerte">Ver detalle</a></td>
+              <td><a href="factura.php" class="enlace-fuerte">Ver detalle</a></td>
             </tr>
             <tr>
               <td class="nombre-fila">0147</td>
@@ -89,7 +89,7 @@
               <td>Corte</td>
               <td>Laura</td>
               <td class="text-end">$35.000</td>
-              <td><a href="factura-0148.html" class="enlace-fuerte">Ver detalle</a></td>
+              <td><a href="factura.php" class="enlace-fuerte">Ver detalle</a></td>
             </tr>
             <tr>
               <td class="nombre-fila">0146</td>
@@ -98,7 +98,7 @@
               <td>Uñas semipermanentes</td>
               <td>Camila</td>
               <td class="text-end">$45.000</td>
-              <td><a href="factura-0148.html" class="enlace-fuerte">Ver detalle</a></td>
+              <td><a href="factura.php" class="enlace-fuerte">Ver detalle</a></td>
             </tr>
             <tr>
               <td class="nombre-fila">0145</td>
@@ -107,7 +107,7 @@
               <td>Corte + Barba</td>
               <td>Andrés</td>
               <td class="text-end">$55.000</td>
-              <td><a href="factura-0148.html" class="enlace-fuerte">Ver detalle</a></td>
+              <td><a href="factura.php" class="enlace-fuerte">Ver detalle</a></td>
             </tr>
             <tr>
               <td class="nombre-fila">0144</td>
@@ -116,7 +116,7 @@
               <td>Uñas acrílicas</td>
               <td>Camila</td>
               <td class="text-end">$70.000</td>
-              <td><a href="factura-0148.html" class="enlace-fuerte">Ver detalle</a></td>
+              <td><a href="factura.php" class="enlace-fuerte">Ver detalle</a></td>
             </tr>
             <tr>
               <td class="nombre-fila">0143</td>
@@ -125,7 +125,7 @@
               <td>Color</td>
               <td>Patty</td>
               <td class="text-end">$80.000</td>
-              <td><a href="factura-0148.html" class="enlace-fuerte">Ver detalle</a></td>
+              <td><a href="factura.php" class="enlace-fuerte">Ver detalle</a></td>
             </tr>
             <tr>
               <td class="nombre-fila">0142</td>
@@ -134,7 +134,7 @@
               <td>Corte + Peinado</td>
               <td>Laura</td>
               <td class="text-end">$75.000</td>
-              <td><a href="factura-0148.html" class="enlace-fuerte">Ver detalle</a></td>
+              <td><a href="factura.php" class="enlace-fuerte">Ver detalle</a></td>
             </tr>
           </tbody>
         </table>

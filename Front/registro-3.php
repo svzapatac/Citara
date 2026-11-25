@@ -31,7 +31,7 @@
       <h1 class="mb-2">Elige tus servicios</h1>
       <p class="text-secondary mb-4">Puedes cambiar precios y activar servicios cuando quieras.</p>
 
-      <form action="agenda.html">
+      <form action="agenda.php">
         <div class="card p-4">
 
           <p class="etiqueta mb-2">Cabello · 30 min por servicio</p>
@@ -54,7 +54,7 @@
         </div>
 
         <div class="d-flex justify-content-end gap-2 mt-3">
-          <a href="registro-2.html" class="btn btn-secondary px-4">Atrás</a>
+          <a href="registro-2.php" class="btn btn-secondary px-4">Atrás</a>
           <button type="submit" class="btn btn-primary px-4">Ir a mi agenda <i class="bi bi-arrow-right ms-1"></i></button>
         </div>
       </form>

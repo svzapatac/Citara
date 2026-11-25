@@ -1,4 +1,3 @@
-!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
@@ -25,7 +24,7 @@
         <p class="text-secondary mb-0">Productos de venta, dotación por área y uso interno, por separado.</p>
       </div>
       <div class="d-flex flex-wrap gap-2">
-        <a href="registrar-entrega.html" class="btn btn-outline-primary">Registrar entrega</a>
+        <a href="registrar-entrega.php" class="btn btn-outline-primary">Registrar entrega</a>
         <a href="#" class="btn btn-primary"><i class="bi bi-plus-lg me-2"></i>Nuevo producto</a>
       </div>
     </div>
@@ -85,7 +84,7 @@
         <div class="card p-3 p-md-4">
           <div class="d-flex align-items-center justify-content-between mb-2">
             <h2 class="card-titulo mb-0">Dotación por área</h2>
-            <a href="dotacion.html" class="enlace-fuerte">Ver kits</a>
+            <a href="dotacion.php" class="enlace-fuerte">Ver kits</a>
           </div>
           <div class="table-responsive">
             <table class="table tabla-citara">
