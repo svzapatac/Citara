@@ -89,8 +89,45 @@ hr { border-color: var(--c-linea); opacity: 1; }
              border-radius: 14px; padding: .6rem 1rem; }
 .logo-caja img { display: block; }
 
-/* ============ Pantallas de acceso (login y registro) ============ */
+/* Pantallas de acceso (login y registro) */
 .panel-marino { background: var(--c-marino); color: #fff; padding: 3rem; }
 .panel-titulo { font-size: clamp(2rem, 3vw, 2.9rem); font-weight: 700; line-height: 1.15; max-width: 420px; color: #fff; }
 .panel-texto  { color: #C9D2E6; max-width: 380px; margin-top: 1rem; }
 .form-ancho   { width: 100%; max-width: 490px; }
+
+/* Registro del dueño */
+.panel-pie     { color: #AEBBD6; font-size: .9rem; max-width: 340px; }
+.form-ancho-lg { width: 100%; max-width: 720px; }
+
+.etiqueta { font-size: .72rem; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--c-texto2); }
+
+/* Lista de pasos (panel izquierdo) */
+.paso { display: flex; align-items: center; gap: .9rem; margin-bottom: 1.6rem; color: #9FB0D0; }
+.paso strong { display: block; font-weight: 600; font-size: 1rem; }
+.paso small { color: #8EA0C4; }
+.paso-num { width: 40px; height: 40px; flex: none; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            border: 1px solid rgba(255,255,255,.3); font-weight: 600; }
+.paso.activo, .paso.hecho { color: #fff; }
+.paso.activo small, .paso.hecho small { color: #C9D2E6; }
+.paso.activo .paso-num, .paso.hecho .paso-num { background: var(--c-accion); border-color: var(--c-accion); }
+
+/* Píldoras seleccionables (días de atención): marino al elegir */
+.btn-outline-dark {
+  --bs-btn-color: var(--c-marino);  --bs-btn-border-color: #C5CBD6;
+  --bs-btn-hover-bg: var(--c-suave); --bs-btn-hover-color: var(--c-marino); --bs-btn-hover-border-color: #C5CBD6;
+  --bs-btn-active-bg: var(--c-marino); --bs-btn-active-border-color: var(--c-marino); --bs-btn-active-color: #fff;
+}
+.btn-check:checked + .btn-outline-dark { background: var(--c-marino); border-color: var(--c-marino); color: #fff; }
+
+/* Subir imagen (borde punteado) */
+.subir { border: 1px dashed #AEB6C4; border-radius: 8px; min-height: 44px; padding: .6rem 1rem;
+         color: var(--c-texto2); display: flex; align-items: center; gap: .6rem; background: #fff; cursor: pointer; }
+
+/* Fila de servicio (paso 3) */
+.servicio { display: flex; align-items: center; gap: 1rem; padding: .6rem 1rem;
+            background: var(--c-suave); border-left: 4px solid var(--c-accion);
+            border-radius: 8px; margin-bottom: .6rem; }
+.servicio .nombre { font-weight: 700; flex: 1; }
+.servicio .duracion { color: var(--c-texto2); }
+.servicio .form-control { width: 130px; text-align: right; font-weight: 700; }
