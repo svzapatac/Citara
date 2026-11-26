@@ -1,3 +1,136 @@
+<?php
+session_start();
+
+if (isset($_SESSION['usuario_id'])) {
+    header('Location: agenda.php');
+    exit;
+}
+if (empty($_SESSION['registro']['paso1'])) { header('Location: registro-1.php'); exit; }
+if (empty($_SESSION['registro']['paso2'])) { header('Location: registro-2.php'); exit; }
+
+function h($s) { return htmlspecialchars((string)$s, ENT_QUOTES, 'UTF-8'); }
+function pesos($n) { return '$' . number_format((int)$n, 0, ',', '.'); }
+
+// Catálogo inicial que se le crea a cada negocio nuevo
+$grupos = [
+    'Cabello'  => 'Cabello · 30 min por servicio',
+    'Uñas'     => 'Uñas · 45 min por servicio',
+    'Barbería' => 'Barbería · 30 min',
+    'Cejas'    => 'Cejas · 15 min',
+];
+$catalogo = [
+    ['categoria' => 'Cabello',  'nombre' => 'Corte',           'duracion' => 30, 'precio' => 35000],
+    ['categoria' => 'Cabello',  'nombre' => 'Color',           'duracion' => 30, 'precio' => 80000],
+    ['categoria' => 'Cabello',  'nombre' => 'Peinado',         'duracion' => 30, 'precio' => 40000],
+    ['categoria' => 'Uñas',     'nombre' => 'Tradicional',     'duracion' => 45, 'precio' => 30000],
+    ['categoria' => 'Uñas',     'nombre' => 'Acrílicas',       'duracion' => 45, 'precio' => 70000],
+    ['categoria' => 'Uñas',     'nombre' => 'Semipermanentes', 'duracion' => 45, 'precio' => 45000],
+    ['categoria' => 'Barbería', 'nombre' => 'Barba',           'duracion' => 30, 'precio' => 20000],
+    ['categoria' => 'Cejas',    'nombre' => 'Cejas',           'duracion' => 15, 'precio' => 15000],
+];
+foreach ($catalogo as &$s) { $s['activo'] = true; } unset($s);
+
+$errores = [];
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $enviados = $_POST['servicios'] ?? [];
+    $activos  = 0;
+
+    foreach ($catalogo as $i => &$s) {
+        $s['activo'] = !empty($enviados[$i]['activo']);
+        $precio = (int)preg_replace('/\D/', '', $enviados[$i]['precio'] ?? '');
+        $s['precio'] = $precio;
+        if ($s['activo']) {
+            $activos++;
+            if ($precio <= 0) $errores[] = "Ponle precio a {$s['nombre']}.";
+        }
+    }
+    unset($s);
+
+    if ($activos === 0) $errores[] = 'Activa al menos un servicio.';
+
+    if (!$errores) {
+        require_once __DIR__ . '/conexion.php';
+
+        $p1 = $_SESSION['registro']['paso1'];
+        $p2 = $_SESSION['registro']['paso2'];
+
+        $nit      = $p2['nit'] !== '' ? $p2['nit'] : null;
+        $logo     = $p2['logo'] ?: null;
+        $dias     = implode(',', $p2['dias']);
+
+        $conexion->begin_transaction();
+        try {
+            // 1. Negocio
+            $stmt = $conexion->prepare("INSERT INTO negocio (plan_id, slug, nombre, nit, tipo, logo) VALUES (?, ?, ?, ?, ?, ?)");
+            $stmt->bind_param('isssss', $p2['plan_id'], $p2['slug'], $p2['negocio'], $nit, $p2['tipo'], $logo);
+            $stmt->execute();
+            $negocioId = $conexion->insert_id;
+            $stmt->close();
+
+            // 2. Primera sede
+            $stmt = $conexion->prepare(
+                "INSERT INTO sedes (negocio_id, nombre, ciudad, direccion, dias_atencion, hora_abre, hora_cierra)
+                 VALUES (?, ?, ?, ?, ?, ?, ?)"
+            );
+            $stmt->bind_param('issssss', $negocioId, $p2['sede'], $p2['ciudad'], $p2['direccion'], $dias, $p2['abre'], $p2['cierra']);
+            $stmt->execute();
+            $sedeId = $conexion->insert_id;
+            $stmt->close();
+
+            // 3. Dueño
+            $rol = 'dueno';
+            $stmt = $conexion->prepare(
+                "INSERT INTO usuarios (negocio_id, sede_id, nombres, apellidos, tipo_documento, numero_documento, celular, correo, clave_hash, rol)
+                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+            );
+            $stmt->bind_param('iissssssss', $negocioId, $sedeId, $p1['nombres'], $p1['apellidos'], $p1['tipo_documento'],
+                              $p1['numero_documento'], $p1['celular'], $p1['correo'], $p1['clave_hash'], $rol);
+            $stmt->execute();
+            $usuarioId = $conexion->insert_id;
+            $stmt->close();
+
+            // 4. Servicios (también los desactivados, para que pueda activarlos después)
+            $stmt = $conexion->prepare(
+                "INSERT INTO servicios (negocio_id, categoria, nombre, duracion_min, precio, activo) VALUES (?, ?, ?, ?, ?, ?)"
+            );
+            foreach ($catalogo as $s) {
+                $activo = $s['activo'] ? 1 : 0;
+                $stmt->bind_param('issiii', $negocioId, $s['categoria'], $s['nombre'], $s['duracion'], $s['precio'], $activo);
+                $stmt->execute();
+            }
+            $stmt->close();
+
+            $conexion->commit();
+
+            // 5. Queda con la sesión iniciada
+            unset($_SESSION['registro']);
+            session_regenerate_id(true);
+            $_SESSION['usuario_id']     = $usuarioId;
+            $_SESSION['negocio_id']     = $negocioId;
+            $_SESSION['sede_id']        = $sedeId;
+            $_SESSION['rol']            = $rol;
+            $_SESSION['tipo_cuenta']    = 'negocio';
+            $_SESSION['usuario_correo'] = $p1['correo'];
+            $_SESSION['usuario_nombre'] = $p1['nombres'];
+
+            header('Location: agenda.php');
+            exit;
+
+        } catch (mysqli_sql_exception $e) {
+            $conexion->rollback();
+            if ($e->getCode() === 1062 && strpos($e->getMessage(), 'slug') !== false) {
+                $errores[] = 'Ese enlace de reservas acaba de ser tomado por otro negocio. Vuelve al paso 2 y elige otro.';
+            } elseif ($e->getCode() === 1062) {
+                $errores[] = 'Ese correo ya quedó registrado. Vuelve al paso 1 y usa otro, o inicia sesión.';
+            } else {
+                // Mientras pruebas se muestra el error real; luego déjalo genérico.
+                $errores[] = 'No se pudo crear el negocio: ' . $e->getMessage();
+            }
+        }
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -31,24 +164,28 @@
       <h1 class="mb-2">Elige tus servicios</h1>
       <p class="text-secondary mb-4">Puedes cambiar precios y activar servicios cuando quieras.</p>
 
-      <form action="agenda.php">
+      <?php if ($errores): ?>
+        <div class="alert alert-danger" role="alert">
+          <i class="bi bi-exclamation-circle me-1"></i>
+          <?php foreach ($errores as $e): ?><div><?= h($e) ?></div><?php endforeach; ?>
+        </div>
+      <?php endif; ?>
+
+      <form method="post" action="">
         <div class="card p-4">
 
-          <p class="etiqueta mb-2">Cabello · 30 min por servicio</p>
-          <div class="servicio"><input class="form-check-input" type="checkbox" checked><span class="nombre">Corte</span><span class="duracion">30 min</span><input class="form-control" value="$35.000" aria-label="Precio de Corte"></div>
-          <div class="servicio"><input class="form-check-input" type="checkbox" checked><span class="nombre">Color</span><span class="duracion">30 min</span><input class="form-control" value="$80.000" aria-label="Precio de Color"></div>
-          <div class="servicio"><input class="form-check-input" type="checkbox" checked><span class="nombre">Peinado</span><span class="duracion">30 min</span><input class="form-control" value="$40.000" aria-label="Precio de Peinado"></div>
-
-          <p class="etiqueta mt-3 mb-2">Uñas · 45 min por servicio</p>
-          <div class="servicio"><input class="form-check-input" type="checkbox" checked><span class="nombre">Tradicional</span><span class="duracion">45 min</span><input class="form-control" value="$30.000" aria-label="Precio de Tradicional"></div>
-          <div class="servicio"><input class="form-check-input" type="checkbox" checked><span class="nombre">Acrílicas</span><span class="duracion">45 min</span><input class="form-control" value="$70.000" aria-label="Precio de Acrílicas"></div>
-          <div class="servicio"><input class="form-check-input" type="checkbox" checked><span class="nombre">Semipermanentes</span><span class="duracion">45 min</span><input class="form-control" value="$45.000" aria-label="Precio de Semipermanentes"></div>
-
-          <p class="etiqueta mt-3 mb-2">Barbería · 30 min</p>
-          <div class="servicio"><input class="form-check-input" type="checkbox" checked><span class="nombre">Barba</span><span class="duracion">30 min</span><input class="form-control" value="$20.000" aria-label="Precio de Barba"></div>
-
-          <p class="etiqueta mt-3 mb-2">Cejas · 15 min</p>
-          <div class="servicio"><input class="form-check-input" type="checkbox" checked><span class="nombre">Cejas</span><span class="duracion">15 min</span><input class="form-control" value="$15.000" aria-label="Precio de Cejas"></div>
+          <?php $primero = true; foreach ($grupos as $cat => $titulo): ?>
+            <p class="etiqueta <?= $primero ? '' : 'mt-3' ?> mb-2"><?= h($titulo) ?></p>
+            <?php $primero = false; ?>
+            <?php foreach ($catalogo as $i => $s): if ($s['categoria'] !== $cat) continue; ?>
+              <div class="servicio">
+                <input class="form-check-input" type="checkbox" name="servicios[<?= $i ?>][activo]" value="1" <?= $s['activo'] ? 'checked' : '' ?> aria-label="Activar <?= h($s['nombre']) ?>">
+                <span class="nombre"><?= h($s['nombre']) ?></span>
+                <span class="duracion"><?= $s['duracion'] ?> min</span>
+                <input class="form-control" name="servicios[<?= $i ?>][precio]" value="<?= pesos($s['precio']) ?>" inputmode="numeric" aria-label="Precio de <?= h($s['nombre']) ?>">
+              </div>
+            <?php endforeach; ?>
+          <?php endforeach; ?>
 
           <p class="text-secondary small mt-3 mb-0">Todos los servicios están disponibles para cualquier cliente. La duración es fija. Los casos que necesitan más tiempo, como una decoloración, se resuelven con el chat de asesoría antes de reservar.</p>
         </div>

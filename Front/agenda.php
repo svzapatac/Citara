@@ -1,3 +1,5 @@
+<?php require_once __DIR__ . '/sesion.php'; require_once __DIR__ . '/conexion.php'; ?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
