@@ -118,3 +118,13 @@ flowchart LR
 | Empleado · Mis productos | Ve los productos que tiene en mano y registra una venta a un cliente, una compra de uso personal o una devolución. | entrega_interna, producto | venta_producto, entrega_interna (devolución) |
 | Empleado · Mis pagos | Ve el detalle y el total de su pago: comisión, descuentos del mes, ganancia por ventas. | liquidacion, liquidacion_detalle, venta_producto | — |
 | Televisor | Muestra por empleado el turno actual, el tiempo restante y la lista de turnos del día; se actualiza con cada cambio. | cita_servicio, empleado, turno_empleado | — |
+
+## Pantallas nuevas (noviembre 2026)
+
+| Pantalla | Archivo HTML | Tablas que escribe |
+|---|---|---|
+| Nuevo cliente | `design/html/Cliente_Nuevo.html` | `cliente` |
+| Crear servicio | `Servicio_Nuevo.html` | `servicio`, `empleado_servicio`, `comision`, `asesoria_regla` |
+| Nueva pieza de dotación | `Dotacion_Pieza_Nueva.html` | `producto` (tipo dotación), `area_dotacion`, `movimiento_inventario` |
+| Nuevo producto | `Producto_Nuevo.html` | `producto`, `movimiento_inventario` |
+| Expediente (6 secciones: Resumen, Documentos, Turnos y servicios, Dotación, Historial, Pagos y productos) | `Empleado_Expediente.html`, `Exp_*.html` | `empleado`, `empleado_area`, `empleado_documento`, `turno_empleado`, `empleado_servicio`, `comision`, `entrega_interna`, `devolucion_entrega`, `liquidacion` |

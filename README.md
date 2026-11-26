@@ -28,8 +28,9 @@ Proyecto final de Programación Avanzada.
 | [`docs/flujo-por-panel.md`](docs/flujo-por-panel.md) | Flujo por panel: qué hace el usuario en cada pantalla y qué tablas lee y escribe. |
 | [`docs/modelo-de-datos.md`](docs/modelo-de-datos.md) | Borrador del modelo de datos (diagrama entidad-relación) y reglas que debe garantizar. |
 | [`docs/er/`](docs/er/) | Modelo entidad-relación completo y por módulos (PNG, SVG y script para regenerarlo). |
-| [`design/Citara_Computador.pdf`](design/Citara_Computador.pdf) | Maquetación para computador: 26 pantallas (administración, dueño, televisor). |
+| [`design/Citara_Computador.pdf`](design/Citara_Computador.pdf) | Maquetación para computador: 35 pantallas (administración, dueño, televisor, formularios nuevos y expediente de 6 secciones). |
 | [`design/Citara_Celular.pdf`](design/Citara_Celular.pdf) | Maquetación para celular: 9 pantallas (app del cliente y del empleado). |
+| [`design/html/`](design/html/) | Las mismas pantallas en HTML, enlazadas entre sí (abrir `Clientes.html`, `Cliente_Nuevo.html`, `Empleado_Expediente.html`…). |
 | [`assets/`](assets) | Logo de Citara e imagen del sistema visual. |
 
 ## Sistema visual
