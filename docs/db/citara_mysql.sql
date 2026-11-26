@@ -501,7 +501,7 @@ CREATE TABLE asesoria_chat (
   cita_id                 BIGINT UNSIGNED NULL,
   tipo                    VARCHAR(20) NOT NULL DEFAULT 'tiempo_extra',
   duracion_propuesta_min  INT NULL,
-  estado                  VARCHAR(25) NOT NULL DEFAULT 'abierto',
+  estado                  VARCHAR(30) NOT NULL DEFAULT 'abierto',
   PRIMARY KEY (id),
   UNIQUE KEY uk_asesoriachat_negocio_id (negocio_id, id),
   KEY ix_asesoriachat_cliente (negocio_id, cliente_id),

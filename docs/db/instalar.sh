@@ -3,6 +3,7 @@
 # Uso:        ./instalar.sh                 (usuario root, sin clave)
 #             MYSQL_PWD='clave' ./instalar.sh usuario
 #             CON_DEMO=1 ./instalar.sh      (agrega datos de demo y corre las pruebas)
+#             CON_MASIVO=1 ./instalar.sh    (agrega 55 negocios con +50 filas por tabla)
 # ¡Borra y recrea las bases `citara` y `citara_app`!
 set -euo pipefail
 cd "$(dirname "$0")"
@@ -18,4 +19,5 @@ if [ "${CON_DEMO:-0}" = "1" ]; then
   run 07_datos_demo.sql
   echo ">> 08_pruebas.sql"; mysql -u"$U" --force --default-character-set=utf8mb4 -t < 08_pruebas.sql 2>&1 | grep -E "OK|FALLA|ERROR" || true
 fi
+if [ "${CON_MASIVO:-0}" = "1" ]; then run 09_datos_masivos.sql; fi
 echo "Listo: base citara (+ citara_app para la aplicación)."

@@ -8,6 +8,7 @@ Multi-tenant en "pool": una sola base para todos los negocios, con `negocio_id` 
 cd docs/db
 ./instalar.sh                 # crea las bases `citara` y `citara_app` (borra las que existan)
 CON_DEMO=1 ./instalar.sh      # además carga 2 negocios de ejemplo y corre las pruebas
+CON_MASIVO=1 ./instalar.sh    # además carga 55 negocios con más de 50 filas por tabla
 ```
 
 O todo de una vez: `mysql -u root -p < citara_mysql.sql`.
@@ -24,6 +25,7 @@ O todo de una vez: `mysql -u root -p < citara_mysql.sql`.
 | `06_roles.sql` | Usuarios `citara_app` (la aplicación) y `citara_admin` (la plataforma). **Cambiar las claves** |
 | `07_datos_demo.sql` | Dos negocios de ejemplo (Salón Demo y Barbería Norte) |
 | `08_pruebas.sql` | 26 comprobaciones de aislamiento y reglas |
+| `09_datos_masivos.sql` | 55 negocios con más de 50 filas en casi todas las tablas, para probar (generado con `generar_masivo.py`; ids desde 1001). `rol` (4, límite del `CHECK`) y `plan` (3) se quedan cortos a propósito |
 | `citara_mysql.sql` | 01 a 06 en un solo archivo |
 
 ## Cómo debe usarla la aplicación
