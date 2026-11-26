@@ -83,7 +83,7 @@ flowchart LR
 | Panel | Qué hace el usuario | Lee | Escribe |
 |---|---|---|---|
 | Equipo | Lista el equipo, su área, servicios habilitados, documentos, dotación y estado. | empleado, empleado_servicio | empleado (activo o retirado) |
-| Empleado · Registro | Crea o actualiza datos personales, área, servicios habilitados, porcentaje de comisión y periodicidad de pago; entrega el kit de dotación de su área. | empleado, empleado_area, area_dotacion, comision_config | empleado, empleado_area, usuario, comision_config, entrega_interna |
+| Empleado · Registro | Crea o actualiza datos personales, área, servicios habilitados, porcentaje de comisión y periodicidad de pago; entrega el kit de dotación de su área. | empleado, empleado_area, area_dotacion, comision | empleado, empleado_area, usuario, comision, entrega_interna |
 | Empleado · Expediente | Sube y verifica los documentos de la Secretaría de Salud; ve su dotación entregada y el historial de servicios y pagos. | documento_requerido, empleado_documento, entrega_interna, cita_servicio, liquidacion | empleado_documento, entrega_interna (devolución) |
 | Turnos | Asigna uno o varios turnos por día (por ejemplo mañana y tarde) según horario y servicios habilitados; impide turnos que se crucen. | empleado, empleado_servicio | turno_empleado |
 | Servicios | Administra el catálogo, duraciones y quién puede hacer cada servicio. | servicio, empleado_servicio, asesoria_regla | servicio, empleado_servicio, asesoria_regla |
@@ -94,7 +94,7 @@ flowchart LR
 |---|---|---|---|
 | Facturas | Historial de facturas con filtros por fecha y cliente. | factura, cita, cliente | — |
 | Factura · Detalle | Una factura por cita: cada servicio, su valor y su empleado. | factura, cita_servicio, empleado | — |
-| Comisiones y pagos | Liquidación por empleado y periodo (diario, semanal, quincenal o mensual). | liquidacion, cita_servicio, comision_config | liquidacion, liquidacion_detalle |
+| Comisiones y pagos | Liquidación por empleado y periodo (diario, semanal, quincenal o mensual). | liquidacion, cita_servicio, comision | liquidacion, liquidacion_detalle |
 | Pago · Detalle | Detalle de un pago: servicios, comisión, descuento por productos vendidos, uso personal y total; muestra la ganancia por ventas. | liquidacion, liquidacion_detalle, venta_producto | liquidacion (estado pagado) |
 
 ## Inventario, finanzas y permisos
@@ -114,7 +114,7 @@ flowchart LR
 | Panel | Qué hace el usuario | Lee | Escribe |
 |---|---|---|---|
 | Empleado · Mi agenda de hoy | Ve sus turnos del día (por ejemplo mañana y tarde) y las citas programadas y realizadas. | cita_servicio, cliente | — |
-| Empleado · Registrar servicio | Marca el servicio como realizado con un toque; suma su comisión. | cita_servicio, comision_config | cita_servicio (estado), liquidacion_detalle |
+| Empleado · Registrar servicio | Marca el servicio como realizado con un toque; suma su comisión. | cita_servicio, comision | cita_servicio (estado), liquidacion_detalle |
 | Empleado · Mis productos | Ve los productos que tiene en mano y registra una venta a un cliente, una compra de uso personal o una devolución. | entrega_interna, producto | venta_producto, entrega_interna (devolución) |
 | Empleado · Mis pagos | Ve el detalle y el total de su pago: comisión, descuentos del mes, ganancia por ventas. | liquidacion, liquidacion_detalle, venta_producto | — |
 | Televisor | Muestra por empleado el turno actual, el tiempo restante y la lista de turnos del día; se actualiza con cada cambio. | cita_servicio, empleado, turno_empleado | — |

@@ -1,188 +1,395 @@
 erDiagram
-    NEGOCIO ||--o{ SEDE : tiene
-    NEGOCIO ||--o{ USUARIO : agrupa
-    NEGOCIO ||--o{ SERVICIO : ofrece
-    NEGOCIO ||--o{ DOCUMENTO_NEGOCIO : presenta
-    SEDE ||--o{ SEDE_HORARIO : abre
-    SEDE ||--o| TELEVISOR : muestra
-    SEDE ||--o{ EMPLEADO : emplea
-    SEDE ||--o{ CITA : recibe
-    SEDE ||--o{ PRODUCTO : guarda
-    SEDE ||--o{ GASTO : paga
-    USUARIO ||--o| EMPLEADO : es
-    USUARIO ||--o| CLIENTE : es
-    EMPLEADO ||--o{ EMPLEADO_DOCUMENTO : presenta
-    DOCUMENTO_REQUERIDO ||--o{ EMPLEADO_DOCUMENTO : define
-    NEGOCIO ||--o{ AREA : define
-    AREA ||--o{ SERVICIO : agrupa
-    AREA ||--o{ AREA_DOTACION : kit
-    PRODUCTO ||--o{ AREA_DOTACION : forma
-    EMPLEADO ||--o{ EMPLEADO_AREA : pertenece
-    AREA ||--o{ EMPLEADO_AREA : incluye
-    EMPLEADO ||--o{ EMPLEADO_SERVICIO : habilitado
-    SERVICIO ||--o{ EMPLEADO_SERVICIO : habilita
-    EMPLEADO ||--o{ TURNO_EMPLEADO : trabaja
-    EMPLEADO ||--|| COMISION_CONFIG : cobra
-    CLIENTE ||--o{ CITA : reserva
-    CITA ||--|{ CITA_SERVICIO : incluye
-    SERVICIO ||--o{ CITA_SERVICIO : es
-    EMPLEADO ||--o{ CITA_SERVICIO : presta
-    CITA ||--|| FACTURA : genera
-    SERVICIO ||--o{ ASESORIA_REGLA : tiene
-    CLIENTE ||--o{ ASESORIA_CHAT : abre
-    ASESORIA_CHAT ||--o{ ASESORIA_MENSAJE : contiene
-    EMPLEADO ||--o{ LIQUIDACION : recibe
-    LIQUIDACION ||--|{ LIQUIDACION_DETALLE : detalla
-    CITA_SERVICIO ||--o| LIQUIDACION_DETALLE : origina
-    PRODUCTO ||--o{ ENTREGA_INTERNA : sale
-    EMPLEADO ||--o{ ENTREGA_INTERNA : recibe
-    ENTREGA_INTERNA ||--o| LIQUIDACION_DETALLE : descuenta
-    PRODUCTO ||--o{ VENTA_PRODUCTO : vende
-    EMPLEADO ||--o{ VENTA_PRODUCTO : registra
-    ENTREGA_INTERNA ||--o{ VENTA_PRODUCTO : origina
-    VENTA_PRODUCTO ||--o| LIQUIDACION_DETALLE : descuenta
+    %% ===== PLATAFORMA (tablas globales, sin negocio_id) =====
+    PLAN ||--o{ NEGOCIO : "contratado por"
+    PLAN ||--o{ SUSCRIPCION : "define"
+    NEGOCIO ||--o{ SUSCRIPCION : "paga"
+    ROL ||--o{ ROL_PERMISO : "tiene"
+    PERMISO ||--o{ ROL_PERMISO : "se concede"
+    ROL ||--o{ USUARIO : "asigna"
+    ROL ||--o{ INVITACION : "otorga"
+    %% ===== ACCESOS =====
+    NEGOCIO ||--o{ USUARIO : "agrupa"
+    NEGOCIO ||--o{ SEDE : "tiene"
+    NEGOCIO ||--o{ AREA : "define"
+    NEGOCIO ||--o{ DOCUMENTO_NEGOCIO : "presenta"
+    USUARIO ||--o{ USUARIO_SEDE : "administra"
+    SEDE ||--o{ USUARIO_SEDE : "es administrada"
+    USUARIO ||--o{ AUDITORIA : "genera"
+    USUARIO ||--o{ INVITACION : "crea"
+    EMPLEADO |o--o{ INVITACION : "recibe"
+    %% ===== ORGANIZACION =====
+    SEDE ||--o{ SEDE_HORARIO : "abre"
+    SEDE ||--o{ TELEVISOR : "muestra"
+    %% ===== EQUIPO =====
+    USUARIO |o--o| EMPLEADO : "es"
+    SEDE ||--o{ EMPLEADO : "emplea"
+    EMPLEADO ||--o{ EMPLEADO_AREA : "pertenece"
+    AREA ||--o{ EMPLEADO_AREA : "incluye"
+    DOCUMENTO_REQUERIDO ||--o{ EMPLEADO_DOCUMENTO : "define"
+    EMPLEADO ||--o{ EMPLEADO_DOCUMENTO : "presenta"
+    EMPLEADO ||--o{ TURNO_EMPLEADO : "trabaja"
+    SEDE ||--o{ TURNO_EMPLEADO : "recibe"
+    EMPLEADO ||--o{ BLOQUEO_AGENDA : "bloquea"
+    EMPLEADO ||--o{ COMISION : "cobra"
+    SERVICIO |o--o{ COMISION : "aplica a"
+    %% ===== CATALOGO =====
+    AREA ||--o{ SERVICIO : "agrupa"
+    EMPLEADO ||--o{ EMPLEADO_SERVICIO : "habilitado"
+    SERVICIO ||--o{ EMPLEADO_SERVICIO : "habilita"
+    SERVICIO ||--o{ ASESORIA_REGLA : "tiene"
+    %% ===== CLIENTES Y RESERVAS =====
+    USUARIO |o--o| CLIENTE : "es"
+    CLIENTE ||--o{ CITA : "reserva"
+    SEDE ||--o{ CITA : "recibe"
+    CITA ||--|{ CITA_SERVICIO : "incluye"
+    SERVICIO ||--o{ CITA_SERVICIO : "es"
+    EMPLEADO ||--o{ CITA_SERVICIO : "presta"
+    CLIENTE ||--o{ ASESORIA_CHAT : "abre"
+    CITA |o--o{ ASESORIA_CHAT : "origina"
+    ASESORIA_CHAT ||--o{ ASESORIA_MENSAJE : "contiene"
+    CITA ||--o| FACTURA : "genera"
+    FACTURA ||--|{ FACTURA_LINEA : "detalla"
+    CITA_SERVICIO |o--o| FACTURA_LINEA : "se factura"
+    VENTA_PRODUCTO |o--o| FACTURA_LINEA : "se factura"
+    %% ===== INVENTARIO =====
+    PRODUCTO ||--o{ MOVIMIENTO_INVENTARIO : "mueve"
+    SEDE ||--o{ MOVIMIENTO_INVENTARIO : "bodega de"
+    AREA ||--o{ AREA_DOTACION : "kit"
+    PRODUCTO ||--o{ AREA_DOTACION : "forma"
+    PRODUCTO ||--o{ ENTREGA_INTERNA : "sale"
+    EMPLEADO ||--o{ ENTREGA_INTERNA : "recibe"
+    ENTREGA_INTERNA ||--o{ DEVOLUCION_ENTREGA : "se devuelve"
+    ENTREGA_INTERNA |o--o{ MOVIMIENTO_INVENTARIO : "origina"
+    VENTA_PRODUCTO |o--o{ MOVIMIENTO_INVENTARIO : "origina"
+    PRODUCTO ||--o{ VENTA_PRODUCTO : "se vende"
+    EMPLEADO |o--o{ VENTA_PRODUCTO : "registra"
+    ENTREGA_INTERNA |o--o{ VENTA_PRODUCTO : "sale de"
+    CLIENTE |o--o{ VENTA_PRODUCTO : "compra"
+    CITA |o--o{ VENTA_PRODUCTO : "incluye"
+    %% ===== PAGOS Y FINANZAS =====
+    EMPLEADO ||--o{ LIQUIDACION : "recibe"
+    LIQUIDACION ||--|{ LIQUIDACION_DETALLE : "detalla"
+    CITA_SERVICIO |o--o| LIQUIDACION_DETALLE : "origina"
+    VENTA_PRODUCTO |o--o| LIQUIDACION_DETALLE : "descuenta"
+    DEVOLUCION_ENTREGA |o--o| LIQUIDACION_DETALLE : "cobra"
+    CATEGORIA_GASTO ||--o{ GASTO : "clasifica"
+    SEDE ||--o{ GASTO : "paga"
 
-    NEGOCIO { int id PK
-        string nombre
-        string nit }
-    SEDE { int id PK
-        int negocio_id FK
-        string nombre
-        string direccion }
-    DOCUMENTO_NEGOCIO { int id PK
-        int negocio_id FK
-        string nombre
-        string archivo
-        date subido_en }
-    SEDE_HORARIO { int id PK
-        int sede_id FK
+    PLAN { bigint id PK
+        text nombre
+        int max_sedes
+        int max_empleados
+        numeric precio_mensual
+        boolean activo }
+    NEGOCIO { bigint id PK "es el tenant_id de todo el sistema"
+        text slug UK "subdominio y enlace publico"
+        text nombre
+        text nit
+        bigint plan_id FK
+        text estado "activo, suspendido, cancelado"
+        text zona_horaria
+        text moneda }
+    SUSCRIPCION { bigint id PK
+        bigint negocio_id FK "tenant"
+        bigint plan_id FK
+        text estado "prueba, activa, vencida, cancelada"
+        date inicio
+        date fin }
+    ROL { bigint id PK
+        text clave UK "cliente, empleado, administrador, dueno"
+        text nombre }
+    PERMISO { bigint id PK
+        text modulo
+        text accion "ver, crear, editar, eliminar" }
+    ROL_PERMISO { bigint rol_id PK,FK
+        bigint permiso_id PK,FK }
+    USUARIO { bigint id PK
+        bigint negocio_id FK "tenant"
+        text correo UK "unico por negocio"
+        text clave_hash
+        bigint rol_id FK
+        boolean activo
+        timestamptz ultimo_acceso }
+    USUARIO_SEDE { bigint negocio_id FK "tenant"
+        bigint usuario_id PK,FK
+        bigint sede_id PK,FK }
+    INVITACION { bigint id PK
+        bigint negocio_id FK "tenant"
+        text correo
+        bigint rol_id FK
+        bigint empleado_id FK
+        bigint creada_por FK
+        text token_hash
+        timestamptz expira_en
+        text estado "pendiente, aceptada, vencida" }
+    AUDITORIA { bigint id PK
+        bigint negocio_id FK "tenant"
+        bigint usuario_id FK
+        text entidad
+        bigint entidad_id
+        text accion
+        jsonb antes
+        jsonb despues
+        timestamptz fecha }
+    SEDE { bigint id PK
+        bigint negocio_id FK "tenant"
+        text nombre
+        text direccion
+        text ciudad
+        text telefono
+        boolean principal
+        boolean activa }
+    SEDE_HORARIO { bigint id PK
+        bigint negocio_id FK "tenant"
+        bigint sede_id FK
         int dia_semana
         time apertura
         time cierre }
-    TELEVISOR { int id PK
-        int sede_id FK
-        string codigo }
-    USUARIO { int id PK
-        int negocio_id FK
-        string correo
-        string clave_hash
-        string rol "cliente, empleado, administrador, dueno" }
-    CLIENTE { int id PK
-        int usuario_id FK
-        string nombres
-        string celular }
-    EMPLEADO { int id PK
-        int usuario_id FK
-        int sede_id FK
-        string nombres
-        string documento
+    TELEVISOR { bigint id PK
+        bigint negocio_id FK "tenant"
+        bigint sede_id FK
+        text nombre
+        text token_hash "acceso sin clave"
         boolean activo }
-    DOCUMENTO_REQUERIDO { int id PK
-        string nombre
-        boolean obligatorio }
-    EMPLEADO_DOCUMENTO { int id PK
-        int empleado_id FK
-        int documento_requerido_id FK
-        string archivo
-        date subido_en
-        string estado "pendiente, verificado" }
-    AREA { int id PK
-        int negocio_id FK
-        string nombre "cabello, unas, barberia, cejas" }
-    EMPLEADO_AREA { int empleado_id PK
-        int area_id PK }
-    AREA_DOTACION { int id PK
-        int area_id FK
-        int producto_id FK
-        int cantidad "piezas del kit del area" }
-    SERVICIO { int id PK
-        int negocio_id FK
-        int area_id FK
-        string nombre "corte, color, peinado, tradicional, acrilicas, semipermanentes, barba, cejas"
-        int duracion_min "30 cabello y barba, 45 unas, 15 cejas"
-        decimal precio }
-    EMPLEADO_SERVICIO { int empleado_id PK
-        int servicio_id PK }
-    TURNO_EMPLEADO { int id PK
-        int empleado_id FK
-        int dia_semana
-        time inicio
-        time fin "varios turnos por dia, sin cruzarse" }
-    COMISION_CONFIG { int empleado_id PK
-        decimal porcentaje
-        string periodicidad "diario, semanal, quincenal, mensual" }
-    CITA { int id PK
-        int sede_id FK
-        int cliente_id FK
+    DOCUMENTO_NEGOCIO { bigint id PK
+        bigint negocio_id FK "tenant"
+        text tipo
+        text nombre
+        text archivo_url
+        timestamptz subido_en }
+    AREA { bigint id PK
+        bigint negocio_id FK "tenant"
+        text nombre UK "cabello, unas, barberia, cejas"
+        boolean activa }
+    EMPLEADO { bigint id PK
+        bigint negocio_id FK "tenant"
+        bigint usuario_id FK
+        bigint sede_id FK
+        text tipo_documento
+        text documento UK
+        text nombres
+        text apellidos
+        date fecha_nacimiento
+        text celular
+        text correo
+        text direccion
+        text contacto_emergencia
+        text telefono_emergencia
+        date fecha_ingreso
+        date fecha_retiro
+        text motivo_retiro
+        text periodicidad_pago "diario, semanal, quincenal, mensual"
+        boolean activo }
+    EMPLEADO_AREA { bigint negocio_id FK "tenant"
+        bigint empleado_id PK,FK
+        bigint area_id PK,FK }
+    DOCUMENTO_REQUERIDO { bigint id PK
+        bigint negocio_id FK "tenant"
+        text nombre
+        boolean obligatorio
+        int orden }
+    EMPLEADO_DOCUMENTO { bigint id PK
+        bigint negocio_id FK "tenant"
+        bigint empleado_id FK
+        bigint documento_requerido_id FK
+        text archivo_url
+        text estado "pendiente, verificado"
+        bigint verificado_por FK
+        timestamptz subido_en
+        timestamptz verificado_en }
+    TURNO_EMPLEADO { bigint id PK
+        bigint negocio_id FK "tenant"
+        bigint empleado_id FK
+        bigint sede_id FK
         date fecha
-        string origen "enlace, whatsapp, administrador"
-        string estado }
-    CITA_SERVICIO { int id PK
-        int cita_id FK
-        int servicio_id FK
-        int empleado_id FK
-        datetime inicio
-        datetime fin
-        decimal valor
-        string estado "programado, en curso, realizado, cancelado" }
-    FACTURA { int id PK
-        int cita_id FK
-        int numero
-        decimal total
-        datetime emitida_en }
-    ASESORIA_REGLA { int id PK
-        int servicio_id FK
-        string motivo "ej. decoloracion"
+        time inicio
+        time fin "varios por dia, sin cruzarse" }
+    BLOQUEO_AGENDA { bigint id PK
+        bigint negocio_id FK "tenant"
+        bigint empleado_id FK
+        timestamptz inicio
+        timestamptz fin
+        text motivo "descanso, permiso, otro" }
+    COMISION { bigint id PK
+        bigint negocio_id FK "tenant"
+        bigint empleado_id FK
+        bigint servicio_id FK "vacio = porcentaje general"
+        numeric porcentaje
+        date vigente_desde
+        date vigente_hasta }
+    SERVICIO { bigint id PK
+        bigint negocio_id FK "tenant"
+        bigint area_id FK
+        text nombre UK
+        text descripcion
+        int duracion_min "30 cabello y barba, 45 unas, 15 cejas"
+        numeric precio
+        boolean permite_asesoria
+        boolean activo }
+    EMPLEADO_SERVICIO { bigint negocio_id FK "tenant"
+        bigint empleado_id PK,FK
+        bigint servicio_id PK,FK }
+    ASESORIA_REGLA { bigint id PK
+        bigint negocio_id FK "tenant"
+        bigint servicio_id FK
+        text motivo "ej. decoloracion"
         int duracion_min "ej. 300" }
-    ASESORIA_CHAT { int id PK
-        int cliente_id FK
-        string tipo "tiempo o caso de unas"
+    CLIENTE { bigint id PK
+        bigint negocio_id FK "tenant"
+        bigint usuario_id FK "opcional si tiene cuenta"
+        text nombres
+        text apellidos
+        text celular UK "unico por negocio"
+        text correo
+        text tipo_documento
+        text documento
+        date fecha_nacimiento
+        text notas
+        boolean acepta_recordatorios
+        text origen "enlace, whatsapp, administrador"
+        boolean activo }
+    CITA { bigint id PK
+        bigint negocio_id FK "tenant"
+        bigint sede_id FK
+        bigint cliente_id FK
+        bigint creada_por FK
+        date fecha
+        text origen "enlace, whatsapp, administrador"
+        text estado "reservada, en curso, finalizada, cancelada, no asistio"
+        text notas }
+    CITA_SERVICIO { bigint id PK
+        bigint negocio_id FK "tenant"
+        bigint cita_id FK
+        bigint servicio_id FK
+        bigint empleado_id FK
+        timestamptz inicio
+        timestamptz fin "sin cruzarse por empleado"
+        int duracion_min
+        numeric valor "precio al reservar"
+        text estado "programado, en curso, realizado, cancelado" }
+    ASESORIA_CHAT { bigint id PK
+        bigint negocio_id FK "tenant"
+        bigint cliente_id FK
+        bigint cita_id FK
+        text tipo "tiempo extra o caso especial"
         int duracion_propuesta_min
-        string estado "abierto, confirmado por administrador" }
-    ASESORIA_MENSAJE { int id PK
-        int chat_id FK
-        string autor "bot o cliente"
-        string texto }
-    LIQUIDACION { int id PK
-        int empleado_id FK
+        text estado "abierto, confirmado por administrador" }
+    ASESORIA_MENSAJE { bigint id PK
+        bigint negocio_id FK "tenant"
+        bigint chat_id FK
+        text autor "bot, cliente, administrador"
+        text texto
+        timestamptz enviado_en }
+    FACTURA { bigint id PK
+        bigint negocio_id FK "tenant"
+        bigint cita_id FK "una factura por cita"
+        int numero UK "consecutivo por negocio"
+        numeric total
+        text metodo_pago
+        text estado "emitida, anulada"
+        timestamptz emitida_en }
+    FACTURA_LINEA { bigint id PK
+        bigint negocio_id FK "tenant"
+        bigint factura_id FK
+        bigint cita_servicio_id FK
+        bigint venta_producto_id FK
+        bigint empleado_id FK
+        text descripcion
+        numeric valor }
+    PRODUCTO { bigint id PK
+        bigint negocio_id FK "tenant"
+        text nombre
+        text tipo "venta, dotacion, uso_interno"
+        text codigo UK
+        text unidad
+        numeric costo
+        numeric precio_publico "solo venta"
+        numeric precio_empleado "solo venta"
+        int stock_minimo "alerta, 5 por defecto"
+        text proveedor
+        boolean activo }
+    MOVIMIENTO_INVENTARIO { bigint id PK
+        bigint negocio_id FK "tenant"
+        bigint producto_id FK
+        bigint sede_id FK
+        bigint entrega_id FK
+        bigint venta_id FK
+        bigint registrado_por FK
+        text tipo "compra, entrega, devolucion, venta, ajuste, baja"
+        int cantidad "positivo entra, negativo sale"
+        timestamptz fecha
+        text nota }
+    AREA_DOTACION { bigint id PK
+        bigint negocio_id FK "tenant"
+        bigint area_id FK
+        bigint producto_id FK
+        int cantidad "piezas por persona"
+        text nota }
+    ENTREGA_INTERNA { bigint id PK
+        bigint negocio_id FK "tenant"
+        bigint producto_id FK
+        bigint empleado_id FK
+        bigint entregada_por FK
+        text tipo "dotacion, venta, uso_interno"
+        date fecha
+        int cantidad
+        numeric precio_unitario "precio de empleado si es venta"
+        text estado "vigente, cerrada"
+        text nota }
+    DEVOLUCION_ENTREGA { bigint id PK
+        bigint negocio_id FK "tenant"
+        bigint entrega_id FK
+        date fecha
+        int cantidad
+        text motivo "no vendida, retiro, danada, perdida"
+        boolean se_cobra }
+    VENTA_PRODUCTO { bigint id PK
+        bigint negocio_id FK "tenant"
+        bigint producto_id FK
+        bigint empleado_id FK "vacio si es de mostrador"
+        bigint entrega_id FK
+        bigint cliente_id FK
+        bigint cita_id FK
+        date fecha
+        int cantidad
+        text destino "cliente, uso_personal, mostrador"
+        numeric precio_cobrado
+        numeric precio_empleado }
+    LIQUIDACION { bigint id PK
+        bigint negocio_id FK "tenant"
+        bigint empleado_id FK
+        bigint pagado_por FK
+        text periodicidad
         date desde
         date hasta
-        decimal total
-        string estado "pendiente, pagado" }
-    LIQUIDACION_DETALLE { int id PK
-        int liquidacion_id FK
-        string tipo "comision, descuento_venta, descuento_personal, descuento_dotacion"
-        int cita_servicio_id FK
-        int venta_producto_id FK
-        int entrega_interna_id FK
-        decimal valor }
-    PRODUCTO { int id PK
-        int sede_id FK
-        string nombre
-        string tipo "venta, dotacion, uso_interno"
-        int existencias_bodega
-        decimal precio_publico "solo venta"
-        decimal precio_empleado "solo venta" }
-    ENTREGA_INTERNA { int id PK
-        int producto_id FK
-        int empleado_id FK
-        date fecha
-        int cantidad
-        string tipo "dotacion, venta, uso_interno"
-        decimal precio_unitario "precio de empleado si es venta"
-        int devueltas }
-    VENTA_PRODUCTO { int id PK
-        int producto_id FK
-        int empleado_id FK
-        int entrega_interna_id FK
-        int cliente_id FK
-        date fecha
-        int cantidad
-        string destino "cliente, uso_personal, mostrador"
-        decimal precio_cobrado
-        decimal precio_empleado }
-    GASTO { int id PK
-        int sede_id FK
-        string concepto "arriendo, servicios, otros"
-        decimal valor
+        numeric total_comisiones
+        numeric total_descuentos
+        numeric total_neto
+        text estado "pendiente, pagado"
+        timestamptz pagado_en }
+    LIQUIDACION_DETALLE { bigint id PK
+        bigint negocio_id FK "tenant"
+        bigint liquidacion_id FK
+        bigint cita_servicio_id FK
+        bigint venta_id FK
+        bigint devolucion_id FK
+        text tipo "comision, descuento_venta, descuento_personal, descuento_dotacion"
+        text descripcion
+        numeric base
+        numeric porcentaje
+        numeric valor }
+    CATEGORIA_GASTO { bigint id PK
+        bigint negocio_id FK "tenant"
+        text nombre UK }
+    GASTO { bigint id PK
+        bigint negocio_id FK "tenant"
+        bigint sede_id FK
+        bigint categoria_id FK
+        bigint registrado_por FK
+        text concepto
+        numeric valor
         date fecha }
+    ADMIN_PLATAFORMA { bigint id PK
+        text correo UK
+        text clave_hash
+        boolean activo }
