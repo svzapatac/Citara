@@ -14,7 +14,7 @@
 -- =====================================================================
 SET NAMES utf8mb4;
 DROP DATABASE IF EXISTS citara;
-CREATE DATABASE citara CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+CREATE DATABASE citara CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE citara;
 SET FOREIGN_KEY_CHECKS = 0;
 
@@ -1300,7 +1300,7 @@ SELECT e.negocio_id, e.id AS empleado_id, dr.id AS documento_requerido_id, dr.no
 -- =====================================================================
 SET NAMES utf8mb4;
 DROP DATABASE IF EXISTS citara_app;
-CREATE DATABASE citara_app CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+CREATE DATABASE citara_app CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE citara_app;
 
 CREATE OR REPLACE SQL SECURITY DEFINER VIEW `area` AS SELECT `id`, `negocio_id`, `nombre`, `activa` FROM citara.`area` WHERE negocio_id = citara.fn_negocio() WITH CHECK OPTION;
