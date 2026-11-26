@@ -31,6 +31,7 @@ Proyecto final de Programación Avanzada.
 | [`design/Citara_Computador.pdf`](design/Citara_Computador.pdf) | Maquetación para computador: 35 pantallas (administración, dueño, televisor, formularios nuevos y expediente de 6 secciones). |
 | [`design/Citara_Celular.pdf`](design/Citara_Celular.pdf) | Maquetación para celular: 9 pantallas (app del cliente y del empleado). |
 | [`design/html/`](design/html/) | Las mismas pantallas en HTML, enlazadas entre sí (abrir `Clientes.html`, `Cliente_Nuevo.html`, `Empleado_Expediente.html`…). |
+| [`docs/db/`](docs/db/README.md) | Script de la base de datos en MySQL 8 (multi-tenant): esquema de 43 tablas, reglas, vistas, aislamiento por negocio, datos de demo y pruebas. |
 | [`assets/`](assets) | Logo de Citara e imagen del sistema visual. |
 
 ## Sistema visual

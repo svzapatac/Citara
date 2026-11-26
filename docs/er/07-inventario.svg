@@ -49,7 +49,7 @@
 <polygon fill="none" stroke="#8a93a3" points="46.5,-511.5 46.5,-542.5 105.5,-542.5 105.5,-511.5 46.5,-511.5"/>
 </g>
 <!-- MOVIMIENTO_INVENTARIO -->
-<g id="node7" class="node">
+<g id="node11" class="node">
 <title>MOVIMIENTO_INVENTARIO</title>
 <polygon fill="white" stroke="transparent" points="156.5,-16 156.5,-288 549.5,-288 549.5,-16 156.5,-16"/>
 <polygon fill="#4a5a82" stroke="transparent" points="158,-262 158,-287 549,-287 549,-262 158,-262"/>
@@ -149,7 +149,7 @@
 <polygon fill="none" stroke="#8a93a3" points="1180,-1263.5 1180,-1294.5 1288,-1294.5 1288,-1263.5 1180,-1263.5"/>
 </g>
 <!-- VENTA_PRODUCTO -->
-<g id="node10" class="node">
+<g id="node8" class="node">
 <title>VENTA_PRODUCTO</title>
 <polygon fill="white" stroke="transparent" points="732.5,-380 732.5,-674 1045.5,-674 1045.5,-380 732.5,-380"/>
 <polygon fill="#4a5a82" stroke="transparent" points="734,-648 734,-673 1045,-673 1045,-648 734,-648"/>
@@ -407,16 +407,8 @@
 <ellipse fill="none" stroke="#5b6676" stroke-width="1.3" cx="992.03" cy="-994.76" rx="4" ry="4"/>
 <text text-anchor="middle" x="1058.5" y="-1082.2" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#3a4556"> &#160;kit &#160;</text>
 </g>
-<!-- FACTURA_LINEA -->
-<g id="node4" class="node">
-<title>FACTURA_LINEA</title>
-<polygon fill="white" stroke="transparent" points="1255.5,-887 1255.5,-918 1402.5,-918 1402.5,-887 1255.5,-887"/>
-<polygon fill="#3a4f8f" stroke="transparent" points="1257,-887.5 1257,-916.5 1402,-916.5 1402,-887.5 1257,-887.5"/>
-<text text-anchor="start" x="1263" y="-898.5" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="15.00" fill="white">FACTURA_LINEA</text>
-<polygon fill="none" stroke="#8a93a3" points="1255.5,-887 1255.5,-918 1402.5,-918 1402.5,-887 1255.5,-887"/>
-</g>
 <!-- CLIENTE -->
-<g id="node5" class="node">
+<g id="node4" class="node">
 <title>CLIENTE</title>
 <polygon fill="white" stroke="transparent" points="1452.5,-887 1452.5,-918 1537.5,-918 1537.5,-887 1452.5,-887"/>
 <polygon fill="#3a4f8f" stroke="transparent" points="1454,-887.5 1454,-916.5 1537,-916.5 1537,-887.5 1454,-887.5"/>
@@ -433,6 +425,14 @@
 <polygon fill="#5b6676" stroke="#5b6676" stroke-width="1.3" points="1055.18,-568.78 1046.93,-561.55 1050.4,-567.31 1045.61,-565.85 1045.61,-565.85 1045.61,-565.85 1050.4,-567.31 1044.3,-570.15 1055.18,-568.78 1055.18,-568.78"/>
 <ellipse fill="none" stroke="#5b6676" stroke-width="1.3" cx="1059" cy="-569.95" rx="4" ry="4"/>
 <text text-anchor="middle" x="1407.5" y="-717.2" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#3a4556"> &#160;compra &#160;</text>
+</g>
+<!-- FACTURA_LINEA -->
+<g id="node5" class="node">
+<title>FACTURA_LINEA</title>
+<polygon fill="white" stroke="transparent" points="1255.5,-887 1255.5,-918 1402.5,-918 1402.5,-887 1255.5,-887"/>
+<polygon fill="#3a4f8f" stroke="transparent" points="1257,-887.5 1257,-916.5 1402,-916.5 1402,-887.5 1257,-887.5"/>
+<text text-anchor="start" x="1263" y="-898.5" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="15.00" fill="white">FACTURA_LINEA</text>
+<polygon fill="none" stroke="#8a93a3" points="1255.5,-887 1255.5,-918 1402.5,-918 1402.5,-887 1255.5,-887"/>
 </g>
 <!-- CITA -->
 <g id="node6" class="node">
@@ -454,7 +454,7 @@
 <text text-anchor="middle" x="1533.5" y="-717.2" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#3a4556"> &#160;incluye &#160;</text>
 </g>
 <!-- PRODUCTO -->
-<g id="node8" class="node">
+<g id="node7" class="node">
 <title>PRODUCTO</title>
 <polygon fill="white" stroke="transparent" points="461.5,-1131 461.5,-1427 758.5,-1427 758.5,-1131 461.5,-1131"/>
 <polygon fill="#4a5a82" stroke="transparent" points="463,-1401 463,-1426 758,-1426 758,-1401 463,-1401"/>
@@ -543,17 +543,17 @@
 <text text-anchor="start" x="741" y="-1140.2" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#0033dd">  </text>
 <polygon fill="none" stroke="#8a93a3" points="461.5,-1131 461.5,-1427 758.5,-1427 758.5,-1131 461.5,-1131"/>
 </g>
-<!-- PRODUCTO&#45;&gt;MOVIMIENTO_INVENTARIO -->
-<g id="edge2" class="edge">
-<title>PRODUCTO&#45;&gt;MOVIMIENTO_INVENTARIO</title>
-<path fill="none" stroke="#5b6676" stroke-width="1.3" d="M451.94,-1228.1C363.27,-1191.08 260.25,-1130.85 208,-1039 76.24,-807.38 185.14,-489.97 272.02,-304.66"/>
-<polygon fill="#5b6676" stroke="#5b6676" stroke-width="1.3" points="462.27,-1226.94 458.47,-1236.19 456.62,-1235.43 460.42,-1226.18 462.27,-1226.94"/>
-<polyline fill="none" stroke="#5b6676" stroke-width="1.3" points="461.29,-1231.94 456.67,-1230.04 "/>
-<polygon fill="#5b6676" stroke="#5b6676" stroke-width="1.3" points="457.64,-1225.04 453.84,-1234.29 451.99,-1233.53 455.79,-1224.28 457.64,-1225.04"/>
-<polyline fill="none" stroke="#5b6676" stroke-width="1.3" points="456.67,-1230.04 452.04,-1228.14 "/>
-<polygon fill="#5b6676" stroke="#5b6676" stroke-width="1.3" points="275.53,-297.28 283.88,-290.18 277.67,-292.76 279.82,-288.25 279.82,-288.25 279.82,-288.25 277.67,-292.76 275.75,-286.32 275.53,-297.28 275.53,-297.28"/>
-<ellipse fill="none" stroke="#5b6676" stroke-width="1.3" cx="273.81" cy="-300.89" rx="4" ry="4"/>
-<text text-anchor="middle" x="176.5" y="-717.2" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#3a4556"> &#160;mueve &#160;</text>
+<!-- PRODUCTO&#45;&gt;VENTA_PRODUCTO -->
+<g id="edge11" class="edge">
+<title>PRODUCTO&#45;&gt;VENTA_PRODUCTO</title>
+<path fill="none" stroke="#5b6676" stroke-width="1.3" d="M625.53,-1120.97C639.93,-1016.88 667.02,-879.16 717,-766 728.47,-740.03 743.09,-714.09 758.95,-689.41"/>
+<polygon fill="#5b6676" stroke="#5b6676" stroke-width="1.3" points="629.26,-1130.62 619.35,-1129.27 619.62,-1127.29 629.53,-1128.63 629.26,-1130.62"/>
+<polyline fill="none" stroke="#5b6676" stroke-width="1.3" points="624.17,-1130.93 624.85,-1125.98 "/>
+<polygon fill="#5b6676" stroke="#5b6676" stroke-width="1.3" points="629.93,-1125.66 620.03,-1124.31 620.3,-1122.33 630.2,-1123.68 629.93,-1125.66"/>
+<polyline fill="none" stroke="#5b6676" stroke-width="1.3" points="624.85,-1125.98 625.52,-1121.02 "/>
+<polygon fill="#5b6676" stroke="#5b6676" stroke-width="1.3" points="763.46,-682.56 772.72,-676.69 766.21,-678.39 768.96,-674.21 768.96,-674.21 768.96,-674.21 766.21,-678.39 765.2,-671.73 763.46,-682.56 763.46,-682.56"/>
+<ellipse fill="none" stroke="#5b6676" stroke-width="1.3" cx="761.26" cy="-685.9" rx="4" ry="4"/>
+<text text-anchor="middle" x="750" y="-899.7" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#3a4556"> &#160;se vende &#160;</text>
 </g>
 <!-- PRODUCTO&#45;&gt;AREA_DOTACION -->
 <g id="edge5" class="edge">
@@ -567,17 +567,17 @@
 <ellipse fill="none" stroke="#5b6676" stroke-width="1.3" cx="850.66" cy="-993.69" rx="4" ry="4"/>
 <text text-anchor="middle" x="802" y="-1082.2" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#3a4556"> &#160;forma &#160;</text>
 </g>
-<!-- PRODUCTO&#45;&gt;VENTA_PRODUCTO -->
-<g id="edge11" class="edge">
-<title>PRODUCTO&#45;&gt;VENTA_PRODUCTO</title>
-<path fill="none" stroke="#5b6676" stroke-width="1.3" d="M625.53,-1120.97C639.93,-1016.88 667.02,-879.16 717,-766 728.47,-740.03 743.09,-714.09 758.95,-689.41"/>
-<polygon fill="#5b6676" stroke="#5b6676" stroke-width="1.3" points="629.26,-1130.62 619.35,-1129.27 619.62,-1127.29 629.53,-1128.63 629.26,-1130.62"/>
-<polyline fill="none" stroke="#5b6676" stroke-width="1.3" points="624.17,-1130.93 624.85,-1125.98 "/>
-<polygon fill="#5b6676" stroke="#5b6676" stroke-width="1.3" points="629.93,-1125.66 620.03,-1124.31 620.3,-1122.33 630.2,-1123.68 629.93,-1125.66"/>
-<polyline fill="none" stroke="#5b6676" stroke-width="1.3" points="624.85,-1125.98 625.52,-1121.02 "/>
-<polygon fill="#5b6676" stroke="#5b6676" stroke-width="1.3" points="763.46,-682.56 772.72,-676.69 766.21,-678.39 768.96,-674.21 768.96,-674.21 768.96,-674.21 766.21,-678.39 765.2,-671.73 763.46,-682.56 763.46,-682.56"/>
-<ellipse fill="none" stroke="#5b6676" stroke-width="1.3" cx="761.26" cy="-685.9" rx="4" ry="4"/>
-<text text-anchor="middle" x="750" y="-899.7" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#3a4556"> &#160;se vende &#160;</text>
+<!-- PRODUCTO&#45;&gt;MOVIMIENTO_INVENTARIO -->
+<g id="edge2" class="edge">
+<title>PRODUCTO&#45;&gt;MOVIMIENTO_INVENTARIO</title>
+<path fill="none" stroke="#5b6676" stroke-width="1.3" d="M451.94,-1228.1C363.27,-1191.08 260.25,-1130.85 208,-1039 76.24,-807.38 185.14,-489.97 272.02,-304.66"/>
+<polygon fill="#5b6676" stroke="#5b6676" stroke-width="1.3" points="462.27,-1226.94 458.47,-1236.19 456.62,-1235.43 460.42,-1226.18 462.27,-1226.94"/>
+<polyline fill="none" stroke="#5b6676" stroke-width="1.3" points="461.29,-1231.94 456.67,-1230.04 "/>
+<polygon fill="#5b6676" stroke="#5b6676" stroke-width="1.3" points="457.64,-1225.04 453.84,-1234.29 451.99,-1233.53 455.79,-1224.28 457.64,-1225.04"/>
+<polyline fill="none" stroke="#5b6676" stroke-width="1.3" points="456.67,-1230.04 452.04,-1228.14 "/>
+<polygon fill="#5b6676" stroke="#5b6676" stroke-width="1.3" points="275.53,-297.28 283.88,-290.18 277.67,-292.76 279.82,-288.25 279.82,-288.25 279.82,-288.25 277.67,-292.76 275.75,-286.32 275.53,-297.28 275.53,-297.28"/>
+<ellipse fill="none" stroke="#5b6676" stroke-width="1.3" cx="273.81" cy="-300.89" rx="4" ry="4"/>
+<text text-anchor="middle" x="176.5" y="-717.2" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#3a4556"> &#160;mueve &#160;</text>
 </g>
 <!-- PRODUCTO&#45;&gt;ENTREGA_INTERNA -->
 <g id="edge6" class="edge">
@@ -635,7 +635,7 @@
 <text text-anchor="middle" x="1076.5" y="-331.2" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#3a4556"> &#160;descuenta &#160;</text>
 </g>
 <!-- DEVOLUCION_ENTREGA -->
-<g id="node11" class="node">
+<g id="node10" class="node">
 <title>DEVOLUCION_ENTREGA</title>
 <polygon fill="white" stroke="transparent" points="361.5,-435.5 361.5,-618.5 682.5,-618.5 682.5,-435.5 361.5,-435.5"/>
 <polygon fill="#4a5a82" stroke="transparent" points="363,-592 363,-617 682,-617 682,-592 363,-592"/>
@@ -700,17 +700,6 @@
 <ellipse fill="none" stroke="#5b6676" stroke-width="1.3" cx="1162.05" cy="-175.65" rx="4" ry="4"/>
 <text text-anchor="middle" x="954" y="-331.2" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#3a4556"> &#160;cobra &#160;</text>
 </g>
-<!-- ENTREGA_INTERNA&#45;&gt;MOVIMIENTO_INVENTARIO -->
-<g id="edge9" class="edge">
-<title>ENTREGA_INTERNA&#45;&gt;MOVIMIENTO_INVENTARIO</title>
-<path fill="none" stroke="#5b6676" stroke-width="1.3" d="M314.27,-754.2C301.37,-728.41 290.16,-701.13 283,-674 249.67,-547.66 263.53,-509.21 283,-380 286.69,-355.52 292.5,-330.03 299.23,-305.36"/>
-<polygon fill="#5b6676" stroke="#5b6676" stroke-width="1.3" points="324.3,-762.76 315.4,-767.33 314.49,-765.55 323.38,-760.98 324.3,-762.76"/>
-<polyline fill="none" stroke="#5b6676" stroke-width="1.3" points="320.31,-765.93 318.02,-761.49 "/>
-<ellipse fill="none" stroke="#5b6676" stroke-width="1.3" cx="316.19" cy="-757.93" rx="4" ry="4"/>
-<polygon fill="#5b6676" stroke="#5b6676" stroke-width="1.3" points="301.42,-297.62 308.48,-289.23 302.79,-292.81 304.15,-288 304.15,-288 304.15,-288 302.79,-292.81 299.82,-286.78 301.42,-297.62 301.42,-297.62"/>
-<ellipse fill="none" stroke="#5b6676" stroke-width="1.3" cx="300.33" cy="-301.47" rx="4" ry="4"/>
-<text text-anchor="middle" x="309.5" y="-524.2" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#3a4556"> &#160;origina &#160;</text>
-</g>
 <!-- ENTREGA_INTERNA&#45;&gt;VENTA_PRODUCTO -->
 <g id="edge13" class="edge">
 <title>ENTREGA_INTERNA&#45;&gt;VENTA_PRODUCTO</title>
@@ -733,6 +722,17 @@
 <polygon fill="#5b6676" stroke="#5b6676" stroke-width="1.3" points="476.65,-628.15 484.6,-620.59 478.54,-623.52 480.44,-618.89 480.44,-618.89 480.44,-618.89 478.54,-623.52 476.27,-617.19 476.65,-628.15 476.65,-628.15"/>
 <ellipse fill="none" stroke="#5b6676" stroke-width="1.3" cx="475.14" cy="-631.85" rx="4" ry="4"/>
 <text text-anchor="middle" x="487" y="-717.2" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#3a4556"> &#160;se devuelve &#160;</text>
+</g>
+<!-- ENTREGA_INTERNA&#45;&gt;MOVIMIENTO_INVENTARIO -->
+<g id="edge9" class="edge">
+<title>ENTREGA_INTERNA&#45;&gt;MOVIMIENTO_INVENTARIO</title>
+<path fill="none" stroke="#5b6676" stroke-width="1.3" d="M314.27,-754.2C301.37,-728.41 290.16,-701.13 283,-674 249.67,-547.66 263.53,-509.21 283,-380 286.69,-355.52 292.5,-330.03 299.23,-305.36"/>
+<polygon fill="#5b6676" stroke="#5b6676" stroke-width="1.3" points="324.3,-762.76 315.4,-767.33 314.49,-765.55 323.38,-760.98 324.3,-762.76"/>
+<polyline fill="none" stroke="#5b6676" stroke-width="1.3" points="320.31,-765.93 318.02,-761.49 "/>
+<ellipse fill="none" stroke="#5b6676" stroke-width="1.3" cx="316.19" cy="-757.93" rx="4" ry="4"/>
+<polygon fill="#5b6676" stroke="#5b6676" stroke-width="1.3" points="301.42,-297.62 308.48,-289.23 302.79,-292.81 304.15,-288 304.15,-288 304.15,-288 302.79,-292.81 299.82,-286.78 301.42,-297.62 301.42,-297.62"/>
+<ellipse fill="none" stroke="#5b6676" stroke-width="1.3" cx="300.33" cy="-301.47" rx="4" ry="4"/>
+<text text-anchor="middle" x="309.5" y="-524.2" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#3a4556"> &#160;origina &#160;</text>
 </g>
 </g>
 </svg>

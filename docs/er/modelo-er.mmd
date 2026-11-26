@@ -88,7 +88,8 @@ erDiagram
         bigint plan_id FK
         text estado "activo, suspendido, cancelado"
         text zona_horaria
-        text moneda }
+        text moneda
+        int ultimo_numero_factura "consecutivo de facturas" }
     SUSCRIPCION { bigint id PK
         bigint negocio_id FK "tenant"
         bigint plan_id FK

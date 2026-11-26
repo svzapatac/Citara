@@ -1,6 +1,6 @@
 # Modelo de datos multi-tenant (borrador 2)
 
-Diseño de la base de datos de Citara para atender a muchos negocios (peluquerías, salones de uñas y barberías) desde una sola instalación. Está pensado para PostgreSQL. Se diseña antes del script de creación: cuando el equipo lo apruebe, de aquí sale el SQL.
+Diseño de la base de datos de Citara para atender a muchos negocios (peluquerías, salones de uñas y barberías) desde una sola instalación. El motor es **MySQL 8.0.16 o superior**; el script está en [`db/`](db/README.md). Las partes escritas pensando en PostgreSQL (RLS, `EXCLUDE`) se resolvieron en MySQL como explica la sección 9.
 
 Deriva de los paneles ([`flujo-por-panel.md`](flujo-por-panel.md)), de las reglas del enunciado y de las decisiones del equipo: catálogo de cuatro áreas para cualquier cliente, varios turnos por día, productos entregados al empleado con descuento mensual, dotación por área y documentos sin vencimiento.
 
@@ -231,10 +231,27 @@ El detalle de lecturas y escrituras de cada pantalla está en [`flujo-por-panel.
 
 ## 8. Por confirmar
 
-- **Motor:** se asume PostgreSQL por RLS, `EXCLUDE` e `identity`. Si el curso exige otro motor (MySQL, SQL Server), cambian las políticas de aislamiento y las restricciones de cruce.
+- **Motor:** MySQL 8 (decidido por el equipo). Ver sección 9 para lo que cambia frente al diseño original.
 - **Un usuario en varios negocios:** hoy el correo es único por negocio, así que una persona con dos negocios tiene dos cuentas. Si se quiere una sola cuenta, se agrega una tabla global de identidades.
 - **Comisión:** si es un porcentaje por empleado o varía por servicio. El modelo soporta las dos.
 - **Productos:** qué se descuenta si no se vende, quién cobra al cliente, cuándo se descuenta cuando el pago no es mensual, y si la dotación perdida se cobra.
 - **Documentos:** cuáles exige en la práctica la Secretaría de Salud.
 - **Facturación electrónica:** queda fuera; `factura` es solo historial.
 - **Planes:** valores y límites de cada plan.
+
+
+## 9. Implementación en MySQL
+
+El script vive en [`db/`](db/README.md). MySQL no tiene seguridad por fila (RLS) ni restricciones de exclusión (`EXCLUDE`), así que esas dos reglas se hacen distinto:
+
+| Idea del diseño | En PostgreSQL | En MySQL (lo implementado) |
+|---|---|---|
+| Un negocio no ve datos de otro | RLS con `app.negocio_id` | Esquema `citara_app`: una vista por tabla con `WHERE negocio_id = fn_negocio()` y `WITH CHECK OPTION`. El usuario de la app solo tiene permisos sobre ese esquema |
+| Tenant de la conexión | `SET LOCAL app.negocio_id` | `CALL sp_set_negocio(id)` al tomar la conexión del pool y `sp_limpiar_negocio()` al devolverla |
+| Un negocio no apunta a datos de otro | claves foráneas compuestas | igual (`negocio_id, id`) en las 43 tablas |
+| Citas y turnos sin cruzarse | `EXCLUDE USING gist` | disparadores `trg_turno_*` y `trg_citaserv_*`, con bloqueo de la fila del empleado para evitar carreras |
+| Enumeraciones | `CHECK` | `CHECK` (requiere MySQL 8.0.16+) |
+| Fechas con zona | `timestamptz` | `DATETIME`: hora local del negocio en citas/turnos, UTC en auditoría y registros |
+| Números de factura | secuencia | columna `negocio.ultimo_numero_factura` actualizada dentro de `sp_emitir_factura` |
+
+Reglas extra que quedaron en la base de datos: el inventario nunca queda en negativo, los movimientos y la auditoría no se editan ni se borran, una cita solo cabe dentro de un turno y de los servicios habilitados del empleado, un empleado no puede vender más de lo que tiene, y un producto de venta exige ambos precios.
