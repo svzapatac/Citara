@@ -28,7 +28,7 @@ out = ["""-- ===================================================================
 -- =====================================================================
 SET NAMES utf8mb4;
 DROP DATABASE IF EXISTS citara_app;
-CREATE DATABASE citara_app CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+CREATE DATABASE citara_app CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE citara_app;
 """]
 for t in sorted(tables | views):
