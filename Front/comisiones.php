@@ -1,121 +1,25 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Comisiones y pagos · Citara</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link href="Style.css" rel="stylesheet">
-</head>
-<body>
-
-<div class="d-flex flex-column flex-lg-row">
-
-  <!-- Menú lateral (lo construye menu.js) -->
-  <div id="menu-lateral" class="menu-envoltura" data-activo="comisiones" data-rol="dueno"></div>
-
-  <main class="contenido p-3 p-lg-4">
-
-    <!-- Encabezado -->
-    <div class="d-flex flex-wrap align-items-start justify-content-between gap-3 mb-3">
-      <div>
-        <h1 class="mb-1">Comisiones y pagos</h1>
-        <p class="text-secondary mb-0">Pago de cada empleado a partir de los servicios realizados.</p>
-      </div>
-      <div class="d-flex flex-wrap align-items-center gap-2">
-        <select class="form-select w-auto fw-semibold" aria-label="Empleado">
-          <option selected>Todos los empleados</option><option>Laura</option><option>Camila</option><option>Patty</option><option>Sofía</option><option>Andrés</option>
-        </select>
-        <select class="form-select w-auto fw-semibold" aria-label="Modalidad">
-          <option selected>Todas las modalidades</option><option>Diario</option><option>Semanal</option><option>Quincenal</option><option>Mensual</option>
-        </select>
-        <a href="#" class="btn btn-primary">Cerrar liquidación</a>
-      </div>
-    </div>
-
-    <!-- Tabla de pagos -->
-    <div class="card p-2 p-md-3 mb-3">
-      <div class="table-responsive">
-        <table class="table tabla-citara tabla-pie">
-          <thead>
-            <tr>
-              <th>Empleado</th><th>Modalidad y período</th><th class="text-end">Serv.</th>
-              <th class="text-end">Valor atendido</th><th class="text-end">Comisión</th>
-              <th class="text-end">Descuentos</th><th class="text-end">Total a pagar</th>
-              <th>Estado</th><th></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr class="table-active">
-              <td><div class="d-flex align-items-center gap-3"><span class="avatar avatar-44 rounded-circle d-inline-flex align-items-center justify-content-center">LG</span><span class="nombre-fila">Laura</span></div></td>
-              <td>Mensual · noviembre</td>
-              <td class="text-end">18</td>
-              <td class="text-end">$720.000</td>
-              <td class="text-end">40% · $288.000</td>
-              <td class="text-end">−$120.000</td>
-              <td class="text-end"><strong>$168.000</strong></td>
-              <td><span class="badge bg-danger-subtle text-danger-emphasis">Pendiente</span></td>
-              <td><a href="pago.php" class="enlace-fuerte" aria-label="Ver pago de Laura"><i class="bi bi-arrow-right"></i></a></td>
-            </tr>
-            <tr>
-              <td><div class="d-flex align-items-center gap-3"><span class="avatar avatar-44 rounded-circle d-inline-flex align-items-center justify-content-center">CR</span><span class="nombre-fila">Camila</span></div></td>
-              <td>Quincenal · 1 a 15 nov</td>
-              <td class="text-end">4</td>
-              <td class="text-end">$120.000</td>
-              <td class="text-end">45% · $54.000</td>
-              <td class="text-end">$0</td>
-              <td class="text-end"><strong>$54.000</strong></td>
-              <td><span class="badge bg-success-subtle text-success-emphasis">Pagado</span></td>
-              <td><a href="pago.php" class="enlace-fuerte" aria-label="Ver pago de Camila"><i class="bi bi-arrow-right"></i></a></td>
-            </tr>
-            <tr>
-              <td><div class="d-flex align-items-center gap-3"><span class="avatar avatar-44 rounded-circle d-inline-flex align-items-center justify-content-center">PM</span><span class="nombre-fila">Patty</span></div></td>
-              <td>Mensual · octubre</td>
-              <td class="text-end">2</td>
-              <td class="text-end">$160.000</td>
-              <td class="text-end">35% · $56.000</td>
-              <td class="text-end">$0</td>
-              <td class="text-end"><strong>$56.000</strong></td>
-              <td><span class="badge bg-success-subtle text-success-emphasis">Pagado</span></td>
-              <td><a href="pago.php" class="enlace-fuerte" aria-label="Ver pago de Patty"><i class="bi bi-arrow-right"></i></a></td>
-            </tr>
-          </tbody>
-          <tfoot>
-            <tr>
-              <td colspan="2">Costo total de pagos</td>
-              <td class="text-end">24</td>
-              <td class="text-end">$1.000.000</td>
-              <td class="text-end">$398.000</td>
-              <td class="text-end">−$120.000</td>
-              <td class="text-end">$278.000</td>
-              <td></td><td></td>
-            </tr>
-          </tfoot>
-        </table>
-      </div>
-    </div>
-
-    <div class="row g-3">
-      <div class="col-12 col-lg-6">
-        <div class="card p-4 h-100">
-          <p class="etiqueta mb-2">Cómo se calcula</p>
-          <p class="text-secondary mb-0">Cada servicio marcado como realizado suma su valor. El pago es ese valor por el porcentaje de comisión, menos los descuentos mensuales por productos que el negocio le entregó (a precio de empleado) y por compras de uso personal. Cada empleado se liquida diaria, semanal, quincenal o mensual según su elección.</p>
-        </div>
-      </div>
-      <div class="col-12 col-lg-6">
-        <div class="caja-info p-4 h-100">
-          <p class="etiqueta mb-2" style="color: var(--c-medio)">Por confirmar con el profesor</p>
-          <p class="mb-0">¿El administrador ve el detalle y total individual, y el costo acumulado queda solo para el dueño? Aquí se muestra como lo vería el dueño.</p>
-        </div>
-      </div>
-    </div>
-
-  </main>
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script src="menu.js"></script>
-</body>
-</html>
+<?php
+require_once __DIR__ . '/modelo.php';
+requerir_rol(ADMIN);
+if (es_post() && csrf_ok()) {
+    $emp = (int)$_POST['empleado_id']; $srv = (int)$_POST['servicio_id']; $pct = (float)str_replace(',', '.', $_POST['porcentaje'] ?? '-1');
+    if ($pct < 0 || $pct > 100 || !q_val("SELECT 1 FROM empleado_servicio WHERE negocio_id = ? AND empleado_id = ? AND servicio_id = ?", [$NEG, $emp, $srv])) flash('Revisa el empleado, el servicio y el porcentaje (0–100).', 'danger');
+    else {
+        $conexion->begin_transaction();
+        q_run("UPDATE comision SET vigente_hasta = DATE_SUB(CURDATE(), INTERVAL 1 DAY) WHERE negocio_id = ? AND empleado_id = ? AND servicio_id = ? AND vigente_hasta IS NULL AND vigente_desde < CURDATE()", [$NEG, $emp, $srv]);
+        q_run("DELETE FROM comision WHERE negocio_id = ? AND empleado_id = ? AND servicio_id = ? AND vigente_desde = CURDATE()", [$NEG, $emp, $srv]);
+        q_run("INSERT INTO comision (negocio_id, empleado_id, servicio_id, porcentaje, vigente_desde) VALUES (?,?,?,?,CURDATE())", [$NEG, $emp, $srv, $pct]);
+        $conexion->commit(); flash('Comisión actualizada.');
+    }
+    header('Location: comisiones.php'); exit;
+}
+$rows = q_all("SELECT e.id AS eid, CONCAT(e.nombres,' ',e.apellidos) AS emp, s.id AS sid, s.nombre AS servicio,
+   (SELECT c.porcentaje FROM comision c WHERE c.negocio_id = es.negocio_id AND c.empleado_id = es.empleado_id AND c.servicio_id = es.servicio_id AND c.vigente_desde <= CURDATE() AND (c.vigente_hasta IS NULL OR c.vigente_hasta >= CURDATE()) ORDER BY c.vigente_desde DESC LIMIT 1) AS pct
+   FROM empleado_servicio es JOIN empleado e ON e.negocio_id = es.negocio_id AND e.id = es.empleado_id JOIN servicio s ON s.negocio_id = es.negocio_id AND s.id = es.servicio_id
+   WHERE es.negocio_id = ? AND e.sede_id = ? AND e.activo = 1 ORDER BY e.nombres, s.nombre", [$NEG, $SEDE]);
+cabecera('Comisiones', 'comisiones');
+?>
+    <h1 class="mb-1">Comisiones</h1><p class="text-secondary mb-3">Porcentaje que gana cada profesional por servicio. Un cambio rige desde hoy; no altera liquidaciones pasadas.</p>
+    <div class="card p-2 p-md-3"><div class="table-responsive"><table class="table tabla-citara"><thead><tr><th>Profesional</th><th>Servicio</th><th style="width:220px">Porcentaje</th></tr></thead><tbody>
+    <?php foreach ($rows as $r): ?><tr><td class="nombre-fila"><?= h($r['emp']) ?></td><td><?= h($r['servicio']) ?></td><td><form method="post" class="input-group input-group-sm"><?= csrf() ?><input type="hidden" name="empleado_id" value="<?= (int)$r['eid'] ?>"><input type="hidden" name="servicio_id" value="<?= (int)$r['sid'] ?>"><input name="porcentaje" class="form-control" value="<?= $r['pct'] !== null ? rtrim(rtrim($r['pct'], '0'), '.') : '' ?>" placeholder="—"><span class="input-group-text">%</span><button class="btn btn-secondary">Guardar</button></form></td></tr><?php endforeach; ?></tbody></table></div></div>
+<?php pie();

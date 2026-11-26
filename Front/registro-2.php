@@ -25,7 +25,7 @@ $tipos       = ['Peluquería y uñas', 'Barbería', 'Spa'];
 $diasNombres = [1 => 'Lun', 2 => 'Mar', 3 => 'Mié', 4 => 'Jue', 5 => 'Vie', 6 => 'Sáb', 7 => 'Dom'];
 
 // ---- Planes disponibles (tabla plan) ----
-require_once __DIR__ . '/conexion.php';
+require_once is_file(__DIR__ . '/conexion.local.php') ? __DIR__ . '/conexion.local.php' : __DIR__ . '/conexion.php'; $conexion->set_charset('utf8mb4');
 $planes = [];
 $errores = [];
 try {

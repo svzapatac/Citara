@@ -1,135 +1,50 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Clientes · Citara</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link href="Style.css" rel="stylesheet">
-</head>
-<body>
-
-<div class="d-flex flex-column flex-lg-row">
-
-  <!-- Menú lateral (lo construye menu.js) -->
-  <div id="menu-lateral" class="menu-envoltura" data-activo="clientes" data-rol="administrador"></div>
-
-  <main class="contenido p-3 p-lg-4">
-
-    <!-- Encabezado -->
+<?php
+require_once __DIR__ . '/modelo.php';
+requerir_rol(ADMIN);
+$buscar = trim($_GET['q'] ?? '');
+$sel = (int)($_GET['id'] ?? 0);
+$p = [$NEG]; $w = '';
+if ($buscar !== '') { $w = " AND (c.nombres LIKE ? OR c.apellidos LIKE ? OR c.celular LIKE ? OR CONCAT(c.nombres,' ',c.apellidos) LIKE ?)"; $l = "%$buscar%"; array_push($p, $l, $l, $l, $l); }
+$rows = q_all("SELECT c.id, c.nombres, c.apellidos, c.celular, c.origen,
+    (SELECT MAX(ci.fecha) FROM cita ci WHERE ci.negocio_id = c.negocio_id AND ci.cliente_id = c.id AND ci.estado <> 'cancelada') AS ultima,
+    (SELECT COUNT(*) FROM cita ci WHERE ci.negocio_id = c.negocio_id AND ci.cliente_id = c.id AND ci.estado <> 'cancelada') AS citas,
+    (SELECT COALESCE(SUM(f.total),0) FROM factura f JOIN cita ci ON ci.negocio_id = f.negocio_id AND ci.id = f.cita_id WHERE ci.negocio_id = c.negocio_id AND ci.cliente_id = c.id AND f.estado <> 'anulada') AS gastado
+    FROM cliente c WHERE c.negocio_id = ? AND c.activo = 1 $w ORDER BY c.nombres, c.apellidos LIMIT 100", $p);
+if (!$sel && $rows) $sel = (int)$rows[0]['id'];
+$c = $sel ? q_row("SELECT * FROM cliente WHERE negocio_id = ? AND id = ?", [$NEG, $sel]) : null;
+$hist = $c ? q_all("SELECT ci.id, ci.fecha, ci.estado, GROUP_CONCAT(s.nombre SEPARATOR ', ') AS servicios, SUM(cs.valor) AS total
+    FROM cita ci JOIN cita_servicio cs ON cs.negocio_id = ci.negocio_id AND cs.cita_id = ci.id JOIN servicio s ON s.negocio_id = cs.negocio_id AND s.id = cs.servicio_id
+    WHERE ci.negocio_id = ? AND ci.cliente_id = ? GROUP BY ci.id ORDER BY ci.fecha DESC LIMIT 8", [$NEG, $sel]) : [];
+$CAN = ['enlace' => 'Enlace', 'whatsapp' => 'WhatsApp', 'administrador' => 'Administrador', 'recomendacion' => 'Recomendación', 'instagram' => 'Instagram', 'local' => 'Local', 'otro' => 'Otro'];
+cabecera('Clientes', 'clientes');
+?>
     <div class="d-flex flex-wrap align-items-start justify-content-between gap-3 mb-3">
-      <div>
-        <h1 class="mb-1">Clientes</h1>
-        <p class="text-secondary mb-0">Todos los clientes del negocio y su historial.</p>
-      </div>
+      <div><h1 class="mb-1">Clientes</h1><p class="text-secondary mb-0">Todos los clientes del negocio y su historial.</p></div>
       <div class="d-flex flex-wrap gap-2">
-        <div class="input-group buscador">
-          <span class="input-group-text border-end-0"><i class="bi bi-search"></i></span>
-          <input type="search" class="form-control border-start-0" placeholder="Buscar cliente" aria-label="Buscar cliente">
-        </div>
-        <a href="#" class="btn btn-primary"><i class="bi bi-plus-lg me-2"></i>Nuevo cliente</a>
+        <form class="input-group buscador" method="get"><span class="input-group-text border-end-0"><i class="bi bi-search"></i></span>
+          <input type="search" name="q" value="<?= h($buscar) ?>" class="form-control border-start-0" placeholder="Buscar cliente" aria-label="Buscar cliente"></form>
+        <a href="cliente-nuevo.php" class="btn btn-primary"><i class="bi bi-plus-lg me-2"></i>Nuevo cliente</a>
       </div>
     </div>
-
     <div class="row g-3">
-
-      <!-- Tabla de clientes -->
-      <div class="col-12 col-xl-8">
-        <div class="card p-2 p-md-3">
-          <div class="table-responsive">
-            <table class="table table-hover tabla-citara">
-              <thead>
-                <tr>
-                  <th>Cliente</th><th>Celular</th><th>Última visita</th>
-                  <th class="text-end">Citas</th><th class="text-end">Total gastado</th><th>Canal</th>
-                </tr>
-              </thead>
-              <tbody>
-            <tr class="table-active">
-              <td><div class="d-flex align-items-center gap-3"><span class="avatar avatar-44 avatar-azul rounded-circle d-inline-flex align-items-center justify-content-center">AM</span><span class="nombre-fila">Ana Martínez</span></div></td>
-              <td>300 765 4321</td>
-              <td>23 nov</td>
-              <td class="text-end">12</td>
-              <td class="text-end">$420.000</td>
-              <td>WhatsApp</td>
-            </tr>
-            <tr>
-              <td><div class="d-flex align-items-center gap-3"><span class="avatar avatar-44 rounded-circle d-inline-flex align-items-center justify-content-center">ML</span><span class="nombre-fila">Marta León</span></div></td>
-              <td>310 222 1100</td>
-              <td>23 nov</td>
-              <td class="text-end">8</td>
-              <td class="text-end">$280.000</td>
-              <td>Enlace</td>
-            </tr>
-            <tr>
-              <td><div class="d-flex align-items-center gap-3"><span class="avatar avatar-44 avatar-azul rounded-circle d-inline-flex align-items-center justify-content-center">DR</span><span class="nombre-fila">Daniela Ruiz</span></div></td>
-              <td>315 887 4545</td>
-              <td>22 nov</td>
-              <td class="text-end">15</td>
-              <td class="text-end">$690.000</td>
-              <td>Facebook</td>
-            </tr>
-            <tr>
-              <td><div class="d-flex align-items-center gap-3"><span class="avatar avatar-44 rounded-circle d-inline-flex align-items-center justify-content-center">PC</span><span class="nombre-fila">Paula Castro</span></div></td>
-              <td>320 456 1212</td>
-              <td>21 nov</td>
-              <td class="text-end">5</td>
-              <td class="text-end">$200.000</td>
-              <td>WhatsApp</td>
-            </tr>
-            <tr>
-              <td><div class="d-flex align-items-center gap-3"><span class="avatar avatar-44 avatar-azul rounded-circle d-inline-flex align-items-center justify-content-center">VG</span><span class="nombre-fila">Valentina Gómez</span></div></td>
-              <td>301 998 3322</td>
-              <td>21 nov</td>
-              <td class="text-end">3</td>
-              <td class="text-end">$210.000</td>
-              <td>Enlace</td>
-            </tr>
-            <tr>
-              <td><div class="d-flex align-items-center gap-3"><span class="avatar avatar-44 avatar-azul rounded-circle d-inline-flex align-items-center justify-content-center">MR</span><span class="nombre-fila">Marcela Ríos</span></div></td>
-              <td>312 665 7788</td>
-              <td>18 nov</td>
-              <td class="text-end">9</td>
-              <td class="text-end">$315.000</td>
-              <td>Llamada</td>
-            </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-
-      <!-- Ficha del cliente seleccionado -->
-      <div class="col-12 col-xl-4">
-        <div class="card p-4">
-          <div class="d-flex align-items-center gap-3 mb-3">
-            <span class="avatar avatar-80 avatar-azul rounded-circle d-inline-flex align-items-center justify-content-center">AM</span>
-            <div>
-              <div class="nombre-grande">Ana Martínez</div>
-              <small class="text-secondary">Cliente desde marzo 2026</small>
-            </div>
-          </div>
-
-          <p class="mb-1"><i class="bi bi-people me-2"></i>Prefiere a <strong>Laura</strong> y <strong>Camila</strong></p>
-          <p class="mb-3">300 765 4321 · ana@correo.com</p>
-
-          <p class="etiqueta mb-2">Últimas citas</p>
-          <div class="linea-servicio"><div><strong class="d-block">Corte + uñas</strong><small>23 nov · Factura 0148</small></div><strong>$65.000</strong></div>
-          <div class="linea-servicio"><div><strong class="d-block">Semipermanentes</strong><small>2 nov · Camila</small></div><strong>$45.000</strong></div>
-          <div class="linea-servicio"><div><strong class="d-block">Peinado</strong><small>18 oct · Laura</small></div><strong>$40.000</strong></div>
-
-          <a href="nueva-cita.php" class="btn btn-primary w-100 mt-2">Nueva cita para Ana</a>
-        </div>
-      </div>
-
+      <div class="col-12 col-xl-8"><div class="card p-2 p-md-3"><div class="table-responsive">
+        <table class="table table-hover tabla-citara"><thead><tr><th>Cliente</th><th>Celular</th><th>Última visita</th><th class="text-end">Citas</th><th class="text-end">Total gastado</th><th>Canal</th></tr></thead><tbody>
+        <?php foreach ($rows as $r): ?>
+          <tr class="<?= (int)$r['id'] === $sel ? 'table-active' : '' ?>" onclick="location='?id=<?= (int)$r['id'] ?>&q=<?= urlencode($buscar) ?>'" style="cursor:pointer">
+            <td><div class="d-flex align-items-center gap-3"><?= avatar($r['nombres'] . ' ' . $r['apellidos'], 'avatar-44') ?><span class="nombre-fila"><?= h($r['nombres'] . ' ' . $r['apellidos']) ?></span></div></td>
+            <td><?= h($r['celular']) ?></td><td><?= fecha_corta($r['ultima']) ?></td><td class="text-end"><?= (int)$r['citas'] ?></td><td class="text-end"><?= pesos($r['gastado']) ?></td><td><?= h($CAN[$r['origen']] ?? $r['origen']) ?></td>
+          </tr>
+        <?php endforeach; if (!$rows): ?><tr><td colspan="6" class="text-secondary text-center py-4">No hay clientes que coincidan.</td></tr><?php endif; ?>
+        </tbody></table></div></div></div>
+      <div class="col-12 col-xl-4"><?php if ($c): ?><div class="card p-4">
+        <div class="d-flex align-items-center gap-3 mb-3"><?= avatar($c['nombres'] . ' ' . $c['apellidos'], 'avatar-44') ?><div><h2 class="h5 mb-0"><?= h($c['nombres'] . ' ' . $c['apellidos']) ?></h2><small class="text-secondary">Cliente desde <?= fecha_corta(substr($c['creado_en'], 0, 10)) ?></small></div></div>
+        <p class="mb-1"><i class="bi bi-telephone me-2"></i><?= h($c['celular']) ?></p>
+        <?php if ($c['correo']): ?><p class="mb-1"><i class="bi bi-envelope me-2"></i><?= h($c['correo']) ?></p><?php endif; ?>
+        <?php if ($c['notas']): ?><p class="small text-secondary mt-2"><?= h($c['notas']) ?></p><?php endif; ?>
+        <a href="nueva-cita.php?cliente=<?= (int)$c['id'] ?>" class="btn btn-primary w-100 my-3"><i class="bi bi-calendar-plus me-2"></i>Nueva cita</a>
+        <p class="etiqueta mb-2">Últimas citas</p>
+        <?php foreach ($hist as $x): ?><div class="linea-servicio"><div><strong class="d-block"><?= fecha_corta($x['fecha']) ?> · <?= h($x['servicios']) ?></strong><small><?= h($x['estado']) ?></small></div><strong><?= pesos($x['total']) ?></strong></div><?php endforeach; ?>
+        <?php if (!$hist): ?><p class="text-secondary small mb-0">Aún no tiene citas.</p><?php endif; ?>
+      </div><?php endif; ?></div>
     </div>
-
-  </main>
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script src="menu.js"></script>
-</body>
-</html>
+<?php pie();

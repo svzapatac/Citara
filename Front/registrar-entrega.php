@@ -1,94 +1,33 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Registrar entrega · Citara</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link href="Style.css" rel="stylesheet">
-</head>
-<body>
-
-<div class="d-flex flex-column flex-lg-row">
-
-  <!-- Menú lateral (lo construye menu.js) -->
-  <div id="menu-lateral" class="menu-envoltura" data-activo="inventario" data-rol="administrador"></div>
-
-  <main class="contenido p-3 p-lg-4">
-
-    <h1 class="mb-1">Registrar entrega</h1>
-    <p class="text-secondary mb-3">Registra quién recibió el producto, cuándo y cuántas unidades.</p>
-
-    <form action="inventario.php">
-      <div class="row g-3">
-
-        <div class="col-12 col-xl-7">
-          <div class="card p-4">
-
-            <div class="btn-group segmento mb-3 align-self-start" role="group" aria-label="Tipo de entrega">
-              <input type="radio" class="btn-check" name="tipo" id="t1"><label class="btn btn-segmento" for="t1">Dotación del área</label>
-              <input type="radio" class="btn-check" name="tipo" id="t2" checked><label class="btn btn-segmento" for="t2">Productos para vender</label>
-              <input type="radio" class="btn-check" name="tipo" id="t3"><label class="btn btn-segmento" for="t3">Uso interno</label>
-            </div>
-
-            <div class="row g-3">
-              <div class="col-md-8"><label class="form-label" for="producto">Producto</label>
-                <select id="producto" class="form-select">
-                  <option selected>Shampoo hidratante</option><option>Acondicionador</option><option>Esmalte en gel</option>
-                  <option>Aceite capilar</option><option>Mascarilla capilar</option><option>Aceite para barba</option>
-                </select></div>
-              <div class="col-md-4"><label class="form-label" for="cantidad">Cantidad</label>
-                <input id="cantidad" class="form-control" inputmode="numeric" value="4"></div>
-
-              <div class="col-md-6"><label class="form-label" for="entregado">Entregado a</label>
-                <select id="entregado" class="form-select">
-                  <option selected>Laura Gómez</option><option>Camila Ruiz</option><option>Patty Mora</option><option>Sofía Díaz</option><option>Andrés Pardo</option>
-                </select></div>
-              <div class="col-md-6"><label class="form-label" for="fecha">Fecha</label>
-                <input id="fecha" class="form-control" value="19/11/2026" placeholder="dd/mm/aaaa"></div>
-
-              <div class="col-md-4"><label class="form-label" for="publico">Precio público</label>
-                <input id="publico" class="form-control" value="$38.000"></div>
-              <div class="col-md-4"><label class="form-label" for="empleado">Precio de empleado</label>
-                <input id="empleado" class="form-control" value="$30.000"></div>
-              <div class="col-md-4"><label class="form-label" for="ganancia">Ganancia por unidad</label>
-                <input id="ganancia" class="form-control" value="$8.000" readonly></div>
-
-              <div class="col-12">
-                <div class="nota-gris">El valor a precio de empleado se descuenta en el pago mensual. Lo que el empleado no venda lo devuelve y no se descuenta. Si lo compra para sí mismo queda como <strong>uso personal</strong>: se descuenta, sin ganancia.</div>
-              </div>
-            </div>
-
-            <div class="d-flex justify-content-end gap-2 mt-3">
-              <a href="inventario.php" class="btn btn-secondary px-4">Cancelar</a>
-              <button type="submit" class="btn btn-primary px-4">Guardar entrega</button>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-12 col-xl-5">
-          <div class="card p-4">
-            <p class="etiqueta mb-2">Cuentas de esta entrega</p>
-            <div class="dato-fila"><span>Cobra a los clientes (4 × $38.000)</span><strong>$152.000</strong></div>
-            <div class="dato-fila"><span>Se descuenta de su pago (4 × $30.000)</span><strong>−$120.000</strong></div>
-            <hr class="my-2">
-            <div class="dato-fila"><strong>Ganancia de Laura si vende las 4</strong><span class="cifra-media">$32.000</span></div>
-
-            <p class="etiqueta mt-4 mb-2">Existencias</p>
-            <div class="dato-fila"><span>Bodega</span><strong>7 → 3</strong></div>
-            <div class="dato-fila"><span>En manos de Laura</span><strong>0 → 4</strong></div>
-          </div>
-        </div>
-
-      </div>
-    </form>
-
-  </main>
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script src="menu.js"></script>
-</body>
-</html>
+<?php
+require_once __DIR__ . '/modelo.php';
+requerir_rol(ADMIN);
+$errores = [];
+$emps = q_all("SELECT id, nombres, apellidos FROM empleado WHERE negocio_id = ? AND sede_id = ? AND activo = 1 ORDER BY nombres", [$NEG, $SEDE]);
+$prods = q_all("SELECT id, nombre, tipo, precio_empleado FROM producto WHERE negocio_id = ? AND activo = 1 ORDER BY tipo, nombre", [$NEG]);
+$f = ['empleado_id' => (int)($_GET['empleado'] ?? 0), 'producto_id' => (int)($_GET['producto'] ?? 0), 'cantidad' => 1, 'nota' => ''];
+if (es_post() && csrf_ok()) {
+    $f['empleado_id'] = (int)$_POST['empleado_id']; $f['producto_id'] = (int)$_POST['producto_id']; $f['cantidad'] = (int)$_POST['cantidad']; $f['nota'] = trim($_POST['nota'] ?? '');
+    $p = q_row("SELECT * FROM producto WHERE negocio_id = ? AND id = ?", [$NEG, $f['producto_id']]);
+    if (!$p) $errores[] = 'Elige un producto.';
+    if (!q_val("SELECT 1 FROM empleado WHERE negocio_id = ? AND id = ?", [$NEG, $f['empleado_id']])) $errores[] = 'Elige un empleado.';
+    if ($f['cantidad'] < 1) $errores[] = 'La cantidad debe ser al menos 1.';
+    if (!$errores) {
+        $conexion->begin_transaction();
+        try {
+            $eid = q_insert("INSERT INTO entrega_interna (negocio_id, producto_id, empleado_id, entregada_por, tipo, cantidad, precio_unitario, nota) VALUES (?,?,?,?,?,?,?,?)",
+                [$NEG, $f['producto_id'], $f['empleado_id'], $UID, $p['tipo'], $f['cantidad'], $p['tipo'] === 'venta' ? $p['precio_empleado'] : null, $f['nota'] ?: null]);
+            if (!hay_triggers()) mover_inventario($NEG, $f['producto_id'], $SEDE, 'entrega', -$f['cantidad'], $UID, $eid, null, $f['nota'] ?: null);
+            $conexion->commit(); flash('Entrega registrada.'); header('Location: dotacion.php'); exit;
+        } catch (Throwable $e) { $conexion->rollback(); $errores[] = $e->getMessage(); }
+    }
+}
+cabecera('Registrar entrega', 'inventario');
+?>
+    <h1 class="mb-3">Registrar entrega</h1><?php errores_html($errores); ?>
+    <form method="post" class="card p-4" style="max-width:640px"><?= csrf() ?><div class="row g-3">
+      <div class="col-12"><label class="form-label">Empleado</label><select name="empleado_id" class="form-select" required><option value="">Elige…</option><?php foreach ($emps as $e): ?><option value="<?= (int)$e['id'] ?>" <?= $f['empleado_id'] === (int)$e['id'] ? 'selected' : '' ?>><?= h($e['nombres'] . ' ' . $e['apellidos']) ?></option><?php endforeach; ?></select></div>
+      <div class="col-md-8"><label class="form-label">Producto</label><select name="producto_id" class="form-select" required><option value="">Elige…</option><?php foreach ($prods as $p): ?><option value="<?= (int)$p['id'] ?>" <?= $f['producto_id'] === (int)$p['id'] ? 'selected' : '' ?>><?= h($p['nombre']) ?> (<?= h($p['tipo']) ?>)</option><?php endforeach; ?></select></div>
+      <div class="col-md-4"><label class="form-label">Cantidad</label><input name="cantidad" type="number" min="1" class="form-control" value="<?= (int)$f['cantidad'] ?>"></div>
+      <div class="col-12"><label class="form-label">Nota</label><input name="nota" class="form-control" maxlength="200" value="<?= h($f['nota']) ?>"></div>
+    </div><div class="d-flex justify-content-end gap-2 mt-4"><a href="inventario.php" class="btn btn-secondary px-4">Cancelar</a><button class="btn btn-primary px-4">Registrar entrega</button></div></form>
+<?php pie();

@@ -1,85 +1,46 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pago de Laura · Citara</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link href="Style.css" rel="stylesheet">
-</head>
-<body>
-
-<div class="d-flex flex-column flex-lg-row">
-
-  <!-- Menú lateral (lo construye menu.js) -->
-  <div id="menu-lateral" class="menu-envoltura" data-activo="comisiones" data-rol="dueno"></div>
-
-  <main class="contenido p-3 p-lg-4">
-
-    <h1 class="mb-1">Pago de Laura</h1>
-    <p class="text-secondary mb-3">Servicios realizados y descuentos del período.</p>
-
-    <div class="row g-3">
-
-      <!-- Detalle -->
-      <div class="col-12 col-xl-8">
-        <div class="card p-2 p-md-3">
-          <div class="table-responsive">
-            <table class="table tabla-citara">
-              <thead>
-                <tr><th>Fecha</th><th>Concepto</th><th>Factura</th><th class="text-end">Valor</th><th class="text-end">Valor para su pago</th></tr>
-              </thead>
-              <tbody>
-            <tr><td>3 nov</td><td>Corte</td><td>0121</td><td class="text-end">$35.000</td><td class="text-end">$14.000</td></tr>
-            <tr><td>5 nov</td><td>Peinado</td><td>0124</td><td class="text-end">$40.000</td><td class="text-end">$16.000</td></tr>
-            <tr><td>10 nov</td><td>Corte</td><td>0131</td><td class="text-end">$35.000</td><td class="text-end">$14.000</td></tr>
-            <tr><td>17 nov</td><td>Corte</td><td>0140</td><td class="text-end">$35.000</td><td class="text-end">$14.000</td></tr>
-            <tr><td>22 nov</td><td>Corte</td><td>0146</td><td class="text-end">$35.000</td><td class="text-end">$14.000</td></tr>
-            <tr><td></td><td class="text-secondary">13 servicios más del mes</td><td></td><td class="text-end">$575.000</td><td class="text-end">$230.000</td></tr>
-            <tr class="table-active"><td>19 nov</td><td>Shampoo hidratante · 3 vendidas a clientes</td><td></td><td class="text-end">−$90.000</td><td class="text-end">−$90.000</td></tr>
-            <tr class="table-active"><td>24 nov</td><td>Mascarilla capilar · 1 de uso personal</td><td></td><td class="text-end">−$30.000</td><td class="text-end">−$30.000</td></tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-
-      <!-- Resumen -->
-      <div class="col-12 col-xl-4">
-        <div class="card p-4">
-          <div class="d-flex align-items-center gap-3 mb-3">
-            <span class="avatar avatar-80 rounded-circle d-inline-flex align-items-center justify-content-center">LG</span>
-            <div>
-              <div class="nombre-grande">Laura Gómez</div>
-              <small class="text-secondary">Mensual · noviembre</small>
-            </div>
-          </div>
-
-          <div class="dato-fila"><span>Valor atendido (18 servicios)</span><strong>$720.000</strong></div>
-          <div class="dato-fila"><span>Comisión 40%</span><strong>$288.000</strong></div>
-          <div class="dato-fila"><span>Productos para vender (3 × $30.000)</span><strong>−$90.000</strong></div>
-          <div class="dato-fila"><span>Uso personal (1 × $30.000)</span><strong>−$30.000</strong></div>
-
-          <div class="total-barra total-grande my-3">
-            <span class="etiqueta">Total a pagar</span>
-            <strong>$168.000</strong>
-          </div>
-
-          <div class="nota-suave mb-3"><strong>Ganancia por ventas:</strong> cobró $114.000 a los clientes y descuenta $90.000, así que se queda con $24.000. La compra de uso personal no deja ganancia.</div>
-
-          <a href="comisiones.php" class="btn btn-primary w-100 mb-2"><i class="bi bi-check-lg me-2"></i>Marcar como pagado</a>
-          <a href="comisiones.php" class="btn btn-secondary w-100">Volver</a>
-        </div>
-      </div>
-
-    </div>
-
-  </main>
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script src="menu.js"></script>
-</body>
-</html>
+<?php
+require_once __DIR__ . '/modelo.php';
+requerir_rol(ADMIN);
+if (es_post() && csrf_ok()) {
+    try {
+        if (isset($_POST['pagar'])) {
+            q_run("UPDATE liquidacion SET estado = 'pagado', pagado_por = ?, pagado_en = UTC_TIMESTAMP() WHERE negocio_id = ? AND id = ? AND estado = 'pendiente'", [$UID, $NEG, (int)$_POST['pagar']]);
+            flash('Pago registrado.');
+        } else {
+            $emp = (int)$_POST['empleado_id']; $d = $_POST['desde'] ?? ''; $h2 = $_POST['hasta'] ?? '';
+            $e = q_row("SELECT periodicidad_pago FROM empleado WHERE negocio_id = ? AND id = ? AND sede_id = ?", [$NEG, $emp, $SEDE]);
+            if (!$e) throw new RuntimeException('Elige un empleado.');
+            if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $d) || !preg_match('/^\d{4}-\d{2}-\d{2}$/', $h2) || $h2 < $d) throw new RuntimeException('Revisa el rango de fechas.');
+            $conexion->begin_transaction();
+            $com = q_all("SELECT cs.id, cs.valor, s.nombre,
+                 COALESCE((SELECT c.porcentaje FROM comision c WHERE c.negocio_id = cs.negocio_id AND c.empleado_id = cs.empleado_id AND c.servicio_id = cs.servicio_id AND c.vigente_desde <= DATE(cs.inicio) AND (c.vigente_hasta IS NULL OR c.vigente_hasta >= DATE(cs.inicio)) ORDER BY c.vigente_desde DESC LIMIT 1), 0) AS pct
+                 FROM cita_servicio cs JOIN servicio s ON s.negocio_id = cs.negocio_id AND s.id = cs.servicio_id
+                 WHERE cs.negocio_id = ? AND cs.empleado_id = ? AND cs.estado = 'realizado' AND DATE(cs.inicio) BETWEEN ? AND ?
+                   AND NOT EXISTS (SELECT 1 FROM liquidacion_detalle ld WHERE ld.negocio_id = cs.negocio_id AND ld.cita_servicio_id = cs.id)", [$NEG, $emp, $d, $h2]);
+            $des = q_all("SELECT v.id, v.cantidad * v.precio_cobrado AS valor, p.nombre FROM venta_producto v JOIN producto p ON p.negocio_id = v.negocio_id AND p.id = v.producto_id
+                 WHERE v.negocio_id = ? AND v.empleado_id = ? AND v.destino = 'uso_personal' AND v.fecha BETWEEN ? AND ?
+                   AND NOT EXISTS (SELECT 1 FROM liquidacion_detalle ld WHERE ld.negocio_id = v.negocio_id AND ld.venta_id = v.id)", [$NEG, $emp, $d, $h2]);
+            if (!$com && !$des) throw new RuntimeException('No hay nada por liquidar en ese rango.');
+            $tc = 0; foreach ($com as $c) $tc += round($c['valor'] * $c['pct'] / 100, 2);
+            $td = 0; foreach ($des as $x) $td += (float)$x['valor'];
+            $lid = q_insert("INSERT INTO liquidacion (negocio_id, empleado_id, periodicidad, desde, hasta, total_comisiones, total_descuentos, total_neto) VALUES (?,?,?,?,?,?,?,?)", [$NEG, $emp, $e['periodicidad_pago'], $d, $h2, $tc, $td, $tc - $td]);
+            foreach ($com as $c) q_run("INSERT INTO liquidacion_detalle (negocio_id, liquidacion_id, cita_servicio_id, tipo, descripcion, base, porcentaje, valor) VALUES (?,?,?,'comision',?,?,?,?)", [$NEG, $lid, $c['id'], $c['nombre'], $c['valor'], $c['pct'], round($c['valor'] * $c['pct'] / 100, 2)]);
+            foreach ($des as $x) q_run("INSERT INTO liquidacion_detalle (negocio_id, liquidacion_id, venta_id, tipo, descripcion, valor) VALUES (?,?,?,'descuento_personal',?,?)", [$NEG, $lid, $x['id'], $x['nombre'], $x['valor']]);
+            $conexion->commit(); flash('Liquidación generada.');
+        }
+    } catch (Throwable $x) { try { $conexion->rollback(); } catch (Throwable $_) {} flash($x->getMessage(), 'danger'); }
+    header('Location: pago.php'); exit;
+}
+$emps = q_all("SELECT id, nombres, apellidos FROM empleado WHERE negocio_id = ? AND sede_id = ? AND activo = 1 ORDER BY nombres", [$NEG, $SEDE]);
+$rows = q_all("SELECT l.*, CONCAT(e.nombres,' ',e.apellidos) AS emp FROM liquidacion l JOIN empleado e ON e.negocio_id = l.negocio_id AND e.id = l.empleado_id WHERE l.negocio_id = ? AND e.sede_id = ? ORDER BY l.hasta DESC, l.id DESC LIMIT 60", [$NEG, $SEDE]);
+cabecera('Pagos', 'pagos');
+?>
+    <h1 class="mb-1">Pagos al equipo</h1><p class="text-secondary mb-3">Liquidaciones de comisiones menos descuentos por productos de uso personal.</p>
+    <div class="row g-3"><div class="col-12 col-xl-8"><div class="card p-2 p-md-3"><div class="table-responsive"><table class="table tabla-citara"><thead><tr><th>Profesional</th><th>Periodo</th><th class="text-end">Comisiones</th><th class="text-end">Descuentos</th><th class="text-end">Neto</th><th></th></tr></thead><tbody>
+      <?php foreach ($rows as $r): ?><tr><td class="nombre-fila"><?= h($r['emp']) ?></td><td><?= fecha_corta($r['desde']) ?> – <?= fecha_corta($r['hasta']) ?></td><td class="text-end"><?= pesos($r['total_comisiones']) ?></td><td class="text-end"><?= pesos($r['total_descuentos']) ?></td><td class="text-end"><strong><?= pesos($r['total_neto']) ?></strong></td>
+        <td class="text-end"><?php if ($r['estado'] === 'pendiente'): ?><form method="post"><?= csrf() ?><button name="pagar" value="<?= (int)$r['id'] ?>" class="btn btn-sm btn-primary">Marcar pagado</button></form><?php else: ?><span class="badge text-bg-success">Pagado</span><?php endif; ?></td></tr>
+      <?php endforeach; if (!$rows) echo '<tr><td colspan="6" class="text-center text-secondary py-4">Aún no hay liquidaciones.</td></tr>'; ?></tbody></table></div></div></div>
+    <div class="col-12 col-xl-4"><form method="post" class="card p-4"><?= csrf() ?><p class="etiqueta mb-2">Generar liquidación</p>
+      <label class="form-label">Profesional</label><select name="empleado_id" class="form-select mb-2"><?php foreach ($emps as $e): ?><option value="<?= (int)$e['id'] ?>"><?= h($e['nombres'] . ' ' . $e['apellidos']) ?></option><?php endforeach; ?></select>
+      <label class="form-label">Desde</label><input type="date" name="desde" class="form-control mb-2" value="<?= date('Y-m-01') ?>"><label class="form-label">Hasta</label><input type="date" name="hasta" class="form-control mb-3" value="<?= date('Y-m-d') ?>"><button class="btn btn-primary">Generar</button></form></div></div>
+<?php pie();

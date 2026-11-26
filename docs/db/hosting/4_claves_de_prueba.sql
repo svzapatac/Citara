@@ -18,3 +18,6 @@ UPDATE admin_plataforma SET clave_hash = '$2y$10$uZtC4SSOwxdkypV.aSxVCOQmbyDT/tN
 
 -- Para cambiar la clave de UN usuario (genera el hash en PHP con password_hash('NuevaClave', PASSWORD_DEFAULT)):
 -- UPDATE usuario SET clave_hash = '<hash>' WHERE negocio_id = 1001 AND correo = 'dueno@negocio001.co';
+
+-- Pantalla de televisor (demo): Front/turnos-hoy.php?t=tv-demo-001
+UPDATE televisor SET token_hash = SHA2('tv-demo-001', 256) WHERE id = (SELECT x.id FROM (SELECT MIN(id) AS id FROM televisor) x);

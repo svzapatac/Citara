@@ -193,7 +193,7 @@ hr { border-color: var(--c-linea); opacity: 1; }
 .agenda-horas span { position: absolute; right: .6rem; top: calc(var(--hora) * var(--n));
                      transform: translateY(-50%); font-size: .8rem; font-weight: 600; color: var(--c-texto2); }
 
-.agenda-col { position: relative; height: calc(var(--hora) * 5);
+.agenda-col { position: relative; height: calc(var(--hora) * var(--horas, 5));
               border-left: 1px solid var(--c-linea); border-bottom: 1px solid var(--c-linea);
               background-image: repeating-linear-gradient(to bottom, var(--c-linea) 0, var(--c-linea) 1px, transparent 1px, transparent var(--hora)); }
 

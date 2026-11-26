@@ -50,7 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($activos === 0) $errores[] = 'Activa al menos un servicio.';
 
     if (!$errores) {
-        require_once __DIR__ . '/conexion.php';
+        require_once is_file(__DIR__ . '/conexion.local.php') ? __DIR__ . '/conexion.local.php' : __DIR__ . '/conexion.php'; $conexion->set_charset('utf8mb4');
 
         $p1 = $_SESSION['registro']['paso1'];
         $p2 = $_SESSION['registro']['paso2'];
@@ -68,51 +68,80 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $negocioId = $conexion->insert_id;
             $stmt->close();
 
-            // 2. Primera sede
-            $stmt = $conexion->prepare(
-                "INSERT INTO sedes (negocio_id, nombre, ciudad, direccion, dias_atencion, hora_abre, hora_cierra)
-                 VALUES (?, ?, ?, ?, ?, ?, ?)"
-            );
-            $stmt->bind_param('issssss', $negocioId, $p2['sede'], $p2['ciudad'], $p2['direccion'], $dias, $p2['abre'], $p2['cierra']);
+            $conexion->query("INSERT INTO suscripcion (negocio_id, plan_id, estado, inicio) VALUES ($negocioId, " . (int)$p2['plan_id'] . ", 'prueba', CURRENT_DATE)");
+
+            // 2. Primera sede (principal) y su horario, un renglón por día de atención
+            $stmt = $conexion->prepare("INSERT INTO sede (negocio_id, nombre, ciudad, direccion, principal) VALUES (?, ?, ?, ?, 1)");
+            $stmt->bind_param('isss', $negocioId, $p2['sede'], $p2['ciudad'], $p2['direccion']);
             $stmt->execute();
             $sedeId = $conexion->insert_id;
             $stmt->close();
 
-            // 3. Dueño
-            $rol = 'dueno';
-            $stmt = $conexion->prepare(
-                "INSERT INTO usuarios (negocio_id, sede_id, nombres, apellidos, tipo_documento, numero_documento, celular, correo, clave_hash, rol)
-                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
-            );
-            $stmt->bind_param('iissssssss', $negocioId, $sedeId, $p1['nombres'], $p1['apellidos'], $p1['tipo_documento'],
-                              $p1['numero_documento'], $p1['celular'], $p1['correo'], $p1['clave_hash'], $rol);
-            $stmt->execute();
-            $usuarioId = $conexion->insert_id;
-            $stmt->close();
-
-            // 4. Servicios (también los desactivados, para que pueda activarlos después)
-            $stmt = $conexion->prepare(
-                "INSERT INTO servicios (negocio_id, categoria, nombre, duracion_min, precio, activo) VALUES (?, ?, ?, ?, ?, ?)"
-            );
-            foreach ($catalogo as $s) {
-                $activo = $s['activo'] ? 1 : 0;
-                $stmt->bind_param('issiii', $negocioId, $s['categoria'], $s['nombre'], $s['duracion'], $s['precio'], $activo);
+            $stmt = $conexion->prepare("INSERT INTO sede_horario (negocio_id, sede_id, dia_semana, apertura, cierre) VALUES (?, ?, ?, ?, ?)");
+            foreach ($p2['dias'] as $dia) {
+                $stmt->bind_param('iiiss', $negocioId, $sedeId, $dia, $p2['abre'], $p2['cierra']);
                 $stmt->execute();
             }
             $stmt->close();
 
+            // 3. Dueño
+            $rol = 'dueno';
+            $rolId = (int)$conexion->query("SELECT id FROM rol WHERE clave = 'dueno'")->fetch_row()[0];
+            $stmt = $conexion->prepare(
+                "INSERT INTO usuario (negocio_id, correo, clave_hash, nombres, apellidos, tipo_documento, documento, celular, rol_id)
+                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
+            );
+            $stmt->bind_param('isssssssi', $negocioId, $p1['correo'], $p1['clave_hash'], $p1['nombres'], $p1['apellidos'],
+                              $p1['tipo_documento'], $p1['numero_documento'], $p1['celular'], $rolId);
+            $stmt->execute();
+            $usuarioId = $conexion->insert_id;
+            $stmt->close();
+            $conexion->query("INSERT INTO usuario_sede (negocio_id, usuario_id, sede_id) VALUES ($negocioId, $usuarioId, $sedeId)");
+
+            // 4. Áreas (Cabello, Uñas, Barbería, Cejas) y servicios (también los desactivados, para activarlos después)
+            $areaId = [];
+            $stmt = $conexion->prepare("INSERT INTO area (negocio_id, nombre) VALUES (?, ?)");
+            foreach (array_keys($grupos) as $nombreArea) {
+                $stmt->bind_param('is', $negocioId, $nombreArea);
+                $stmt->execute();
+                $areaId[$nombreArea] = $conexion->insert_id;
+            }
+            $stmt->close();
+
+            $stmt = $conexion->prepare(
+                "INSERT INTO servicio (negocio_id, area_id, nombre, duracion_min, precio, permite_asesoria, activo) VALUES (?, ?, ?, ?, ?, ?, ?)"
+            );
+            foreach ($catalogo as $s) {
+                $activo = $s['activo'] ? 1 : 0;
+                $ase = in_array($s['nombre'], ['Color', 'Acrílicas'], true) ? 1 : 0;
+                $aid = $areaId[$s['categoria']];
+                $stmt->bind_param('iisiiii', $negocioId, $aid, $s['nombre'], $s['duracion'], $s['precio'], $ase, $activo);
+                $stmt->execute();
+            }
+            $stmt->close();
+
+            // 5. Documentos que se piden a cada empleado y categorías de gasto de arranque
+            foreach ([['Documento de identidad',1],['Afiliación a salud (EPS)',1],['Certificado de bioseguridad',1],['Examen médico ocupacional',1],['Hoja de vida',0]] as $i => $dr) {
+                $conexion->query("INSERT INTO documento_requerido (negocio_id, nombre, obligatorio, orden) VALUES ($negocioId, '" . $conexion->real_escape_string($dr[0]) . "', $dr[1], " . ($i + 1) . ")");
+            }
+            foreach (['Arriendo','Servicios públicos','Insumos','Nómina','Publicidad','Otros'] as $cg) {
+                $conexion->query("INSERT INTO categoria_gasto (negocio_id, nombre) VALUES ($negocioId, '" . $conexion->real_escape_string($cg) . "')");
+            }
+
             $conexion->commit();
 
-            // 5. Queda con la sesión iniciada
+            // 6. Queda con la sesión iniciada
             unset($_SESSION['registro']);
             session_regenerate_id(true);
             $_SESSION['usuario_id']     = $usuarioId;
             $_SESSION['negocio_id']     = $negocioId;
             $_SESSION['sede_id']        = $sedeId;
+            $_SESSION['sede_nombre']    = $p2['sede'];
+            $_SESSION['empleado_id']    = null;
             $_SESSION['rol']            = $rol;
             $_SESSION['tipo_cuenta']    = 'negocio';
             $_SESSION['usuario_correo'] = $p1['correo'];
-            $_SESSION['usuario_nombre'] = $p1['nombres'];
+            $_SESSION['usuario_nombre'] = trim($p1['nombres'] . ' ' . $p1['apellidos']);
 
             header('Location: agenda.php');
             exit;

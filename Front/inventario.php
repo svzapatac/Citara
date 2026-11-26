@@ -1,132 +1,36 @@
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Inventario · Citara</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link href="Style.css" rel="stylesheet">
-</head>
-<body>
-
-<div class="d-flex flex-column flex-lg-row">
-
-  <!-- Menú lateral (lo construye menu.js) -->
-  <div id="menu-lateral" class="menu-envoltura" data-activo="inventario" data-rol="administrador"></div>
-
-  <main class="contenido p-3 p-lg-4">
-
-    <!-- Encabezado -->
+<?php
+require_once __DIR__ . '/modelo.php';
+requerir_rol(ADMIN);
+if (es_post() && csrf_ok()) {    // registrar compra / ajuste de bodega
+    $pid = (int)($_POST['producto_id'] ?? 0); $cant = (int)($_POST['cantidad'] ?? 0); $tipo = ($_POST['tipo'] ?? 'compra') === 'ajuste' ? 'ajuste' : 'compra';
+    try {
+        if (!q_val("SELECT 1 FROM producto WHERE negocio_id = ? AND id = ?", [$NEG, $pid])) throw new RuntimeException('Elige un producto.');
+        if ($cant === 0 || ($tipo === 'compra' && $cant < 0)) throw new RuntimeException('La cantidad no es válida.');
+        mover_inventario($NEG, $pid, $SEDE, $tipo, $cant, $UID, null, null, trim($_POST['nota'] ?? '') ?: null);
+        flash('Inventario actualizado.');
+    } catch (Throwable $e) { flash($e->getMessage(), 'danger'); }
+    header('Location: inventario.php'); exit;
+}
+$rows = q_all("SELECT p.id, p.nombre, p.tipo, p.precio_publico, p.stock_minimo, p.activo, COALESCE((SELECT SUM(m.cantidad) FROM movimiento_inventario m WHERE m.negocio_id = p.negocio_id AND m.producto_id = p.id AND m.sede_id = ?), 0) AS existencia
+   FROM producto p WHERE p.negocio_id = ? AND p.activo = 1 ORDER BY p.tipo, p.nombre", [$SEDE, $NEG]);
+$TIPO = ['venta' => 'Para la venta', 'dotacion' => 'Dotación', 'uso_interno' => 'Uso interno'];
+cabecera('Inventario', 'inventario');
+?>
     <div class="d-flex flex-wrap align-items-start justify-content-between gap-3 mb-3">
-      <div>
-        <h1 class="mb-1">Inventario</h1>
-        <p class="text-secondary mb-0">Productos de venta, dotación por área y uso interno, por separado.</p>
-      </div>
-      <div class="d-flex flex-wrap gap-2">
-        <a href="registrar-entrega.php" class="btn btn-outline-primary">Registrar entrega</a>
-        <a href="#" class="btn btn-primary"><i class="bi bi-plus-lg me-2"></i>Nuevo producto</a>
-      </div>
+      <div><h1 class="mb-1">Inventario</h1><p class="text-secondary mb-0">Existencias de la bodega de esta sede.</p></div>
+      <div class="d-flex gap-2"><a href="registrar-entrega.php" class="btn btn-secondary"><i class="bi bi-box-arrow-right me-2"></i>Entregar a empleado</a><a href="producto-nuevo.php" class="btn btn-primary"><i class="bi bi-plus-lg me-2"></i>Nuevo producto</a></div>
     </div>
-
-    <!-- Alerta de existencias -->
-    <div class="caja-info d-flex align-items-center gap-3 mb-3">
-      <i class="bi bi-bell fs-4"></i>
-      <div class="lh-sm">
-        <div class="alerta-titulo">3 productos de venta con menos de 5 unidades en bodega</div>
-        <span>Shampoo hidratante · Esmalte en gel · Mascarilla capilar</span>
-      </div>
-    </div>
-
-    <div class="row g-3 mb-3">
-
-      <div class="col-12 col-xl-7">
-        <div class="card p-3 p-md-4 h-100">
-          <h2 class="card-titulo mb-2">Productos de venta</h2>
-          <div class="table-responsive">
-            <table class="table tabla-citara">
-              <thead>
-                <tr><th>Producto</th><th class="text-end">Bodega</th><th class="text-end">En empleados</th><th class="text-end">Público</th><th class="text-end">Empleado</th></tr>
-              </thead>
-              <tbody>
-                <tr class="table-active">
-                  <td>Shampoo hidratante</td><td class="text-end"><strong>3</strong> <span class="badge bg-danger-subtle text-danger-emphasis ms-1">Bajo</span></td><td class="text-end">4</td>
-                  <td class="text-end">$38.000</td><td class="text-end">$30.000</td>
-                </tr>
-                <tr>
-                  <td>Acondicionador</td><td class="text-end">12</td><td class="text-end">2</td>
-                  <td class="text-end">$36.000</td><td class="text-end">$28.000</td>
-                </tr>
-                <tr class="table-active">
-                  <td>Esmalte en gel</td><td class="text-end"><strong>4</strong> <span class="badge bg-danger-subtle text-danger-emphasis ms-1">Bajo</span></td><td class="text-end">3</td>
-                  <td class="text-end">$18.000</td><td class="text-end">$13.000</td>
-                </tr>
-                <tr>
-                  <td>Aceite capilar</td><td class="text-end">8</td><td class="text-end">1</td>
-                  <td class="text-end">$42.000</td><td class="text-end">$33.000</td>
-                </tr>
-                <tr class="table-active">
-                  <td>Mascarilla capilar</td><td class="text-end"><strong>2</strong> <span class="badge bg-danger-subtle text-danger-emphasis ms-1">Bajo</span></td><td class="text-end">2</td>
-                  <td class="text-end">$45.000</td><td class="text-end">$35.000</td>
-                </tr>
-                <tr>
-                  <td>Aceite para barba</td><td class="text-end">9</td><td class="text-end">2</td>
-                  <td class="text-end">$32.000</td><td class="text-end">$24.000</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          <p class="text-secondary small mb-0 mt-2">El gerente entrega estos productos a los empleados a precio de empleado; ellos los venden al precio público.</p>
-        </div>
-      </div>
-
-      <div class="col-12 col-xl-5">
-        <div class="card p-3 p-md-4">
-          <div class="d-flex align-items-center justify-content-between mb-2">
-            <h2 class="card-titulo mb-0">Dotación por área</h2>
-            <a href="dotacion.php" class="enlace-fuerte">Ver kits</a>
-          </div>
-          <div class="table-responsive">
-            <table class="table tabla-citara">
-              <thead>
-                <tr><th>Área</th><th>Kit básico</th><th class="text-end">Personas</th></tr>
-              </thead>
-              <tbody>
-                <tr><td>Cabello</td><td>Tijeras, secador, plancha, peinillas</td><td class="text-end">3</td></tr>
-                <tr><td>Uñas</td><td>Esmaltes, brochas, limas, lámpara UV</td><td class="text-end">1</td></tr>
-                <tr><td>Barbería</td><td>Tijeras, máquina, navajas, capa</td><td class="text-end">1</td></tr>
-                <tr><td>Cejas</td><td>Cera, pinzas, hilo</td><td class="text-end">2</td></tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- Entregas recientes -->
-    <div class="card p-3 p-md-4">
-      <h2 class="card-titulo mb-2">Entregas recientes</h2>
-      <div class="table-responsive">
-        <table class="table tabla-citara">
-          <thead>
-            <tr><th>Fecha</th><th>Empleado</th><th>Producto</th><th class="text-end">Cant.</th><th>Tipo</th></tr>
-          </thead>
-          <tbody>
-            <tr><td>19 nov</td><td>Laura</td><td>Shampoo hidratante</td><td class="text-end">4</td><td><span class="badge bg-primary-subtle text-primary-emphasis">Para vender</span></td></tr>
-            <tr><td>12 nov</td><td>Camila</td><td>Esmalte en gel</td><td class="text-end">3</td><td><span class="badge bg-primary-subtle text-primary-emphasis">Para vender</span></td></tr>
-            <tr><td>10 nov</td><td>Patty</td><td>Tinte</td><td class="text-end">2</td><td><span class="badge bg-secondary-subtle text-secondary-emphasis">Uso interno</span></td></tr>
-            <tr><td>9 nov</td><td>Andrés</td><td>Máquina de corte</td><td class="text-end">1</td><td><span class="badge bg-secondary-subtle text-secondary-emphasis">Dotación</span></td></tr>
-            <tr><td>5 nov</td><td>Sofía</td><td>Plancha</td><td class="text-end">1</td><td><span class="badge bg-secondary-subtle text-secondary-emphasis">Dotación</span></td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-  </main>
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script src="menu.js"></script>
-</body>
-</html>
+    <div class="row g-3"><div class="col-12 col-xl-8"><div class="card p-2 p-md-3"><div class="table-responsive"><table class="table table-hover tabla-citara">
+      <thead><tr><th>Producto</th><th>Tipo</th><th class="text-end">Existencia</th><th class="text-end">Mínimo</th><th class="text-end">Precio</th></tr></thead><tbody>
+      <?php foreach ($rows as $r): $bajo = (int)$r['existencia'] <= (int)$r['stock_minimo']; ?><tr>
+        <td class="nombre-fila"><?= h($r['nombre']) ?></td><td><?= h($TIPO[$r['tipo']] ?? $r['tipo']) ?></td>
+        <td class="text-end"><span class="<?= $bajo ? 'text-danger fw-semibold' : '' ?>"><?= (int)$r['existencia'] ?></span><?= $bajo ? ' <i class="bi bi-exclamation-triangle text-danger"></i>' : '' ?></td>
+        <td class="text-end"><?= (int)$r['stock_minimo'] ?></td><td class="text-end"><?= $r['precio_publico'] !== null ? pesos($r['precio_publico']) : '—' ?></td></tr>
+      <?php endforeach; ?></tbody></table></div></div></div>
+      <div class="col-12 col-xl-4"><form method="post" class="card p-4"><?= csrf() ?><p class="etiqueta mb-2">Registrar entrada o ajuste</p>
+        <label class="form-label">Producto</label><select name="producto_id" class="form-select mb-2" required><option value="">Elige…</option><?php foreach ($rows as $r): ?><option value="<?= (int)$r['id'] ?>"><?= h($r['nombre']) ?></option><?php endforeach; ?></select>
+        <label class="form-label">Movimiento</label><select name="tipo" class="form-select mb-2"><option value="compra">Compra (suma)</option><option value="ajuste">Ajuste (+/−)</option></select>
+        <label class="form-label">Cantidad</label><input name="cantidad" type="number" class="form-control mb-2" required>
+        <label class="form-label">Nota</label><input name="nota" class="form-control mb-3" maxlength="200">
+        <button class="btn btn-primary">Guardar</button></form></div></div>
+<?php pie();

@@ -19,7 +19,7 @@ $d = $_SESSION['registro']['paso1'] ?? [
 $errores = [];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    require_once __DIR__ . '/conexion.php';
+    require_once is_file(__DIR__ . '/conexion.local.php') ? __DIR__ . '/conexion.local.php' : __DIR__ . '/conexion.php'; $conexion->set_charset('utf8mb4');
 
     $d = [
         'nombres'          => trim($_POST['nombres'] ?? ''),
@@ -48,7 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt = $conexion->prepare(
                 "SELECT 1 FROM usuario WHERE correo = ?"
             );
-            $stmt->bind_param('ss', $d['correo'], $d['correo']);
+            $stmt->bind_param('s', $d['correo']);
             $stmt->execute();
             if ($stmt->get_result()->fetch_row()) {
                 $errores[] = 'Ya existe una cuenta con ese correo. Inicia sesión.';

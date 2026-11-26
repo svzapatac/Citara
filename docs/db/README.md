@@ -51,3 +51,10 @@ O todo de una vez: `mysql -u root -p < citara_mysql.sql`.
 - Límites y precios de los planes (los de `02_datos_base.sql` son de ejemplo).
 - Si una misma persona puede tener cuenta en varios negocios (hoy el correo es único por negocio).
 - Qué hacer al borrar un negocio: el diseño usa baja lógica (`estado = 'cancelado'`), no borrado físico.
+
+## Front en PHP (carpeta `Front/`)
+
+Todas las pantallas leen y escriben en esta base. El negocio sale siempre de la sesión.
+En hosting: corre en este orden `hosting/1`, `2`, (`3` opcional), `4` y por último **`0_migracion_front.sql`**;
+sube `Front/` completo (con `conexion.php` con tus credenciales). La carpeta `Front/uploads/` se crea sola
+al subir logos o documentos. Pantalla de TV: `Front/turnos-hoy.php?t=TOKEN`.

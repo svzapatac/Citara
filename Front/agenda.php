@@ -1,159 +1,158 @@
-<?php require_once __DIR__ . '/sesion.php'; require_once __DIR__ . '/conexion.php'; ?>
+<?php
+require_once __DIR__ . '/modelo.php';
+requerir_rol(ADMIN);
 
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Agenda · Citara</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link href="Style.css" rel="stylesheet">
-</head>
-<body>
+$fecha = $_GET['fecha'] ?? date('Y-m-d');
+if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $fecha)) $fecha = date('Y-m-d');
 
-<div class="d-flex flex-column flex-lg-row">
+// ---- Acciones sobre una cita ----
+if (es_post() && csrf_ok()) {
+    $citaId = (int)($_POST['cita_id'] ?? 0);
+    $accion = $_POST['accion'] ?? '';
+    try {
+        if ($accion === 'realizados') {
+            q_run("UPDATE cita_servicio SET estado = 'realizado' WHERE negocio_id = ? AND cita_id = ? AND estado <> 'cancelado'", [$NEG, $citaId]);
+            q_run("UPDATE cita SET estado = 'finalizada' WHERE negocio_id = ? AND id = ?", [$NEG, $citaId]);
+            flash('Servicios marcados como realizados.');
+        } elseif ($accion === 'en_curso') {
+            q_run("UPDATE cita_servicio SET estado = 'en curso' WHERE negocio_id = ? AND cita_id = ? AND estado = 'programado'", [$NEG, $citaId]);
+            q_run("UPDATE cita SET estado = 'en curso' WHERE negocio_id = ? AND id = ?", [$NEG, $citaId]);
+            flash('La cita quedó en curso.');
+        } elseif ($accion === 'cancelar') {
+            q_run("UPDATE cita_servicio SET estado = 'cancelado' WHERE negocio_id = ? AND cita_id = ?", [$NEG, $citaId]);
+            q_run("UPDATE cita SET estado = 'cancelada' WHERE negocio_id = ? AND id = ?", [$NEG, $citaId]);
+            flash('Cita cancelada.', 'warning');
+        } elseif ($accion === 'facturar') {
+            $fid = emitir_factura($NEG, $citaId, $_POST['metodo'] ?? 'efectivo');
+            header('Location: factura.php?id=' . $fid); exit;
+        }
+    } catch (Throwable $e) { flash($e->getMessage(), 'danger'); }
+    header('Location: agenda.php?fecha=' . urlencode($fecha) . '&cita=' . $citaId); exit;
+}
 
-  <!-- Menú lateral (lo construye menu.js) -->
-  <div id="menu-lateral" class="menu-envoltura" data-activo="agenda" data-rol="administrador"></div>
+// ---- Datos del día ----
+$hor = q_row("SELECT MIN(apertura) a, MAX(cierre) c FROM sede_horario WHERE negocio_id = ? AND sede_id = ?", [$NEG, $SEDE]);
+$h0 = $hor && $hor['a'] ? (int)substr($hor['a'], 0, 2) : 9;
+$h1 = $hor && $hor['c'] ? (int)substr($hor['c'], 0, 2) : 19;
+if ($h1 <= $h0) $h1 = $h0 + 10;
 
-  <main class="contenido p-3 p-lg-4">
+$emps = q_all("SELECT e.id, e.nombres, e.apellidos, GROUP_CONCAT(DISTINCT a.nombre ORDER BY a.nombre SEPARATOR ' · ') AS areas
+               FROM empleado e LEFT JOIN empleado_area ea ON ea.negocio_id = e.negocio_id AND ea.empleado_id = e.id
+               LEFT JOIN area a ON a.negocio_id = ea.negocio_id AND a.id = ea.area_id
+               WHERE e.negocio_id = ? AND e.sede_id = ? AND e.activo = 1 GROUP BY e.id ORDER BY e.nombres", [$NEG, $SEDE]);
+$citas = q_all("SELECT cs.id, cs.cita_id, cs.empleado_id, cs.inicio, cs.fin, cs.estado, s.nombre AS servicio, cl.nombres, cl.apellidos, cs.duracion_min
+                FROM cita_servicio cs JOIN cita c ON c.negocio_id = cs.negocio_id AND c.id = cs.cita_id
+                JOIN servicio s ON s.negocio_id = cs.negocio_id AND s.id = cs.servicio_id
+                JOIN cliente cl ON cl.negocio_id = c.negocio_id AND cl.id = c.cliente_id
+                WHERE cs.negocio_id = ? AND c.sede_id = ? AND c.fecha = ? AND cs.estado <> 'cancelado' ORDER BY cs.inicio", [$NEG, $SEDE, $fecha]);
+$bloqueos = q_all("SELECT b.empleado_id, b.inicio, b.fin, b.motivo FROM bloqueo_agenda b WHERE b.negocio_id = ? AND DATE(b.inicio) = ?", [$NEG, $fecha]);
+$porEmp = []; foreach ($citas as $c) $porEmp[$c['empleado_id']][] = $c;
+$blqEmp = []; foreach ($bloqueos as $b) $blqEmp[$b['empleado_id']][] = $b;
 
-    <!-- Encabezado -->
+// Cita seleccionada para el panel de detalle (la indicada o la primera del día)
+$sel = (int)($_GET['cita'] ?? ($citas[0]['cita_id'] ?? 0));
+$detalle = null;
+if ($sel) {
+    $detalle = q_row("SELECT c.id, c.estado, c.origen, cl.nombres, cl.apellidos, cl.celular, f.id AS factura_id, f.numero
+                      FROM cita c JOIN cliente cl ON cl.negocio_id = c.negocio_id AND cl.id = c.cliente_id
+                      LEFT JOIN factura f ON f.negocio_id = c.negocio_id AND f.cita_id = c.id
+                      WHERE c.negocio_id = ? AND c.id = ?", [$NEG, $sel]);
+    if ($detalle) $detalle['lineas'] = q_all("SELECT cs.inicio, cs.fin, cs.valor, cs.estado, s.nombre AS servicio, e.nombres AS emp FROM cita_servicio cs
+        JOIN servicio s ON s.negocio_id = cs.negocio_id AND s.id = cs.servicio_id JOIN empleado e ON e.negocio_id = cs.negocio_id AND e.id = cs.empleado_id
+        WHERE cs.negocio_id = ? AND cs.cita_id = ? AND cs.estado <> 'cancelado' ORDER BY cs.inicio", [$NEG, $sel]);
+}
+$ESTADO = ['programado' => '', 'en curso' => 'En curso', 'realizado' => 'Realizado'];
+
+cabecera('Agenda', 'agenda');
+?>
     <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-2">
       <h1 class="mb-0">Agenda</h1>
       <div class="d-flex flex-wrap align-items-center gap-2">
-        <select class="form-select w-auto fw-semibold" aria-label="Fecha">
-          <option selected>Lunes 23 de noviembre</option>
-          <option>Martes 24 de noviembre</option>
-          <option>Miércoles 25 de noviembre</option>
-          <option>Jueves 26 de noviembre</option>
-          <option>Viernes 27 de noviembre</option>
-          <option>Sábado 28 de noviembre</option>
-        </select>
+        <form method="get" class="d-flex gap-2 align-items-center">
+          <a class="btn btn-secondary" href="?fecha=<?= date('Y-m-d', strtotime("$fecha -1 day")) ?>" aria-label="Día anterior"><i class="bi bi-chevron-left"></i></a>
+          <input type="date" name="fecha" value="<?= h($fecha) ?>" class="form-control w-auto fw-semibold" onchange="this.form.submit()" aria-label="Fecha">
+          <a class="btn btn-secondary" href="?fecha=<?= date('Y-m-d', strtotime("$fecha +1 day")) ?>" aria-label="Día siguiente"><i class="bi bi-chevron-right"></i></a>
+        </form>
         <div class="btn-group segmento" role="group" aria-label="Vista">
-          <a href="agenda.php" class="btn btn-segmento active" aria-current="page">Día</a>
-          <a href="agenda-semana.php" class="btn btn-segmento">Semana</a>
+          <a href="agenda.php?fecha=<?= h($fecha) ?>" class="btn btn-segmento active" aria-current="page">Día</a>
+          <a href="agenda-semana.php?fecha=<?= h($fecha) ?>" class="btn btn-segmento">Semana</a>
         </div>
-        <a href="nueva-cita.php" class="btn btn-primary"><i class="bi bi-plus-lg me-1"></i> Nueva cita</a>
+        <a href="nueva-cita.php?fecha=<?= h($fecha) ?>" class="btn btn-primary"><i class="bi bi-plus-lg me-1"></i> Nueva cita</a>
       </div>
     </div>
-
-    <p class="small text-secondary mb-3">
-      <span class="leyenda-cita"></span>Cita
-      <span class="leyenda-bloqueo ms-3"></span>Bloqueo / descanso
-    </p>
+    <p class="text-secondary mb-2"><?= h(fecha_larga($fecha)) ?> · <?= h($_SESSION['sede_nombre'] ?? '') ?></p>
+    <p class="small text-secondary mb-3"><span class="leyenda-cita"></span>Cita <span class="leyenda-bloqueo ms-3"></span>Bloqueo / descanso</p>
 
     <div class="row g-3">
-
-      <!-- Cuadrícula del día -->
       <div class="col-12 col-xl-8">
-        <div class="card agenda">
-          <div class="agenda-scroll">
-            <div class="agenda-ancho">
-
-              <!-- Empleados -->
-              <div class="agenda-cab">
-                <div></div>
-                <div class="agenda-emp"><span class="avatar rounded-circle d-inline-flex align-items-center justify-content-center">LG</span><div><strong>Laura</strong><small>Corte · peinado</small></div></div>
-                <div class="agenda-emp"><span class="avatar rounded-circle d-inline-flex align-items-center justify-content-center">CR</span><div><strong>Camila</strong><small>Uñas</small></div></div>
-                <div class="agenda-emp"><span class="avatar rounded-circle d-inline-flex align-items-center justify-content-center">PM</span><div><strong>Patty</strong><small>Color</small></div></div>
-                <div class="agenda-emp"><span class="avatar rounded-circle d-inline-flex align-items-center justify-content-center">AP</span><div><strong>Andrés</strong><small>Barbería · cejas</small></div></div>
-              </div>
-
-              <div class="agenda-cuerpo">
-
-                <!-- Horas -->
-                <div class="agenda-horas">
-                  <span style="--n:0">9:00</span>
-                  <span style="--n:1">10:00</span>
-                  <span style="--n:2">11:00</span>
-                  <span style="--n:3">12:00</span>
-                  <span style="--n:4">13:00</span>
-                </div>
-
-                <!-- Laura -->
-                <div class="agenda-col">
-                  <div class="cita hecha" style="--ini:0; --dur:.5"><strong>09:00 Corte</strong><small class="d-block">Marta León</small></div>
-                  <div class="cita hecha" style="--ini:.5; --dur:.5"><strong>09:30 Peinado</strong><small class="d-block">Paula Castro</small></div>
-                  <div class="cita" style="--ini:1; --dur:.5"><strong>10:00 Corte</strong><span class="cita-estado">En curso</span><small class="d-block">Ana Martínez</small></div>
-                  <div class="cita" style="--ini:4; --dur:.5"><strong>13:00 Corte</strong><span class="badge bg-danger-subtle text-danger-emphasis cita-estado"><i class="bi bi-arrow-repeat"></i> de 12:30</span><small class="d-block">Marcela Ríos</small></div>
-                </div>
-
-                <!-- Camila -->
-                <div class="agenda-col">
-                  <div class="cita" style="--ini:1.5; --dur:.75"><strong>10:30 Uñas tradicional</strong><small class="d-block">Ana Martínez · 45 min</small></div>
-                  <div class="cita" style="--ini:3; --dur:.75"><strong>12:00 Semipermanentes</strong><small class="d-block">Daniela Ruiz · 45 min</small></div>
-                </div>
-
-                <!-- Patty -->
-                <div class="agenda-col">
-                  <div class="cita" style="--ini:0; --dur:5"><strong>09:00 Decoloración</strong><span class="cita-estado">En curso</span><small class="d-block">Lucía Ortiz · 5 h</small></div>
-                </div>
-
-                <!-- Andrés -->
-                <div class="agenda-col">
-                  <div class="cita hecha" style="--ini:0; --dur:.5"><strong>09:00 Corte</strong><small class="d-block">Julián Rey</small></div>
-                  <div class="cita hecha" style="--ini:.5; --dur:.5"><strong>09:30 Barba</strong><small class="d-block">Julián Rey</small></div>
-                  <div class="cita" style="--ini:1; --dur:.5"><strong>10:00 Corte</strong><span class="cita-estado">En curso</span><small class="d-block">Sebastián C.</small></div>
-                  <div class="cita" style="--ini:1.5; --dur:.5"><strong>10:30 Barba</strong><small class="d-block">Sebastián C.</small></div>
-                  <div class="cita corta" style="--ini:2; --dur:.25"><strong>11:00 Cejas</strong> <small>· Mateo D.</small></div>
-                  <div class="cita" style="--ini:3; --dur:.5"><strong>12:00 Corte</strong><small class="d-block">Felipe Mora</small></div>
-                </div>
-
-                <!-- Hora actual: 10:12 = 1,2 horas desde las 9:00 -->
-                <div class="agenda-ahora" style="--ini:1.2"><span>10:12</span></div>
-
-              </div>
+        <div class="card agenda" style="--cols: <?= max(1, count($emps)) ?>; --hora: 64px; --horas: <?= $h1 - $h0 ?>">
+          <div class="agenda-scroll"><div class="agenda-ancho">
+            <div class="agenda-cab">
+              <div></div>
+              <?php foreach ($emps as $e): ?>
+                <div class="agenda-emp"><?= avatar($e['nombres'] . ' ' . $e['apellidos']) ?><div><strong><?= h($e['nombres']) ?></strong><small><?= h($e['areas']) ?></small></div></div>
+              <?php endforeach; ?>
             </div>
-          </div>
+            <div class="agenda-cuerpo">
+              <div class="agenda-horas"><?php for ($i = 0; $i < $h1 - $h0; $i++): ?><span style="--n:<?= $i ?>"><?= $h0 + $i ?>:00</span><?php endfor; ?></div>
+              <?php foreach ($emps as $e): ?>
+                <div class="agenda-col">
+                  <?php foreach ($blqEmp[$e['id']] ?? [] as $b):
+                      $ini = (strtotime($b['inicio']) - strtotime("$fecha {$h0}:00")) / 3600; $dur = (strtotime($b['fin']) - strtotime($b['inicio'])) / 3600; ?>
+                    <div style="position:absolute;left:4px;right:4px;top:calc(var(--hora) * <?= $ini ?>);height:calc(var(--hora) * <?= $dur ?> - 3px);background:#E4E8F0;border-radius:6px;padding:.3rem .5rem;font-size:.75rem;color:#5b6676"><?= h(ucfirst($b['motivo'])) ?></div>
+                  <?php endforeach; ?>
+                  <?php foreach ($porEmp[$e['id']] ?? [] as $c):
+                      $ini = (strtotime($c['inicio']) - strtotime("$fecha {$h0}:00")) / 3600; $dur = $c['duracion_min'] / 60; ?>
+                    <a href="?fecha=<?= h($fecha) ?>&cita=<?= (int)$c['cita_id'] ?>" class="cita <?= $c['estado'] === 'realizado' ? 'hecha' : '' ?> <?= $dur <= .25 ? 'corta' : '' ?>" style="--ini:<?= $ini ?>; --dur:<?= $dur ?>; text-decoration:none<?= (int)$c['cita_id'] === $sel ? ';outline:2px solid var(--c-accion)' : '' ?>">
+                      <strong><?= hora($c['inicio']) ?> <?= h($c['servicio']) ?></strong>
+                      <?php if (!empty($ESTADO[$c['estado']])): ?><span class="cita-estado"><?= h($ESTADO[$c['estado']]) ?></span><?php endif; ?>
+                      <small class="d-block"><?= h($c['nombres'] . ' ' . mb_substr($c['apellidos'], 0, 1) . '.') ?></small>
+                    </a>
+                  <?php endforeach; ?>
+                </div>
+              <?php endforeach; ?>
+              <?php if ($fecha === date('Y-m-d')): $ahora = (time() - strtotime("$fecha {$h0}:00")) / 3600; if ($ahora > 0 && $ahora < $h1 - $h0): ?>
+                <div class="agenda-ahora" style="--ini:<?= $ahora ?>"><span><?= date('H:i') ?></span></div>
+              <?php endif; endif; ?>
+            </div>
+          </div></div>
         </div>
+        <?php if (!$emps): ?><p class="text-secondary mt-3">Aún no hay empleados en esta sede. <a href="registrar-empleado.php" class="enlace-fuerte">Registra al primero</a>.</p><?php endif; ?>
       </div>
 
-      <!-- Detalle de cita -->
       <div class="col-12 col-xl-4">
         <div class="card p-3">
           <h2 class="h3 mb-3">Detalle de cita</h2>
-
-          <div class="d-flex align-items-center gap-3 mb-3">
-            <span class="avatar rounded-circle d-inline-flex align-items-center justify-content-center" style="width:52px;height:52px;background:var(--c-suave);color:var(--c-medio);font-size:1rem">AM</span>
-            <div>
-              <strong class="fs-5 d-block lh-sm">Ana Martínez</strong>
-              <small class="text-secondary">300 765 4321 · WhatsApp</small>
+          <?php if (!$detalle): ?>
+            <p class="text-secondary mb-0">No hay citas este día. Crea una con «Nueva cita».</p>
+          <?php else: $tot = array_sum(array_column($detalle['lineas'], 'valor')); $nom = $detalle['nombres'] . ' ' . $detalle['apellidos']; ?>
+            <div class="d-flex align-items-center gap-3 mb-3">
+              <span class="avatar rounded-circle d-inline-flex align-items-center justify-content-center" style="width:52px;height:52px;background:var(--c-suave);color:var(--c-medio);font-size:1rem"><?= h(iniciales($nom)) ?></span>
+              <div><strong class="fs-5 d-block lh-sm"><?= h($nom) ?></strong><small class="text-secondary"><?= h($detalle['celular']) ?> · <?= h(ucfirst($detalle['origen'])) ?></small></div>
             </div>
-          </div>
-
-          <div class="linea-servicio">
-            <div><strong class="d-block">Corte</strong><small>Laura · 10:00 a 10:30</small></div>
-            <strong>$35.000</strong>
-          </div>
-          <div class="linea-servicio">
-            <div><strong class="d-block">Uñas tradicional</strong><small>Camila · 10:30 a 11:15</small></div>
-            <strong>$30.000</strong>
-          </div>
-
-          <div class="d-flex justify-content-between align-items-baseline my-3">
-            <span class="etiqueta">Total · Factura 0148</span>
-            <strong class="fs-3">$65.000</strong>
-          </div>
-
-          <div class="d-flex gap-2 mb-3">
-            <span class="badge bg-primary-subtle text-primary-emphasis">En curso</span>
-            <span class="badge bg-success-subtle text-success-emphasis">Sin traslapes</span>
-          </div>
-
-          <button type="button" class="btn btn-primary w-100 mb-2"><i class="bi bi-check-lg me-2"></i>Marcar servicios realizados</button>
-          <button type="button" class="btn btn-outline-primary w-100 mb-2">Reprogramar</button>
-          <a href="factura.php" class="btn btn-secondary w-100">Ver factura</a>
+            <?php foreach ($detalle['lineas'] as $l): ?>
+              <div class="linea-servicio"><div><strong class="d-block"><?= h($l['servicio']) ?></strong><small><?= h($l['emp']) ?> · <?= hora($l['inicio']) ?> a <?= hora($l['fin']) ?></small></div><strong><?= pesos($l['valor']) ?></strong></div>
+            <?php endforeach; ?>
+            <div class="d-flex justify-content-between align-items-baseline my-3">
+              <span class="etiqueta">Total<?= $detalle['numero'] ? ' · Factura ' . str_pad($detalle['numero'], 4, '0', STR_PAD_LEFT) : '' ?></span><strong class="fs-3"><?= pesos($tot) ?></strong>
+            </div>
+            <div class="d-flex gap-2 mb-3"><span class="badge bg-primary-subtle text-primary-emphasis"><?= h(ucfirst($detalle['estado'])) ?></span></div>
+            <form method="post" class="d-grid gap-2">
+              <?= csrf() ?><input type="hidden" name="cita_id" value="<?= (int)$detalle['id'] ?>">
+              <?php if ($detalle['estado'] === 'reservada'): ?><button name="accion" value="en_curso" class="btn btn-outline-primary">Empezar cita</button><?php endif; ?>
+              <?php if (!in_array($detalle['estado'], ['finalizada', 'cancelada'])): ?>
+                <button name="accion" value="realizados" class="btn btn-primary"><i class="bi bi-check-lg me-2"></i>Marcar servicios realizados</button>
+                <button name="accion" value="cancelar" class="btn btn-outline-primary" onclick="return confirm('¿Cancelar esta cita?')">Cancelar cita</button>
+              <?php endif; ?>
+              <?php if ($detalle['factura_id']): ?>
+                <a href="factura.php?id=<?= (int)$detalle['factura_id'] ?>" class="btn btn-secondary">Ver factura</a>
+              <?php elseif ($detalle['estado'] === 'finalizada'): ?>
+                <select name="metodo" class="form-select"><option value="efectivo">Efectivo</option><option value="tarjeta">Tarjeta</option><option value="transferencia">Transferencia</option></select>
+                <button name="accion" value="facturar" class="btn btn-primary">Facturar</button>
+              <?php endif; ?>
+            </form>
+          <?php endif; ?>
         </div>
       </div>
-
     </div>
-  </main>
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script src="menu.js"></script>
-</body>
-</html>
+<?php pie();

@@ -1,116 +1,28 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Equipo · Citara</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link href="Style.css" rel="stylesheet">
-</head>
-<body>
-
-<div class="d-flex flex-column flex-lg-row">
-
-  <!-- Menú lateral (lo construye menu.js) -->
-  <div id="menu-lateral" class="menu-envoltura" data-activo="equipo" data-rol="administrador"></div>
-
-  <main class="contenido p-3 p-lg-4">
-
-    <!-- Encabezado -->
+<?php
+require_once __DIR__ . '/modelo.php';
+requerir_rol(ADMIN);
+$rows = q_all("SELECT e.id, e.nombres, e.apellidos, e.celular, e.fecha_ingreso, e.activo,
+   (SELECT GROUP_CONCAT(a.nombre SEPARATOR ', ') FROM empleado_area ea JOIN area a ON a.negocio_id = ea.negocio_id AND a.id = ea.area_id WHERE ea.negocio_id = e.negocio_id AND ea.empleado_id = e.id) AS areas,
+   (SELECT COUNT(*) FROM cita_servicio cs WHERE cs.negocio_id = e.negocio_id AND cs.empleado_id = e.id AND DATE(cs.inicio) = CURDATE() AND cs.estado <> 'cancelado') AS hoy,
+   (SELECT COUNT(*) FROM v_expediente_documentos d WHERE d.negocio_id = e.negocio_id AND d.empleado_id = e.id AND d.obligatorio = 1 AND (d.estado IS NULL OR d.estado <> 'verificado')) AS docs_pend
+   FROM empleado e WHERE e.negocio_id = ? AND e.sede_id = ? ORDER BY e.activo DESC, e.nombres", [$NEG, $SEDE]);
+cabecera('Equipo', 'equipo');
+?>
     <div class="d-flex flex-wrap align-items-start justify-content-between gap-3 mb-3">
-      <div>
-        <h1 class="mb-1">Equipo</h1>
-        <p class="text-secondary mb-0 ancho-texto">Datos personales, servicios habilitados, forma de pago y documentos de cada persona.</p>
-      </div>
-      <div class="d-flex flex-wrap align-items-center gap-2">
-        <div class="btn-group segmento" role="group" aria-label="Estado">
-          <button type="button" class="btn btn-segmento active">Activos</button>
-          <button type="button" class="btn btn-segmento">Retirados</button>
-        </div>
-        <a href="turnos.php" class="btn btn-outline-primary"><i class="bi bi-calendar-week me-2"></i>Turnos y horarios</a>
-        <a href="registrar-empleado.php" class="btn btn-primary"><i class="bi bi-plus-lg me-2"></i>Registrar empleado</a>
-      </div>
+      <div><h1 class="mb-1">Equipo</h1><p class="text-secondary mb-0">Profesionales de la sede, su expediente y su carga de hoy.</p></div>
+      <a href="registrar-empleado.php" class="btn btn-primary"><i class="bi bi-plus-lg me-2"></i>Registrar empleado</a>
     </div>
-
-    <!-- Tabla del equipo -->
-    <div class="card p-2 p-md-3 mb-3">
-      <div class="table-responsive">
-        <table class="table tabla-citara">
-          <thead>
-            <tr>
-              <th>Empleado</th><th>Área</th><th>Servicios habilitados</th><th>Pago</th>
-              <th>Documentos</th><th>Dotación</th><th></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><div class="d-flex align-items-center gap-3"><span class="avatar avatar-44 rounded-circle d-inline-flex align-items-center justify-content-center">LG</span><span class="nombre-fila">Laura Gómez</span></div></td>
-              <td>Cabello</td>
-              <td>Corte, peinado</td>
-              <td>Semanal · 40%</td>
-              <td><span class="badge bg-success-subtle text-success-emphasis">Completos</span></td>
-              <td><span class="badge bg-success-subtle text-success-emphasis">Kit completo</span></td>
-              <td><a href="expediente.php" class="enlace-fuerte">Expediente</a></td>
-            </tr>
-            <tr>
-              <td><div class="d-flex align-items-center gap-3"><span class="avatar avatar-44 rounded-circle d-inline-flex align-items-center justify-content-center">CR</span><span class="nombre-fila">Camila Ruiz</span></div></td>
-              <td>Uñas</td>
-              <td>3 servicios de uñas</td>
-              <td>Quincenal · 45%</td>
-              <td><span class="badge bg-secondary-subtle text-secondary-emphasis">1 por verificar</span></td>
-              <td><span class="badge bg-success-subtle text-success-emphasis">Kit completo</span></td>
-              <td><a href="expediente.php" class="enlace-fuerte">Expediente</a></td>
-            </tr>
-            <tr>
-              <td><div class="d-flex align-items-center gap-3"><span class="avatar avatar-44 rounded-circle d-inline-flex align-items-center justify-content-center">PM</span><span class="nombre-fila">Patty Mora</span></div></td>
-              <td>Cabello</td>
-              <td>Color, decoloración</td>
-              <td>Mensual · 35%</td>
-              <td><span class="badge bg-success-subtle text-success-emphasis">Completos</span></td>
-              <td><span class="badge bg-success-subtle text-success-emphasis">Kit completo</span></td>
-              <td><a href="expediente.php" class="enlace-fuerte">Expediente</a></td>
-            </tr>
-            <tr>
-              <td><div class="d-flex align-items-center gap-3"><span class="avatar avatar-44 avatar-azul rounded-circle d-inline-flex align-items-center justify-content-center">SD</span><span class="nombre-fila">Sofía Díaz</span></div></td>
-              <td>Cabello</td>
-              <td>Color, decoloración</td>
-              <td>Mensual · 35%</td>
-              <td><span class="badge bg-danger-subtle text-danger-emphasis">Falta 1</span></td>
-              <td><span class="badge bg-secondary-subtle text-secondary-emphasis">Falta 1 pieza</span></td>
-              <td><a href="expediente.php" class="enlace-fuerte">Expediente</a></td>
-            </tr>
-            <tr>
-              <td><div class="d-flex align-items-center gap-3"><span class="avatar avatar-44 rounded-circle d-inline-flex align-items-center justify-content-center">AP</span><span class="nombre-fila">Andrés Pardo</span></div></td>
-              <td>Barbería y cejas</td>
-              <td>Corte, barba, cejas</td>
-              <td>Quincenal · 40%</td>
-              <td><span class="badge bg-success-subtle text-success-emphasis">Completos</span></td>
-              <td><span class="badge bg-success-subtle text-success-emphasis">Kit completo</span></td>
-              <td><a href="expediente.php" class="enlace-fuerte">Expediente</a></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+    <div class="row g-3">
+    <?php foreach ($rows as $e): ?>
+      <div class="col-12 col-md-6 col-xl-4"><div class="card p-4 h-100">
+        <div class="d-flex align-items-center gap-3 mb-3"><?= avatar($e['nombres'] . ' ' . $e['apellidos'], 'avatar-44') ?>
+          <div><h2 class="h6 mb-0"><?= h($e['nombres'] . ' ' . $e['apellidos']) ?></h2><small class="text-secondary"><?= h($e['areas'] ?: 'Sin área') ?></small></div></div>
+        <p class="mb-1 small"><i class="bi bi-telephone me-2"></i><?= h($e['celular'] ?: '—') ?></p>
+        <p class="mb-1 small"><i class="bi bi-calendar-check me-2"></i><?= (int)$e['hoy'] ?> servicios hoy</p>
+        <p class="mb-3 small"><i class="bi bi-folder2-open me-2"></i><?= (int)$e['docs_pend'] ? (int)$e['docs_pend'] . ' documentos pendientes' : 'Documentos al día' ?></p>
+        <div class="mt-auto d-flex gap-2"><span class="badge <?= $e['activo'] ? 'text-bg-success' : 'text-bg-secondary' ?>"><?= $e['activo'] ? 'Activo' : 'Retirado' ?></span>
+          <a href="expediente.php?id=<?= (int)$e['id'] ?>" class="btn btn-sm btn-secondary ms-auto">Expediente</a></div>
+      </div></div>
+    <?php endforeach; if (!$rows) echo '<p class="text-secondary">Aún no hay empleados en esta sede.</p>'; ?>
     </div>
-
-    <!-- Persona retirada -->
-    <div class="caja-punteada d-flex flex-wrap align-items-center justify-content-between gap-3">
-      <div class="d-flex align-items-center gap-3">
-        <span class="avatar avatar-44 avatar-azul rounded-circle d-inline-flex align-items-center justify-content-center">DR</span>
-        <div class="lh-sm">
-          <strong>Diana Rojas</strong> · retirada el 30 oct 2026
-          <div class="text-secondary">Su historial de servicios y pagos se conserva y se puede consultar.</div>
-        </div>
-      </div>
-      <button type="button" class="btn btn-secondary px-4">Ver historial</button>
-    </div>
-
-  </main>
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script src="menu.js"></script>
-</body>
-</html>
+<?php pie();
